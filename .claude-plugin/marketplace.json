@@ -1,11 +1,14 @@
 {
   "name": "claude-skills-jesper",
-  "owner": "flight505",
+  "owner": {
+    "name": "flight505",
+    "url": "https://github.com/flight505"
+  },
   "description": "Curated Claude Code skills, agents, personas, and commands — vendored from alirezarezvani/claude-skills plus first-party additions.",
   "homepage": "https://github.com/flight505/claude-skills-jesper",
   "metadata": {
     "version": "0.1.0",
-    "generated": "2026-05-15T12:10:41Z",
+    "generated": "2026-05-15T12:12:48Z",
     "upstream": {
       "repo": "alirezarezvani/claude-skills",
       "subtree_prefix": "upstream"

@@ -259,7 +259,7 @@ def main(argv: list[str]) -> int:
 
     marketplace = {
         "name": "claude-skills-jesper",
-        "owner": "flight505",
+        "owner": {"name": "flight505", "url": "https://github.com/flight505"},
         "description": "Curated Claude Code skills, agents, personas, and commands — vendored from alirezarezvani/claude-skills plus first-party additions.",
         "homepage": "https://github.com/flight505/claude-skills-jesper",
         "metadata": {
