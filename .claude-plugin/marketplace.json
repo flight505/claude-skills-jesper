@@ -8,7 +8,7 @@
   "homepage": "https://github.com/flight505/claude-skills-jesper",
   "metadata": {
     "version": "0.1.0",
-    "generated": "2026-05-15T12:12:48Z",
+    "generated": "2026-05-15T12:20:08Z",
     "upstream": {
       "repo": "alirezarezvani/claude-skills",
       "subtree_prefix": "upstream"
@@ -17,7 +17,10 @@
       "bundles": 43,
       "skills": 274,
       "skills_upstream": 290,
-      "skills_first_party": 0
+      "skills_first_party": 0,
+      "agents": 20,
+      "personas": 7,
+      "commands": 33
     }
   },
   "plugins": [
@@ -3655,6 +3658,490 @@
       "author": "Alireza Rezvani",
       "license": "MIT",
       "category": "marketing"
+    }
+  ],
+  "agents": [
+    {
+      "name": "cs-agile-product-owner",
+      "source": {
+        "source": "./upstream/agents/product/cs-agile-product-owner.md",
+        "type": "file"
+      },
+      "description": "Agile product owner agent for epic breakdown, sprint planning, backlog refinement, and INVEST-compliant user story generation"
+    },
+    {
+      "name": "cs-ceo-advisor",
+      "source": {
+        "source": "./upstream/agents/c-level/cs-ceo-advisor.md",
+        "type": "file"
+      },
+      "description": "Strategic leadership advisor for CEOs covering vision, strategy, board management, investor relations, and organizational culture"
+    },
+    {
+      "name": "cs-content-creator",
+      "source": {
+        "source": "./upstream/agents/marketing/cs-content-creator.md",
+        "type": "file"
+      },
+      "description": "AI-powered content creation specialist for brand voice consistency, SEO optimization, and multi-platform content strategy"
+    },
+    {
+      "name": "cs-cto-advisor",
+      "source": {
+        "source": "./upstream/agents/c-level/cs-cto-advisor.md",
+        "type": "file"
+      },
+      "description": "Technical leadership advisor for CTOs covering technology strategy, team scaling, architecture decisions, and engineering excellence"
+    },
+    {
+      "name": "cs-demand-gen-specialist",
+      "source": {
+        "source": "./upstream/agents/marketing/cs-demand-gen-specialist.md",
+        "type": "file"
+      },
+      "description": "Demand generation and customer acquisition specialist for lead generation, conversion optimization, and multi-channel acquisition campaigns"
+    },
+    {
+      "name": "cs-engineering-lead",
+      "source": {
+        "source": "./upstream/agents/engineering-team/cs-engineering-lead.md",
+        "type": "file"
+      },
+      "description": "Engineering Team Lead agent for coordinating QA, security, data engineering, ML, and frontend/backend teams. Orchestrates engineering-team skills for team-level technical decisions. Spawn when users need team coordination, tech stack evaluation, incident response, or cross-functional engineering work."
+    },
+    {
+      "name": "cs-financial-analyst",
+      "source": {
+        "source": "./upstream/agents/finance/cs-financial-analyst.md",
+        "type": "file"
+      },
+      "description": "Financial Analyst agent for DCF valuation, financial modeling, budgeting, forecasting, and SaaS metrics (ARR, MRR, churn, CAC, LTV, NRR). Orchestrates finance skills. Spawn when users need financial analysis, valuation models, budget planning, ratio analysis, SaaS health checks, or unit economics projections."
+    },
+    {
+      "name": "cs-growth-strategist",
+      "source": {
+        "source": "./upstream/agents/business-growth/cs-growth-strategist.md",
+        "type": "file"
+      },
+      "description": "Growth Strategist agent for revenue operations, sales engineering, customer success, and business development. Orchestrates business-growth skills. Spawn when users need pipeline analysis, churn prevention, expansion scoring, sales demos, or proposal writing."
+    },
+    {
+      "name": "cs-karpathy-reviewer",
+      "source": {
+        "source": "./upstream/agents/engineering/cs-karpathy-reviewer.md",
+        "type": "file"
+      },
+      "description": "Reviews staged git changes against Karpathy's 4 coding principles. Runs complexity_checker on changed files, diff_surgeon on the diff, and produces a verdict with specific fix recommendations. Spawn before committing, when the user says \"karpathy check\", \"review my diff\", or when the /karpathy-check command is invoked."
+    },
+    {
+      "name": "cs-product-analyst",
+      "source": {
+        "source": "./upstream/agents/product/cs-product-analyst.md",
+        "type": "file"
+      },
+      "description": "Product analytics agent for KPI definition, dashboard setup, experiment design, and test result interpretation."
+    },
+    {
+      "name": "cs-product-manager",
+      "source": {
+        "source": "./upstream/agents/product/cs-product-manager.md",
+        "type": "file"
+      },
+      "description": "Product management agent for feature prioritization, customer discovery, PRD development, and roadmap planning using RICE framework"
+    },
+    {
+      "name": "cs-product-strategist",
+      "source": {
+        "source": "./upstream/agents/product/cs-product-strategist.md",
+        "type": "file"
+      },
+      "description": "Product strategy agent for quarterly OKR planning, competitive landscape analysis, product vision development, and strategy pivot evaluation"
+    },
+    {
+      "name": "cs-project-manager",
+      "source": {
+        "source": "./upstream/agents/project-management/cs-project-manager.md",
+        "type": "file"
+      },
+      "description": "Project Manager agent for sprint planning, Jira/Confluence workflows, Scrum ceremonies, and stakeholder reporting. Orchestrates project-management skills."
+    },
+    {
+      "name": "cs-quality-regulatory",
+      "source": {
+        "source": "./upstream/agents/ra-qm-team/cs-quality-regulatory.md",
+        "type": "file"
+      },
+      "description": "Quality & Regulatory agent for ISO 13485 QMS, MDR compliance, FDA submissions, GDPR/DSGVO, and ISMS audits. Orchestrates ra-qm-team skills. Spawn when users need regulatory strategy, audit preparation, CAPA management, risk management, or compliance documentation."
+    },
+    {
+      "name": "cs-senior-engineer",
+      "source": {
+        "source": "./upstream/agents/engineering/cs-senior-engineer.md",
+        "type": "file"
+      },
+      "description": "Senior Engineer agent for architecture decisions, code review, DevOps, and API design. Orchestrates engineering and engineering-team skills for technical implementation work. Spawn when users need system design, code quality review, CI/CD pipeline setup, or infrastructure decisions."
+    },
+    {
+      "name": "cs-ux-researcher",
+      "source": {
+        "source": "./upstream/agents/product/cs-ux-researcher.md",
+        "type": "file"
+      },
+      "description": "UX research agent for research planning, persona generation, journey mapping, and usability test analysis"
+    },
+    {
+      "name": "cs-wiki-ingestor",
+      "source": {
+        "source": "./upstream/agents/engineering/cs-wiki-ingestor.md",
+        "type": "file"
+      },
+      "description": "Dispatched sub-agent that ingests a new source into an LLM Wiki vault. Reads the source, proposes TL;DR and key claims, identifies which entity/concept/synthesis pages will be touched, flags contradictions with existing pages, and — after user confirmation — writes the source summary, updates cross-references across 5-15 pages, regenerates the index, and appends a standardized log entry. Spawn when the user says \"ingest this\", \"add this paper/article/book to the wiki\", or drops a file into raw/."
+    },
+    {
+      "name": "cs-wiki-librarian",
+      "source": {
+        "source": "./upstream/agents/engineering/cs-wiki-librarian.md",
+        "type": "file"
+      },
+      "description": "Dispatched sub-agent that answers queries against an LLM Wiki vault. Reads index.md first, drills into 3-10 relevant pages across categories, synthesizes an answer with inline [[wikilink]] citations, and offers to file the answer back into the wiki as a new comparison or synthesis page. Spawn when the user asks a substantive question the wiki might answer, says \"what does the wiki say about X\", \"compare A and B across my sources\", or wants to explore a topic."
+    },
+    {
+      "name": "cs-wiki-linter",
+      "source": {
+        "source": "./upstream/agents/engineering/cs-wiki-linter.md",
+        "type": "file"
+      },
+      "description": "Dispatched sub-agent that runs a periodic health check on an LLM Wiki vault. Runs mechanical checks via scripts (orphans, broken links, stale pages, missing frontmatter, duplicate titles, log gaps), does semantic checks (contradictions, stale claims, cross-reference gaps, concepts missing their own page), and produces a markdown report with suggested actions. Spawn weekly, after batch ingests, or when the user says \"check the wiki\" / \"lint my wiki\" / \"audit the vault\"."
+    },
+    {
+      "name": "cs-workspace-admin",
+      "source": {
+        "source": "./upstream/agents/engineering-team/cs-workspace-admin.md",
+        "type": "file"
+      },
+      "description": "Google Workspace administration agent using the gws CLI. Orchestrates workspace setup, Gmail/Drive/Sheets/Calendar automation, security audits, and recipe execution. Spawn when users need Google Workspace automation, gws CLI help, or workspace administration."
+    }
+  ],
+  "personas": [
+    {
+      "name": "content-strategist",
+      "source": {
+        "source": "./upstream/agents/personas/content-strategist.md",
+        "type": "file"
+      },
+      "description": "Content Strategist: Builds content engines that rank, convert, and compound. Thinks in systems — topic clusters, not individual posts. Every piece earns its place or gets killed."
+    },
+    {
+      "name": "devops-engineer",
+      "source": {
+        "source": "./upstream/agents/personas/devops-engineer.md",
+        "type": "file"
+      },
+      "description": "DevOps Engineer: Builds infrastructure that scales without babysitting. Automates everything worth automating. Monitors before it breaks. Treats clicking in consoles as a production incident waiting to happen."
+    },
+    {
+      "name": "finance-lead",
+      "source": {
+        "source": "./upstream/agents/personas/finance-lead.md",
+        "type": "file"
+      },
+      "description": "Finance Lead: Startup CFO who builds models that survive contact with reality. Handles fundraising, unit economics, pricing, burn rate, and board reporting. Speaks fluent spreadsheet but translates to English for founders who'd rather build product."
+    },
+    {
+      "name": "growth-marketer",
+      "source": {
+        "source": "./upstream/agents/personas/growth-marketer.md",
+        "type": "file"
+      },
+      "description": "Growth Marketer: Growth marketing specialist for bootstrapped startups and indie hackers. Builds content engines, optimizes funnels, runs launch sequences, and finds scalable acquisition channels — all on a budget that makes enterprise marketers cry."
+    },
+    {
+      "name": "product-manager",
+      "source": {
+        "source": "./upstream/agents/personas/product-manager.md",
+        "type": "file"
+      },
+      "description": "Product Manager: Ships outcomes, not features. Writes specs engineers actually read. Prioritizes ruthlessly. Kills darlings when the data says so. Operates at the intersection of user needs, business goals, and engineering reality."
+    },
+    {
+      "name": "solo-founder",
+      "source": {
+        "source": "./upstream/agents/personas/solo-founder.md",
+        "type": "file"
+      },
+      "description": "Solo Founder: Your co-founder who doesn't exist yet. Covers product, engineering, marketing, and strategy for one-person startups — because nobody's stopping you from making bad decisions and somebody should."
+    },
+    {
+      "name": "startup-cto",
+      "source": {
+        "source": "./upstream/agents/personas/startup-cto.md",
+        "type": "file"
+      },
+      "description": "Startup CTO: Technical co-founder who's been through two startups and learned what actually matters. Makes architecture decisions, selects tech stacks, builds engineering culture, and prepares for technical due diligence — all while shipping fast with a small team."
+    }
+  ],
+  "commands": [
+    {
+      "name": "a11y-audit",
+      "source": {
+        "source": "./upstream/commands/a11y-audit.md",
+        "type": "file"
+      },
+      "description": "Scan a frontend project for WCAG 2.2 accessibility violations and fix them. Usage: /a11y-audit [path]"
+    },
+    {
+      "name": "changelog",
+      "source": {
+        "source": "./upstream/commands/changelog.md",
+        "type": "file"
+      },
+      "description": "Generate changelogs from git history and validate conventional commits. Usage: /changelog <generate|lint> [options]"
+    },
+    {
+      "name": "chaos-experiment",
+      "source": {
+        "source": "./upstream/commands/chaos-experiment.md",
+        "type": "file"
+      },
+      "description": "Interactive wizard to design and validate a chaos engineering experiment"
+    },
+    {
+      "name": "code-to-prd",
+      "source": {
+        "source": "./upstream/commands/code-to-prd.md",
+        "type": "file"
+      },
+      "description": "Reverse-engineer a frontend codebase into a PRD. Usage: /code-to-prd [path]"
+    },
+    {
+      "name": "competitive-matrix",
+      "source": {
+        "source": "./upstream/commands/competitive-matrix.md",
+        "type": "file"
+      },
+      "description": "Build competitive analysis matrices with scoring and gap analysis. Usage: /competitive-matrix <analyze> [options]"
+    },
+    {
+      "name": "financial-health",
+      "source": {
+        "source": "./upstream/commands/financial-health.md",
+        "type": "file"
+      },
+      "description": "Run financial ratio analysis, DCF valuation, budget variance analysis, and rolling forecasts. Usage: /financial-health <ratios|dcf|budget|forecast> <data.json>"
+    },
+    {
+      "name": "flag-cleanup",
+      "source": {
+        "source": "./upstream/commands/flag-cleanup.md",
+        "type": "file"
+      },
+      "description": "Run the quarterly feature-flag cleanup workflow on the current repo"
+    },
+    {
+      "name": "focused-fix",
+      "source": {
+        "source": "./upstream/commands/focused-fix.md",
+        "type": "file"
+      },
+      "description": "Deep-dive feature repair — systematically fix an entire feature/module across all its files and dependencies. Usage: /focused-fix <feature-path>"
+    },
+    {
+      "name": "google-workspace",
+      "source": {
+        "source": "./upstream/commands/google-workspace.md",
+        "type": "file"
+      },
+      "description": "Google Workspace CLI operations: setup diagnostics, security audit, recipe discovery, and output analysis. Usage: /google-workspace <setup|audit|recipe|analyze> [options]"
+    },
+    {
+      "name": "karpathy-check",
+      "source": {
+        "source": "./upstream/commands/karpathy-check.md",
+        "type": "file"
+      },
+      "description": "Run Karpathy's 4-principle review on staged changes or the last commit. Checks complexity, diff noise, hidden assumptions, and goal verification. Usage /karpathy-check [--last-commit]"
+    },
+    {
+      "name": "okr",
+      "source": {
+        "source": "./upstream/commands/okr.md",
+        "type": "file"
+      },
+      "description": "Generate OKR cascades from company strategy to team objectives. Usage: /okr generate <strategy>"
+    },
+    {
+      "name": "operator-audit",
+      "source": {
+        "source": "./upstream/commands/operator-audit.md",
+        "type": "file"
+      },
+      "description": "Run the full Kubernetes Operator audit (CRD + reconcile + capability) on the current repo"
+    },
+    {
+      "name": "persona",
+      "source": {
+        "source": "./upstream/commands/persona.md",
+        "type": "file"
+      },
+      "description": "Generate data-driven user personas for UX research and product design. Usage: /persona generate [options]"
+    },
+    {
+      "name": "pipeline",
+      "source": {
+        "source": "./upstream/commands/pipeline.md",
+        "type": "file"
+      },
+      "description": "Detect stack and generate CI/CD pipeline configs. Usage: /pipeline <detect|generate> [options]"
+    },
+    {
+      "name": "plugin-audit",
+      "source": {
+        "source": "./upstream/commands/plugin-audit.md",
+        "type": "file"
+      }
+    },
+    {
+      "name": "prd",
+      "source": {
+        "source": "./upstream/commands/prd.md",
+        "type": "file"
+      },
+      "description": "Quick PRD generation command. Usage: /prd <feature-or-problem>"
+    },
+    {
+      "name": "project-health",
+      "source": {
+        "source": "./upstream/commands/project-health.md",
+        "type": "file"
+      },
+      "description": "Portfolio health dashboard and risk matrix analysis. Usage: /project-health <dashboard|risk> [options]"
+    },
+    {
+      "name": "retro",
+      "source": {
+        "source": "./upstream/commands/retro.md",
+        "type": "file"
+      },
+      "description": "Analyze sprint retrospectives for patterns and action item tracking. Usage: /retro analyze <retro_data.json>"
+    },
+    {
+      "name": "rice",
+      "source": {
+        "source": "./upstream/commands/rice.md",
+        "type": "file"
+      },
+      "description": "RICE feature prioritization with scoring and capacity planning. Usage: /rice prioritize <features.csv> [options]"
+    },
+    {
+      "name": "saas-health",
+      "source": {
+        "source": "./upstream/commands/saas-health.md",
+        "type": "file"
+      },
+      "description": "Calculate SaaS health metrics (ARR, MRR, churn, CAC, LTV, NRR) and benchmark against industry standards. Usage: /saas-health <metrics|quick-ratio|simulate> [options]"
+    },
+    {
+      "name": "seo-auditor",
+      "source": {
+        "source": "./upstream/commands/seo-auditor.md",
+        "type": "file"
+      }
+    },
+    {
+      "name": "slo-design",
+      "source": {
+        "source": "./upstream/commands/slo-design.md",
+        "type": "file"
+      },
+      "description": "Interactive wizard to design an SLO with SLI, target, error budget, and burn-rate alerts"
+    },
+    {
+      "name": "sprint-health",
+      "source": {
+        "source": "./upstream/commands/sprint-health.md",
+        "type": "file"
+      },
+      "description": "Sprint health scoring and velocity analysis for agile teams. Usage: /sprint-health <analyze|velocity> [options]"
+    },
+    {
+      "name": "sprint-plan",
+      "source": {
+        "source": "./upstream/commands/sprint-plan.md",
+        "type": "file"
+      },
+      "description": "Sprint planning shortcut. Usage: /sprint-plan <goal> [capacity]"
+    },
+    {
+      "name": "tc",
+      "source": {
+        "source": "./upstream/commands/tc.md",
+        "type": "file"
+      },
+      "description": "Track technical changes with structured records, a state machine, and session handoff. Usage: /tc <init|create|update|status|resume|close|export|dashboard> [args]"
+    },
+    {
+      "name": "tdd",
+      "source": {
+        "source": "./upstream/commands/tdd.md",
+        "type": "file"
+      },
+      "description": "Generate tests, analyze coverage, and run TDD workflows. Usage: /tdd <generate|coverage|validate> [options]"
+    },
+    {
+      "name": "tech-debt",
+      "source": {
+        "source": "./upstream/commands/tech-debt.md",
+        "type": "file"
+      },
+      "description": "Scan, prioritize, and report technical debt. Usage: /tech-debt <scan|prioritize|report> [options]"
+    },
+    {
+      "name": "user-story",
+      "source": {
+        "source": "./upstream/commands/user-story.md",
+        "type": "file"
+      },
+      "description": "Generate user stories with acceptance criteria and sprint planning. Usage: /user-story <generate|sprint> [options]"
+    },
+    {
+      "name": "wiki-ingest",
+      "source": {
+        "source": "./upstream/commands/wiki-ingest.md",
+        "type": "file"
+      },
+      "description": "Ingest a source file from raw/ into the LLM Wiki — read, discuss, write summary page, update cross-references across 5-15 pages, regenerate index, append to log. Usage /wiki-ingest <path-to-source>"
+    },
+    {
+      "name": "wiki-init",
+      "source": {
+        "source": "./upstream/commands/wiki-init.md",
+        "type": "file"
+      },
+      "description": "Bootstrap a fresh LLM Wiki vault with the three-layer structure, schema files, and starter templates. Usage /wiki-init <path> --topic \"<topic>\" [--tool all|claude-code|codex|cursor|antigravity]"
+    },
+    {
+      "name": "wiki-lint",
+      "source": {
+        "source": "./upstream/commands/wiki-lint.md",
+        "type": "file"
+      },
+      "description": "Run a health check on the LLM Wiki vault — mechanical checks (orphans, broken links, stale pages, missing frontmatter, log gap, duplicates) plus semantic checks (contradictions, cross-reference gaps, concepts missing their own page). Outputs a markdown report with suggested actions. Usage /wiki-lint [--stale-days N] [--log-gap-days N]"
+    },
+    {
+      "name": "wiki-log",
+      "source": {
+        "source": "./upstream/commands/wiki-log.md",
+        "type": "file"
+      },
+      "description": "Show recent entries from the LLM Wiki log (wiki/log.md). Uses the standardized ## [YYYY-MM-DD] header format so grep + tail works. Usage /wiki-log [--last N] [--op ingest|query|lint|...]"
+    },
+    {
+      "name": "wiki-query",
+      "source": {
+        "source": "./upstream/commands/wiki-query.md",
+        "type": "file"
+      },
+      "description": "Query the LLM Wiki — reads index.md first, drills into 3-10 relevant pages, synthesizes an answer with inline [[wikilink]] citations, and offers to file the answer back as a new comparison or synthesis page. Usage /wiki-query \"<question>\""
     }
   ]
 }

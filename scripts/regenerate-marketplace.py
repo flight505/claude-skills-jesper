@@ -35,6 +35,16 @@ OUT_PATH = ROOT / ".claude-plugin" / "marketplace.json"
 OVERLAP_PATH = ROOT / "OVERLAP.md"
 UPSTREAM_MARKETPLACE = UPSTREAM_DIR / ".claude-plugin" / "marketplace.json"
 
+# Roots for non-skill content. Personas live in agents/personas/; everything
+# else under agents/ is an agent. Commands are at the top-level commands/ dir
+# plus inside each bundle (we walk the bundle's commands/ as well).
+PERSONAS_ROOT = UPSTREAM_DIR / "agents" / "personas"
+AGENTS_ROOT = UPSTREAM_DIR / "agents"
+COMMANDS_ROOT = UPSTREAM_DIR / "commands"
+
+# .md filenames we never treat as installable content.
+META_FILENAMES = {"README.md", "TEMPLATE.md", "CHANGELOG.md", "CLAUDE.md", "GEMINI.md", "AGENTS.md"}
+
 FRONTMATTER_RE = re.compile(r"^---\s*\n(.*?)\n---\s*(?:\n|$)", re.DOTALL)
 TOP_KEY_RE = re.compile(r"^([a-zA-Z_][\w-]*)\s*:\s*(.*?)\s*$")
 NESTED_KEY_RE = re.compile(r"^[ \t]+([a-zA-Z_][\w-]*)\s*:\s*(.*?)\s*$")
@@ -209,6 +219,63 @@ def find_skills(roots: list[Path]) -> list[dict[str, Any]]:
     return entries
 
 
+def find_md_entries(root: Path, exclude_subdirs: set[Path] | None = None) -> list[dict[str, Any]]:
+    """Walk root for *.md files (not SKILL.md) and return entries.
+
+    `exclude_subdirs` is a set of directories to skip entirely. Use this to
+    keep persona files out of the agent walk, for example. Meta filenames
+    (README, TEMPLATE, etc.) are always skipped.
+    """
+    entries: list[dict[str, Any]] = []
+    if not root.exists():
+        return entries
+    excluded = exclude_subdirs or set()
+    for md in root.rglob("*.md"):
+        if md.name in META_FILENAMES:
+            continue
+        if md.name == "SKILL.md":
+            continue
+        if md.is_symlink() or not md.is_file():
+            continue
+        if any(parent in excluded for parent in md.parents):
+            continue
+        try:
+            text = md.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        fm = parse_frontmatter(text)
+        # For agents/personas/commands use the file stem as the slug-name —
+        # frontmatter `name` is treated as a display label only, so the
+        # installable identifier stays URL-safe.
+        name = md.stem
+        if not name:
+            continue
+        rel = md.relative_to(ROOT).as_posix()
+        display = fm.get("name") if fm.get("name") and fm.get("name") != name else ""
+        description = fm.get("description", "")
+        if display:
+            description = f"{display}: {description}" if description else display
+        entry = {
+            "name": name,
+            "source": {"source": "./" + rel, "type": "file"},
+            "description": description,
+            "version": str(fm.get("version", "")),
+            "author": fm.get("author", ""),
+            "license": fm.get("license", ""),
+            "category": fm.get("category", ""),
+        }
+        entry = {k: v for k, v in entry.items() if v not in ("", None, {})}
+        entries.append(entry)
+    return entries
+
+
+def dedup_by_name(entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    seen: dict[str, dict[str, Any]] = {}
+    for e in entries:
+        seen.setdefault(e["name"], e)
+    return sorted(seen.values(), key=lambda e: e["name"])
+
+
 def merge_with_overlap(upstream: list[dict[str, Any]], first_party: list[dict[str, Any]], rules: dict[str, str]) -> list[dict[str, Any]]:
     """Merge two lists keyed by name; first-party wins unless OVERLAP.md says otherwise.
 
@@ -251,8 +318,12 @@ def main(argv: list[str]) -> int:
     bundles, upstream_roots = load_upstream_marketplace()
     upstream_skills = find_skills(upstream_roots)
     first_party_skills = find_skills([SKILLS_DIR])
+    personas = dedup_by_name(find_md_entries(PERSONAS_ROOT))
+    agents = dedup_by_name(find_md_entries(AGENTS_ROOT, exclude_subdirs={PERSONAS_ROOT}))
+    commands = dedup_by_name(find_md_entries(COMMANDS_ROOT))
     if args.verbose:
         print(f"[upstream] {len(bundles)} bundles, {len(upstream_skills)} SKILL.md", file=sys.stderr)
+        print(f"[upstream] {len(personas)} personas, {len(agents)} agents, {len(commands)} commands", file=sys.stderr)
         print(f"[first-party] {len(first_party_skills)} SKILL.md", file=sys.stderr)
 
     skills = merge_with_overlap(upstream_skills, first_party_skills, rules)
@@ -274,10 +345,16 @@ def main(argv: list[str]) -> int:
                 "skills": len(skills),
                 "skills_upstream": len(upstream_skills),
                 "skills_first_party": len(first_party_skills),
+                "agents": len(agents),
+                "personas": len(personas),
+                "commands": len(commands),
             },
         },
         "plugins": bundles,
         "skills": skills,
+        "agents": agents,
+        "personas": personas,
+        "commands": commands,
     }
 
     body = json.dumps(marketplace, indent=2, ensure_ascii=False) + "\n"
