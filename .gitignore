@@ -9,3 +9,6 @@ node_modules/
 .vscode/
 *.log
 .cache/
+
+# auto-generated full-tier docs (regenerated via skills/*/scripts/update-*.sh)
+skills/*/references/llms-full.txt

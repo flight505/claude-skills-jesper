@@ -8,16 +8,16 @@
   "homepage": "https://github.com/flight505/claude-skills-jesper",
   "metadata": {
     "version": "0.1.0",
-    "generated": "2026-05-15T12:25:29Z",
+    "generated": "2026-05-16T00:49:57Z",
     "upstream": {
       "repo": "alirezarezvani/claude-skills",
       "subtree_prefix": "upstream"
     },
     "counts": {
       "bundles": 43,
-      "skills": 274,
+      "skills": 420,
       "skills_upstream": 290,
-      "skills_first_party": 0,
+      "skills_first_party": 148,
       "agents": 20,
       "personas": 7,
       "commands": 33
@@ -1080,6 +1080,22 @@
       "category": "marketing"
     },
     {
+      "name": "accessibility-generator",
+      "source": {
+        "source": "./skills/apple/generators/accessibility-generator",
+        "type": "directory"
+      },
+      "description": "Generate accessibility infrastructure for VoiceOver, Dynamic Type, and accessibility features. Use when improving app accessibility, adding accessibility labels and hints, or auditing compliance."
+    },
+    {
+      "name": "account-deletion",
+      "source": {
+        "source": "./skills/apple/generators/account-deletion",
+        "type": "directory"
+      },
+      "description": "Generates an Apple-compliant account deletion flow with multi-step confirmation UI, optional data export, configurable grace period, Keychain cleanup, and server-side deletion request. Use when user needs account deletion, right-to-delete, or Apple App Review compliance for account removal."
+    },
+    {
       "name": "ad-creative",
       "source": {
         "source": "./upstream/marketing-skill/skills/ad-creative",
@@ -1172,6 +1188,22 @@
       "category": "marketing"
     },
     {
+      "name": "analytics-interpretation",
+      "source": {
+        "source": "./skills/apple/growth/analytics-interpretation",
+        "type": "directory"
+      },
+      "description": "Interpret app metrics and make data-driven decisions. Covers DAU/MAU, retention, LTV, ARPU, App Store Connect analytics, AARRR funnel analysis, cohort analysis, and diagnostic decision trees. Use when user wants to understand their metrics, diagnose problems, or build a data-driven growth plan."
+    },
+    {
+      "name": "analytics-setup",
+      "source": {
+        "source": "./skills/apple/generators/analytics-setup",
+        "type": "directory"
+      },
+      "description": "Generates protocol-based analytics infrastructure with swappable providers (TelemetryDeck, Firebase, Mixpanel). Use when user wants to add analytics, track events, or set up telemetry."
+    },
+    {
       "name": "analytics-tracking",
       "source": {
         "source": "./upstream/marketing-skill/skills/analytics-tracking",
@@ -1182,6 +1214,22 @@
       "author": "Alireza Rezvani",
       "license": "MIT",
       "category": "marketing"
+    },
+    {
+      "name": "animation-patterns",
+      "source": {
+        "source": "./skills/apple/design/animation-patterns",
+        "type": "directory"
+      },
+      "description": "SwiftUI animation patterns including springs, transitions, PhaseAnimator, KeyframeAnimator, and SF Symbol effects. Use when implementing, reviewing, or fixing animation code on iOS/macOS."
+    },
+    {
+      "name": "announcement-banner",
+      "source": {
+        "source": "./skills/apple/generators/announcement-banner",
+        "type": "directory"
+      },
+      "description": "Generates an in-app announcement banner system with remote configuration, scheduling, deep link actions, and dismiss tracking. Use when user wants in-app banners, promotional notices, maintenance alerts, or contextual announcements."
     },
     {
       "name": "api-design-reviewer",
@@ -1200,12 +1248,92 @@
       "description": "Use when the user asks to generate API tests, create integration test suites, test REST endpoints, or build contract tests."
     },
     {
+      "name": "app-clip",
+      "source": {
+        "source": "./skills/apple/generators/app-clip",
+        "type": "directory"
+      },
+      "description": "Generates App Clip targets with invocation URL handling, lightweight experiences, and full app upgrade prompts. Use when user wants NFC/QR/Safari banner invocation, instant app experiences, or App Clip Card setup."
+    },
+    {
+      "name": "app-description-writer",
+      "source": {
+        "source": "./skills/apple/app-store/app-description-writer",
+        "type": "directory"
+      },
+      "description": "Generate compelling App Store descriptions that convert browsers into users. Use when writing initial descriptions, improving existing copy, or drafting promotional text and What's New for a major update."
+    },
+    {
+      "name": "app-extensions",
+      "source": {
+        "source": "./skills/apple/generators/app-extensions",
+        "type": "directory"
+      },
+      "description": "Generates app extension infrastructure for Share Extensions, Action Extensions, Keyboard Extensions, and Safari Web Extensions with data sharing via App Groups. Use when user wants to add a share extension, action extension, keyboard extension, Safari web extension, or any app extension type."
+    },
+    {
+      "name": "app-icon-generator",
+      "source": {
+        "source": "./skills/apple/generators/app-icon-generator",
+        "type": "directory"
+      },
+      "description": "Generates app icons programmatically using CoreGraphics following Apple HIG. Use when user wants to create, generate, or design an app icon for macOS or iOS."
+    },
+    {
+      "name": "app-intents",
+      "source": {
+        "source": "./skills/apple/apple-intelligence/app-intents",
+        "type": "directory"
+      },
+      "description": "App Intents for Siri, Shortcuts, Spotlight, and Apple Intelligence integration including intent modes, interactive snippets, visual intelligence, and entity indexing. Use when implementing Siri integration, App Shortcuts, or Spotlight indexing."
+    },
+    {
+      "name": "app-planner",
+      "source": {
+        "source": "./skills/apple/ios/app-planner",
+        "type": "directory"
+      },
+      "description": "Guides you through comprehensive iOS/Swift app planning and analysis. Use for new apps (concept to architecture) or existing apps (audit current state, plan improvements, evaluate tech stack). Covers product planning, technical decisions, UI/UX design, and distribution strategy."
+    },
+    {
+      "name": "app-store",
+      "source": {
+        "source": "./skills/apple/app-store",
+        "type": "directory"
+      },
+      "description": "App Store optimization and marketing skills for descriptions, screenshots, keywords, review responses, and comprehensive promotional strategy. Use when user needs help with App Store presence, ASO, marketing, or customer communication."
+    },
+    {
+      "name": "app-store-assets",
+      "source": {
+        "source": "./skills/apple/generators/app-store-assets",
+        "type": "directory"
+      },
+      "description": "Comprehensive App Store asset specifications and guidelines for all promotional artwork — app icons, screenshots, app previews, event cards, subscription images, and featuring artwork. Use when preparing assets for App Store Connect upload."
+    },
+    {
       "name": "app-store-optimization",
       "source": {
         "source": "./upstream/marketing-skill/skills/app-store-optimization",
         "type": "directory"
       },
       "description": "App Store Optimization (ASO) toolkit for researching keywords, analyzing competitor rankings, generating metadata suggestions, and improving app visibility on Apple App Store and Google Play Store. Use when the user asks about ASO, app store rankings, app metadata, app titles and descriptions, app store listings, app visibility, or mobile app marketing on iOS or Android. Supports keyword research and scoring, competitor keyword analysis, metadata optimization, A/B test planning, launch checklists, and tracking ranking changes."
+    },
+    {
+      "name": "appkit-swiftui-bridge",
+      "source": {
+        "source": "./skills/apple/macos/appkit-swiftui-bridge",
+        "type": "directory"
+      },
+      "description": "Expert guidance for hybrid AppKit-SwiftUI development. Covers NSViewRepresentable, hosting controllers, and state management between frameworks. Use when bridging AppKit and SwiftUI."
+    },
+    {
+      "name": "apple",
+      "source": {
+        "source": "./skills/apple",
+        "type": "directory"
+      },
+      "description": "Complete Apple platform development toolkit — iOS, macOS, watchOS, Swift, SwiftUI, StoreKit, ASO, legal, security, testing, and growth. Install for any Apple-platform project."
     },
     {
       "name": "apple-hig-expert",
@@ -1218,6 +1346,54 @@
       "author": "Alireza Rezvani",
       "license": "MIT",
       "category": "design"
+    },
+    {
+      "name": "apple-intelligence",
+      "source": {
+        "source": "./skills/apple/apple-intelligence",
+        "type": "directory"
+      },
+      "description": "Apple Intelligence skills for on-device AI features including Foundation Models, Visual Intelligence, App Intents, and intelligent assistants. Use when implementing AI-powered features."
+    },
+    {
+      "name": "apple-search-ads",
+      "source": {
+        "source": "./skills/apple/app-store/apple-search-ads",
+        "type": "directory"
+      },
+      "description": "Apple Search Ads campaign strategy for indie developers — paid acquisition, keyword bidding, budget planning, and ROAS optimization. Use when user asks about running ads, paid user acquisition, or Apple Search Ads campaigns."
+    },
+    {
+      "name": "architecture-patterns",
+      "source": {
+        "source": "./skills/apple/macos/architecture-patterns",
+        "type": "directory"
+      },
+      "description": "Deep dive into software architecture for macOS. Covers SOLID principles, design patterns, and modular code organization. Use when designing app architecture or refactoring."
+    },
+    {
+      "name": "architecture-spec",
+      "source": {
+        "source": "./skills/apple/product/architecture-spec",
+        "type": "directory"
+      },
+      "description": "Generates technical architecture specification from PRD. Covers architecture pattern, tech stack, data models, and app structure. Use when creating ARCHITECTURE.md or designing system architecture."
+    },
+    {
+      "name": "aso-appstore-screenshots",
+      "source": {
+        "source": "./skills/apple/aso-appstore-screenshots",
+        "type": "directory"
+      },
+      "description": "USE THIS SKILL to design and generate high-converting App Store screenshots — Benefit Discovery → Screenshot Pairing → Two-stage AI Generation (deterministic compose + Nano Banana Pro enhance) → exact App Store Connect dimensions. Persists progress to memory across sessions."
+    },
+    {
+      "name": "assistive-access",
+      "source": {
+        "source": "./skills/apple/ios/assistive-access",
+        "type": "directory"
+      },
+      "description": "Assistive Access implementation for cognitive accessibility including simplified scenes, navigation icons, runtime detection, and design principles. Use when optimizing apps for Assistive Access mode."
     },
     {
       "name": "atlassian-admin",
@@ -1234,6 +1410,14 @@
         "type": "directory"
       },
       "description": "Atlassian Template and Files Creator/Modifier expert for creating, modifying, and managing Jira and Confluence templates, blueprints, custom layouts, reusable components, and standardized content structures. Use when building org-wide templates, custom blueprints, page layouts, and automated content generation."
+    },
+    {
+      "name": "auth-flow",
+      "source": {
+        "source": "./skills/apple/generators/auth-flow",
+        "type": "directory"
+      },
+      "description": "Generates authentication infrastructure with Sign in with Apple, biometrics, and Keychain storage. Use when user wants to add authentication, login, or Sign in with Apple."
     },
     {
       "name": "autoresearch-agent",
@@ -1264,12 +1448,28 @@
       "description": "Design Azure architectures for startups and enterprises. Use when asked to design Azure infrastructure, create Bicep/ARM templates, optimize Azure costs, set up Azure DevOps pipelines, or migrate to Azure. Covers AKS, App Service, Azure Functions, Cosmos DB, and cost optimization."
     },
     {
+      "name": "background-processing",
+      "source": {
+        "source": "./skills/apple/generators/background-processing",
+        "type": "directory"
+      },
+      "description": "Generates background processing infrastructure with BGTaskScheduler, background refresh, background downloads, and silent push handling. Use when user needs background tasks, periodic refresh, background URLSession downloads, or silent push notification processing."
+    },
+    {
       "name": "behuman",
       "source": {
         "source": "./upstream/engineering/behuman/skills/behuman",
         "type": "directory"
       },
       "description": "Use when the user wants more human-like AI responses — less robotic, less listy, more authentic. Triggers: 'behuman', 'be real', 'like a human', 'more human', 'less AI', 'talk like a person', 'mirror mode', 'stop being so AI', or when conversations are emotionally charged (grief, job loss, relationship advice, fear). NOT for technical questions, code generation, or factual lookups."
+    },
+    {
+      "name": "beta-testing",
+      "source": {
+        "source": "./skills/apple/product/beta-testing",
+        "type": "directory"
+      },
+      "description": "Beta testing strategy for iOS/macOS apps. Covers TestFlight program setup, beta tester recruitment, feedback collection methodology, user interviews, signal-vs-noise interpretation, and go/no-go launch readiness decisions. Use when planning a beta, setting up TestFlight, collecting user feedback, or deciding if ready to launch."
     },
     {
       "name": "board",
@@ -1524,6 +1724,14 @@
       "license": "MIT"
     },
     {
+      "name": "characterization-test-generator",
+      "source": {
+        "source": "./skills/apple/testing/characterization-test-generator",
+        "type": "directory"
+      },
+      "description": "Generates tests that capture current behavior of existing code before refactoring. Use when you need a safety net before AI-assisted refactoring or modifying legacy code."
+    },
+    {
       "name": "chief-ai-officer-advisor",
       "source": {
         "source": "./upstream/c-level-advisor/skills/chief-ai-officer-advisor",
@@ -1604,6 +1812,22 @@
       "description": "Generate pragmatic CI/CD pipelines from detected project stack signals — fast baseline generation, repeatable checks, environment-aware deployment stages. Use when setting up CI for a new project, refactoring existing pipelines, or standardizing deployment workflows across multiple repos."
     },
     {
+      "name": "ci-cd-setup",
+      "source": {
+        "source": "./skills/apple/generators/ci-cd-setup",
+        "type": "directory"
+      },
+      "description": "Generate CI/CD configuration for automated builds, tests, and distribution of iOS/macOS apps. Use when setting up GitHub Actions, Xcode Cloud, or fastlane for continuous integration, TestFlight, or App Store deployment."
+    },
+    {
+      "name": "cinematic-onboarding-swiftui",
+      "source": {
+        "source": "./skills/apple/cinematic-onboarding-swiftui",
+        "type": "directory"
+      },
+      "description": "USE THIS SKILL to build cinematic, animated SwiftUI onboarding flows for iOS apps — multi-step structure with smooth fade/scale transitions, animated progress bar, rotating testimonials, hero header/footer images, and modern async/await timing patterns. Adapts the proven 3-step Adam Lyttle reference implementation to any app's domain."
+    },
+    {
       "name": "ciso-advisor",
       "source": {
         "source": "./upstream/c-level-advisor/skills/ciso-advisor",
@@ -1624,12 +1848,28 @@
       "description": "/cs:ciso-review <plan> — Risk-paranoid interrogation of any plan that touches data, compliance, or production access."
     },
     {
+      "name": "claude-docs-skill",
+      "source": {
+        "source": "./skills/claude-docs-skill",
+        "type": "directory"
+      },
+      "description": "USE THIS SKILL for any question about Claude API, Claude Code CLI, hooks, plugins, skills, subagents, MCP servers, SDKs, extended thinking, tool use, streaming, or deployment. This skill has complete local documentation — do not use web search, WebFetch, or claude-code-guide instead."
+    },
+    {
       "name": "cloud-security",
       "source": {
         "source": "./upstream/engineering-team/skills/cloud-security",
         "type": "directory"
       },
       "description": "Use when assessing cloud infrastructure for security misconfigurations, IAM privilege escalation paths, S3 public exposure, open security group rules, or IaC security gaps. Covers AWS, Azure, and GCP posture assessment with MITRE ATT&CK mapping."
+    },
+    {
+      "name": "cloudkit-sync",
+      "source": {
+        "source": "./skills/apple/generators/cloudkit-sync",
+        "type": "directory"
+      },
+      "description": "Generate CloudKit sync infrastructure using CKSyncEngine with conflict resolution, sharing, and account monitoring. Use when adding iCloud sync to an iOS/macOS app."
     },
     {
       "name": "cmo-advisor",
@@ -1684,6 +1924,14 @@
       "description": "Analyze a codebase and generate onboarding documentation for engineers, tech leads, and contractors. Fast fact-gathering and repeatable onboarding outputs. Use when onboarding a new engineer, writing architecture-overview docs for a new project, or producing tech-lead briefings for unfamiliar repos."
     },
     {
+      "name": "coding-best-practices",
+      "source": {
+        "source": "./skills/apple/ios/coding-best-practices",
+        "type": "directory"
+      },
+      "description": "Reviews Swift/iOS code for adherence to modern Swift idioms, Apple platform best practices, architecture patterns, and code quality standards. Use when user mentions best practices, code review, clean code, refactoring, or wants to improve code quality."
+    },
+    {
       "name": "cold-email",
       "source": {
         "source": "./upstream/marketing-skill/skills/cold-email",
@@ -1704,6 +1952,14 @@
       "description": ">"
     },
     {
+      "name": "community-building",
+      "source": {
+        "source": "./skills/apple/growth/community-building",
+        "type": "directory"
+      },
+      "description": "Build and engage a user community around your indie app. Covers platform selection, building in public strategy, content calendars for solo developers, and converting community members into advocates. Use when user wants to grow social media presence, start building in public, or create a content strategy."
+    },
+    {
       "name": "company-os",
       "source": {
         "source": "./upstream/c-level-advisor/skills/company-os",
@@ -1714,6 +1970,14 @@
       "author": "Alireza Rezvani",
       "license": "MIT",
       "category": "c-level"
+    },
+    {
+      "name": "competitive-analysis",
+      "source": {
+        "source": "./skills/apple/product/competitive-analysis",
+        "type": "directory"
+      },
+      "description": "Deep competitive analysis for iOS/macOS apps including feature comparison, pricing analysis, strengths/weaknesses, market positioning, and differentiation opportunities. Use when user asks for competitive analysis, competitor research, feature comparison, market positioning, or wants to understand competition in detail."
     },
     {
       "name": "competitive-intel",
@@ -1748,12 +2012,28 @@
       "category": "marketing"
     },
     {
+      "name": "concurrency-patterns",
+      "source": {
+        "source": "./skills/apple/swift/concurrency-patterns",
+        "type": "directory"
+      },
+      "description": "Swift concurrency patterns including Swift 6.2 approachable concurrency, structured concurrency, actors, continuations, and migration. Use when reviewing or building async code, fixing data race errors, or migrating to Swift 6."
+    },
+    {
       "name": "confluence-expert",
       "source": {
         "source": "./upstream/project-management/skills/confluence-expert",
         "type": "directory"
       },
       "description": "Atlassian Confluence expert for creating and managing spaces, knowledge bases, and documentation. Configures space permissions and hierarchies, creates page templates with macros, sets up documentation taxonomies, designs page layouts, and manages content governance. Use when users need to build or restructure a Confluence space, design page hierarchies with permission structures, author or standardise documentation templates, embed Jira reports in pages, run knowledge base audits, or establish documentation standards and collaborative workflows."
+    },
+    {
+      "name": "consent-flow",
+      "source": {
+        "source": "./skills/apple/generators/consent-flow",
+        "type": "directory"
+      },
+      "description": "Generates GDPR/CCPA/DPDP privacy consent flows with granular category preferences, consent state persistence, audit logging, and ATT (App Tracking Transparency) integration. Use when user needs privacy consent UI, cookie/tracking consent, or compliance management."
     },
     {
       "name": "content-creator",
@@ -1860,6 +2140,14 @@
       "category": "marketing"
     },
     {
+      "name": "core-ml",
+      "source": {
+        "source": "./skills/apple/core-ml",
+        "type": "directory"
+      },
+      "description": "Core ML, Create ML, Vision framework, Natural Language framework, on-device ML integration. Use when user wants image classification, text analysis, object detection, sound classification, model optimization, or custom model integration. Covers Core ML vs Foundation Models decision."
+    },
+    {
       "name": "coverage",
       "source": {
         "source": "./upstream/engineering-team/playwright-pro/skills/coverage",
@@ -1960,6 +2248,14 @@
       "category": "c-level"
     },
     {
+      "name": "custom-product-pages",
+      "source": {
+        "source": "./skills/apple/generators/custom-product-pages",
+        "type": "directory"
+      },
+      "description": "Generates Custom Product Page metadata templates with screenshot strategies, keyword targeting, and audience-specific messaging for up to 35 page variants. Use when creating targeted App Store pages for different audiences, ad campaigns, or traffic sources."
+    },
+    {
       "name": "customer-success-manager",
       "source": {
         "source": "./upstream/business-growth/skills/customer-success-manager",
@@ -1970,6 +2266,14 @@
       "author": "Alireza Rezvani",
       "license": "MIT",
       "category": "business-growth"
+    },
+    {
+      "name": "data-export",
+      "source": {
+        "source": "./skills/apple/generators/data-export",
+        "type": "directory"
+      },
+      "description": "Generates data export/import infrastructure for JSON, CSV, PDF formats with GDPR data portability, share sheet integration, and file import. Use when user wants data export functionality, CSV/JSON/PDF export, GDPR compliance data portability, import from files, or share sheet for data."
     },
     {
       "name": "data-quality-auditor",
@@ -1996,6 +2300,14 @@
       "description": "Use when the user asks to create ERD diagrams, normalize database schemas, design table relationships, or plan schema migrations."
     },
     {
+      "name": "debug-menu",
+      "source": {
+        "source": "./skills/apple/generators/debug-menu",
+        "type": "directory"
+      },
+      "description": "Generates a developer debug menu with feature flag toggles, environment switching, network log viewer, cache clearing, crash trigger, and diagnostic info export. Only included in DEBUG builds. Use when user wants a debug panel, dev tools menu, or shake-to-debug functionality."
+    },
+    {
       "name": "decide",
       "source": {
         "source": "./upstream/c-level-advisor/c-level-agents/skills/decide",
@@ -2016,6 +2328,14 @@
       "category": "c-level"
     },
     {
+      "name": "deep-linking",
+      "source": {
+        "source": "./skills/apple/generators/deep-linking",
+        "type": "directory"
+      },
+      "description": "Generate deep linking infrastructure with URL schemes, Universal Links, and App Intents for Siri/Shortcuts. Use when handling custom URL schemes, Universal Links/Associated Domains, or routing to specific content from external sources."
+    },
+    {
       "name": "demo-video",
       "source": {
         "source": "./upstream/engineering/demo-video/skills/demo-video",
@@ -2030,6 +2350,22 @@
         "type": "directory"
       },
       "description": "Audit and manage dependencies across multi-language projects. Identifies vulnerabilities, license conflicts, transitive dependency risks, and safe-upgrade paths. Use when auditing third-party packages before release, investigating a CVE, planning a major version bump, or running a license-compliance review."
+    },
+    {
+      "name": "design",
+      "source": {
+        "source": "./skills/apple/design",
+        "type": "directory"
+      },
+      "description": "Design system skills for modern Apple platform UI including Liquid Glass, animations, and visual design patterns. Use when implementing new design language features."
+    },
+    {
+      "name": "design-md",
+      "source": {
+        "source": "./skills/design-md",
+        "type": "directory"
+      },
+      "description": "Drop-in DESIGN.md design-system files for 71 popular brands (Claude, Linear, Stripe, Vercel, Apple, Figma, Tesla…). Use when the user wants to match a brand's look and feel, asks to \"apply a design system\", says \"make it look like <brand>\", mentions DESIGN.md, or needs design tokens (colors, typography, components) extracted from a known site."
     },
     {
       "name": "docker-development",
@@ -2106,6 +2442,14 @@
       "category": "engineering-team"
     },
     {
+      "name": "error-monitoring",
+      "source": {
+        "source": "./skills/apple/generators/error-monitoring",
+        "type": "directory"
+      },
+      "description": "Generates protocol-based error/crash monitoring with swappable providers (Sentry, Crashlytics). Use when user wants to add crash reporting, error tracking, or production monitoring."
+    },
+    {
       "name": "eu-ai-act-specialist",
       "source": {
         "source": "./upstream/ra-qm-team/skills/eu-ai-act-specialist",
@@ -2170,6 +2514,14 @@
       "description": "FDA regulatory consultant for medical device companies. Provides 510(k)/PMA/De Novo pathway guidance, QSR (21 CFR 820) compliance, HIPAA assessments, and device cybersecurity. Use when user mentions FDA submission, 510(k), PMA, De Novo, QSR, premarket, predicate device, substantial equivalence, HIPAA medical device, or FDA cybersecurity."
     },
     {
+      "name": "feature-flags",
+      "source": {
+        "source": "./skills/apple/generators/feature-flags",
+        "type": "directory"
+      },
+      "description": "Generate feature flag infrastructure with local defaults, remote configuration, SwiftUI integration, and debug menu. Use when adding feature flags or A/B testing to iOS/macOS apps."
+    },
+    {
       "name": "feature-flags-architect",
       "source": {
         "source": "./upstream/engineering/skills/feature-flags-architect",
@@ -2179,6 +2531,22 @@
       "version": "2.4.0",
       "author": "claude-code-skills",
       "license": "MIT"
+    },
+    {
+      "name": "featuring-nomination",
+      "source": {
+        "source": "./skills/apple/generators/featuring-nomination",
+        "type": "directory"
+      },
+      "description": "Generates App Store featuring nomination pitches with all required fields, compelling narratives, and Apple editorial angles. Use when submitting your app for App Store editorial featuring or preparing a self-nomination."
+    },
+    {
+      "name": "feedback-form",
+      "source": {
+        "source": "./skills/apple/generators/feedback-form",
+        "type": "directory"
+      },
+      "description": "Generates an in-app feedback collection form with category selection, text input, optional screenshot attachment, device diagnostics, and smart routing — directing happy users to App Store reviews and unhappy users to support. Use when user wants feedback, bug reports, feature requests, or contact support forms."
     },
     {
       "name": "finance-skills",
@@ -2216,6 +2584,14 @@
       "description": "Use when the user asks to fix, debug, or make a specific feature/module/area work end-to-end. Triggers: 'make X work', 'fix the Y feature', 'the Z module is broken', 'focus on [area]'. Not for quick single-bug fixes — this is for systematic deep-dive repair across all files and dependencies."
     },
     {
+      "name": "force-update",
+      "source": {
+        "source": "./skills/apple/generators/force-update",
+        "type": "directory"
+      },
+      "description": "Generates a minimum version enforcement system with hard-block and soft-prompt update flows, App Store redirect, and remote config or App Store lookup for version checks. Use when user wants force update, mandatory update, or minimum version check."
+    },
+    {
       "name": "form-cro",
       "source": {
         "source": "./upstream/marketing-skill/skills/form-cro",
@@ -2226,6 +2602,14 @@
       "author": "Alireza Rezvani",
       "license": "MIT",
       "category": "marketing"
+    },
+    {
+      "name": "foundation-models",
+      "source": {
+        "source": "./skills/apple/apple-intelligence/foundation-models",
+        "type": "directory"
+      },
+      "description": "On-device LLM integration using Apple's Foundation Models framework. Use when implementing AI text generation, structured output, or tool calling."
     },
     {
       "name": "founder-coach",
@@ -2300,6 +2684,14 @@
       "description": "GDPR and German DSGVO compliance automation. Scans codebases for privacy risks, generates DPIA documentation, tracks data subject rights requests. Use for GDPR compliance assessments, privacy audits, data protection planning, DPIA generation, and data subject rights management."
     },
     {
+      "name": "gemini-docs-skill",
+      "source": {
+        "source": "./skills/gemini-docs-skill",
+        "type": "directory"
+      },
+      "description": "USE THIS SKILL for any question about Google Gemini API — models, function calling, structured output, Live API, embeddings, pricing, or SDKs. This skill has complete local documentation — do not use web search or WebFetch instead."
+    },
+    {
       "name": "general-counsel-advisor",
       "source": {
         "source": "./upstream/c-level-advisor/general-counsel-advisor/skills/general-counsel-advisor",
@@ -2318,6 +2710,14 @@
         "type": "directory"
       },
       "description": ">-"
+    },
+    {
+      "name": "generators",
+      "source": {
+        "source": "./skills/apple/generators",
+        "type": "directory"
+      },
+      "description": "Code generator skills that produce production-ready Swift code for common app components. Use when user wants to add logging, analytics, onboarding, review prompts, networking, authentication, paywalls, settings, persistence, error monitoring, CI/CD pipelines, localization, push notifications, deep linking, testing, accessibility, widgets, feature flags, app icons, image caching, pagination, HTTP caching, share cards, social export, subscription lifecycle, referral systems, watermarks, streak tracking, milestone celebrations, what's new screens, lapsed user re-engagement, usage insights, variable rewards, consent flows, account deletion, permission priming, force updates, state restoration, debug menus, offline queues, feedback forms, announcement banners, quick win sessions, Spotlight indexing, App Clips, screenshot automation, background processing, app extensions, or data export."
     },
     {
       "name": "git-worktree-manager",
@@ -2344,6 +2744,14 @@
       "description": "Interview the user relentlessly about a plan or design until reaching shared understanding, resolving each branch of the decision tree. Use when user wants to stress-test a plan, get grilled on their design, or mentions \"grill me\".",
       "version": "1.0.0",
       "license": "MIT"
+    },
+    {
+      "name": "growth",
+      "source": {
+        "source": "./skills/apple/growth",
+        "type": "directory"
+      },
+      "description": "Growth skills for indie Apple developers — user acquisition, analytics interpretation, press/media outreach, community building, and indie business operations. Use when user asks about growing their app, understanding metrics, getting press coverage, or running an indie dev business."
     },
     {
       "name": "handoff",
@@ -2376,6 +2784,54 @@
       "category": "engineering"
     },
     {
+      "name": "http-cache",
+      "source": {
+        "source": "./skills/apple/generators/http-cache",
+        "type": "directory"
+      },
+      "description": "Generates an HTTP caching layer with Cache-Control parsing, ETag/conditional requests, and offline fallback. Use when user wants to add response caching, offline support, or reduce API calls."
+    },
+    {
+      "name": "idea-generator",
+      "source": {
+        "source": "./skills/apple/product/idea-generator",
+        "type": "directory"
+      },
+      "description": "Brainstorm and rank iOS/macOS app ideas tailored to developer skills. Use when user says \"what should I build\", \"give me app ideas\", \"I don't know what to build\", \"brainstorm app ideas\", or \"help me find an app idea\"."
+    },
+    {
+      "name": "image-loading",
+      "source": {
+        "source": "./skills/apple/generators/image-loading",
+        "type": "directory"
+      },
+      "description": "Generates an image loading pipeline with memory/disk caching, deduplication, and a CachedAsyncImage SwiftUI view. Use when user wants image caching, lazy image loading, or a replacement for AsyncImage."
+    },
+    {
+      "name": "implementation-guide",
+      "source": {
+        "source": "./skills/apple/product/implementation-guide",
+        "type": "directory"
+      },
+      "description": "Generates detailed implementation guide with pseudo-code and step-by-step development instructions. Creates IMPLEMENTATION_GUIDE.md from PRD, Architecture, and UX specs. Use when creating development roadmap."
+    },
+    {
+      "name": "implementation-spec",
+      "source": {
+        "source": "./skills/apple/product/implementation-spec",
+        "type": "directory"
+      },
+      "description": "Master orchestrator that generates all implementation specs (PRD, Architecture, UX, Implementation, Test, Release) from product plan. Use when generating complete specification package."
+    },
+    {
+      "name": "in-app-events",
+      "source": {
+        "source": "./skills/apple/generators/in-app-events",
+        "type": "directory"
+      },
+      "description": "Generates In-App Event metadata templates for App Store Connect — event names, descriptions, badge types, image specs, and deep link configuration. Use when creating events for App Store visibility, engagement campaigns, or seasonal promotions."
+    },
+    {
       "name": "incident-commander",
       "source": {
         "source": "./upstream/engineering-team/skills/incident-commander",
@@ -2392,6 +2848,14 @@
       "description": "Use when a security incident has been detected or declared and needs classification, triage, escalation path determination, and forensic evidence collection. Covers SEV1-SEV4 classification, false positive filtering, incident taxonomy, and NIST SP 800-61 lifecycle."
     },
     {
+      "name": "indie-business",
+      "source": {
+        "source": "./skills/apple/growth/indie-business",
+        "type": "directory"
+      },
+      "description": "Business fundamentals for indie app developers — LLC/entity setup, taxes, Apple Small Business Program, revenue tracking, hiring contractors, and financial planning for sustainability. Use when user asks about business setup, tax implications, hiring, or financial planning for their app business."
+    },
+    {
       "name": "information-security-manager-iso27001",
       "source": {
         "source": "./upstream/ra-qm-team/skills/information-security-manager-iso27001",
@@ -2406,6 +2870,14 @@
         "type": "directory"
       },
       "description": "Create a new AgentHub collaboration session with task, agent count, and evaluation criteria."
+    },
+    {
+      "name": "integration-test-scaffold",
+      "source": {
+        "source": "./skills/apple/testing/integration-test-scaffold",
+        "type": "directory"
+      },
+      "description": "Generate cross-module test harness with mock servers, in-memory stores, and test configuration. Use when testing networking + persistence + business logic together."
     },
     {
       "name": "internal-narrative",
@@ -2438,6 +2910,22 @@
       "author": "Alireza Rezvani",
       "license": "MIT",
       "category": "c-level"
+    },
+    {
+      "name": "ios-development",
+      "source": {
+        "source": "./skills/apple/ios",
+        "type": "directory"
+      },
+      "description": "Comprehensive iOS development guidance including Swift best practices, SwiftUI patterns, UI/UX review against HIG, and app planning. Use for iOS code review, best practices, accessibility audits, or planning new iOS apps."
+    },
+    {
+      "name": "ipad-patterns",
+      "source": {
+        "source": "./skills/apple/ios/ipad-patterns",
+        "type": "directory"
+      },
+      "description": "iPadOS-specific patterns including Stage Manager, multi-window, drag and drop, keyboard shortcuts, pointer interactions, and Apple Pencil support. Use when building iPad-optimized features."
     },
     {
       "name": "isms-audit-expert",
@@ -2479,6 +2967,14 @@
       "license": "MIT"
     },
     {
+      "name": "keyword-optimizer",
+      "source": {
+        "source": "./skills/apple/app-store/keyword-optimizer",
+        "type": "directory"
+      },
+      "description": "Optimize app title, subtitle, and keywords for maximum App Store discoverability. Use when launching a new app, improving search rankings, entering new markets/languages, or safely optimizing ASO for an app with existing traffic."
+    },
+    {
       "name": "kubernetes-operator",
       "source": {
         "source": "./upstream/engineering/skills/kubernetes-operator",
@@ -2498,6 +2994,14 @@
       "description": "Generates high-converting landing pages as complete Next.js/React (TSX) components with Tailwind CSS. Creates hero sections, feature grids, pricing tables, FAQ accordions, testimonial blocks, and CTA sections using proven copy frameworks (PAS, AIDA, BAB). Outputs SEO meta tags, structured data, and performance-optimised code targeting Core Web Vitals (LCP < 1s, CLS < 0.1). Use when the user asks to create a landing page, marketing page, homepage, single-page site, lead capture page, campaign page, promo page, or conversion-optimised web page — or when they want to A/B test landing page variants or replace a static page with one designed to convert."
     },
     {
+      "name": "lapsed-user",
+      "source": {
+        "source": "./skills/apple/generators/lapsed-user",
+        "type": "directory"
+      },
+      "description": "Generates lapsed user detection and re-engagement screens with personalized return experiences, win-back offers, and inactivity tracking. Use when user wants to re-engage inactive users, detect lapsed users, or build return flows."
+    },
+    {
       "name": "launch-strategy",
       "source": {
         "source": "./upstream/marketing-skill/skills/launch-strategy",
@@ -2508,6 +3012,30 @@
       "author": "Alireza Rezvani",
       "license": "MIT",
       "category": "marketing"
+    },
+    {
+      "name": "legal",
+      "source": {
+        "source": "./skills/apple/legal",
+        "type": "directory"
+      },
+      "description": "Legal document generation and compliance guidance for indie Apple developers. Covers privacy policies, terms of service, EULAs, GDPR/CCPA/DPDP compliance, and Apple App Store legal requirements. Use when user needs legal documents or compliance guidance."
+    },
+    {
+      "name": "liquid-glass",
+      "source": {
+        "source": "./skills/apple/design/liquid-glass",
+        "type": "directory"
+      },
+      "description": "Implement Liquid Glass design using .glassEffect() API for iOS/macOS 26+. Covers SwiftUI, AppKit, UIKit, and WidgetKit. Use when creating modern glass-based UI effects."
+    },
+    {
+      "name": "live-activity-generator",
+      "source": {
+        "source": "./skills/apple/generators/live-activity-generator",
+        "type": "directory"
+      },
+      "description": "Generate ActivityKit Live Activity infrastructure with Dynamic Island layouts, Lock Screen presentation, and push-to-update support. Use when adding Live Activities to an iOS app."
     },
     {
       "name": "llm-cost-optimizer",
@@ -2529,6 +3057,30 @@
       "license": "MIT"
     },
     {
+      "name": "localization-setup",
+      "source": {
+        "source": "./skills/apple/generators/localization-setup",
+        "type": "directory"
+      },
+      "description": "Generate internationalization (i18n) infrastructure for multi-language support in iOS/macOS apps. Use when localizing for multiple languages, adopting String Catalogs (xcstrings), or supporting RTL languages."
+    },
+    {
+      "name": "localization-strategy",
+      "source": {
+        "source": "./skills/apple/product/localization-strategy",
+        "type": "directory"
+      },
+      "description": "Localization and internationalization strategy for iOS/macOS apps. Covers market prioritization, language tier recommendations, minimum viable localization levels, translation workflows, cultural adaptation, localized ASO, and testing. Use when planning localization, expanding to new markets, deciding which languages to support, or planning translation workflow."
+    },
+    {
+      "name": "logging-setup",
+      "source": {
+        "source": "./skills/apple/generators/logging-setup",
+        "type": "directory"
+      },
+      "description": "Generates structured logging infrastructure using os.log/Logger to replace print() statements. Use when user wants to add proper logging, replace print statements, or set up app logging."
+    },
+    {
       "name": "loop",
       "source": {
         "source": "./upstream/engineering/autoresearch-agent/skills/loop",
@@ -2547,6 +3099,46 @@
       "author": "Alireza Rezvani",
       "license": "MIT",
       "category": "c-level"
+    },
+    {
+      "name": "macos-accessibility",
+      "source": {
+        "source": "./skills/apple/macos-accessibility",
+        "type": "directory"
+      },
+      "description": "USE THIS SKILL for automating macOS apps via the Accessibility API (AXUIElement) — TCC permission handling, element discovery, safe action execution, code-signature verification, and the security boundaries you must respect."
+    },
+    {
+      "name": "macos-capabilities",
+      "source": {
+        "source": "./skills/apple/macos/macos-capabilities",
+        "type": "directory"
+      },
+      "description": "Expert guidance on macOS platform capabilities. Covers sandboxing, app extensions, menu bar apps, and background execution. Use when implementing system integration features."
+    },
+    {
+      "name": "macos-development",
+      "source": {
+        "source": "./skills/apple/macos",
+        "type": "directory"
+      },
+      "description": "Comprehensive macOS development guidance including Swift 6+, SwiftUI, SwiftData, architecture patterns, AppKit bridging, and macOS 26 Tahoe APIs. Use for macOS code review, best practices, UI review, or platform-specific features."
+    },
+    {
+      "name": "macos-tahoe-apis",
+      "source": {
+        "source": "./skills/apple/macos/macos-tahoe-apis",
+        "type": "directory"
+      },
+      "description": "Guide to macOS 26 Tahoe APIs and features. Covers Apple Intelligence, Foundation Models, MLX framework, and Continuity. Use when implementing macOS 26 specific features."
+    },
+    {
+      "name": "market-research",
+      "source": {
+        "source": "./skills/apple/product/market-research",
+        "type": "directory"
+      },
+      "description": "Deep market analysis for iOS/macOS apps including market sizing (TAM/SAM/SOM), growth trends, market maturity, entry barriers, distribution channels, and revenue potential. Use when user asks for market research, market size, market opportunity, growth potential, TAM/SAM/SOM, or market trends."
     },
     {
       "name": "marketing-context",
@@ -2619,6 +3211,14 @@
       "license": "MIT"
     },
     {
+      "name": "marketing-strategy",
+      "source": {
+        "source": "./skills/apple/app-store/marketing-strategy",
+        "type": "directory"
+      },
+      "description": "App Store marketing strategy advisor that analyzes your app and recommends the best promotional features. Orchestrates sub-skills for implementation. Use when planning app promotion, launch strategy, user acquisition, or re-engagement campaigns."
+    },
+    {
       "name": "marketing-strategy-pmm",
       "source": {
         "source": "./upstream/marketing-skill/skills/marketing-strategy-pmm",
@@ -2651,6 +3251,14 @@
       "description": "Analyzes meeting transcripts and recordings to surface behavioral patterns, communication anti-patterns, and actionable coaching feedback. Use this skill whenever the user uploads or points to meeting transcripts (.txt, .md, .vtt, .srt, .docx), asks about their communication habits, wants feedback on how they run meetings, requests speaking ratio analysis, mentions filler words or conflict avoidance, or wants to compare their communication across time periods. Also trigger when users mention tools like Granola, Otter, Fireflies, or Zoom transcripts. Even if the user just says \"look at my meetings\" or \"how do I come across in meetings\" — use this skill."
     },
     {
+      "name": "memory",
+      "source": {
+        "source": "./skills/apple/swift/memory",
+        "type": "directory"
+      },
+      "description": "Swift 6.2 InlineArray and Span types for zero-overhead memory access, fixed-size collections, and safe pointer alternatives. Use when optimizing performance-critical code paths."
+    },
+    {
       "name": "merge",
       "source": {
         "source": "./upstream/engineering/agenthub/skills/merge",
@@ -2675,6 +3283,30 @@
       "description": "Zero-downtime migration planning, compatibility validation, and rollback strategy generation. Tools for system, database, and infrastructure migrations with minimal business impact. Use when planning a database migration, infrastructure cutover, system replacement, or any high-risk transition that needs explicit rollback paths."
     },
     {
+      "name": "migration-patterns",
+      "source": {
+        "source": "./skills/apple/ios/migration-patterns",
+        "type": "directory"
+      },
+      "description": "Migration guides for CoreData to SwiftData, UIKit to SwiftUI, ObservableObject to @Observable, XCTest to Swift Testing, Objective-C to Swift, and StoreKit 1 to StoreKit 2. Use when migrating between Apple framework generations."
+    },
+    {
+      "name": "milestone-celebration",
+      "source": {
+        "source": "./skills/apple/generators/milestone-celebration",
+        "type": "directory"
+      },
+      "description": "Generates achievement celebration UI with confetti animations, badge unlocks, progress milestones, haptic feedback, and optional share-to-social. Use when user wants to celebrate achievements, show confetti, display milestone badges, or trigger rewards on key thresholds."
+    },
+    {
+      "name": "monetization",
+      "source": {
+        "source": "./skills/apple/monetization",
+        "type": "directory"
+      },
+      "description": "Monetization strategy for iOS/macOS apps. Covers readiness assessment, pricing model selection, tier structuring, free trial strategy, and implementation guidance. Use when deciding what to charge, how to price, or planning monetization end-to-end."
+    },
+    {
       "name": "monorepo-navigator",
       "source": {
         "source": "./upstream/engineering/skills/monorepo-navigator",
@@ -2691,6 +3323,22 @@
       "description": "Microsoft 365 tenant administration for Global Administrators. Automate M365 tenant setup, Office 365 admin tasks, Azure AD user management, Exchange Online configuration, Teams administration, and security policies. Generate PowerShell scripts for bulk operations, Conditional Access policies, license management, and compliance reporting. Use for M365 tenant manager, Office 365 admin, Azure AD users, Global Administrator, tenant configuration, or Microsoft 365 automation."
     },
     {
+      "name": "navigation-patterns",
+      "source": {
+        "source": "./skills/apple/ios/navigation-patterns",
+        "type": "directory"
+      },
+      "description": "SwiftUI navigation architecture patterns including NavigationStack, NavigationSplitView, TabView, programmatic navigation, and custom transitions. Use when reviewing or building navigation, fixing navigation bugs, or architecting app flow."
+    },
+    {
+      "name": "networking-layer",
+      "source": {
+        "source": "./skills/apple/generators/networking-layer",
+        "type": "directory"
+      },
+      "description": "Generates a protocol-based networking layer with async/await, error handling, and swappable implementations. Use when user wants to add API client, networking, or HTTP layer."
+    },
+    {
       "name": "observability-designer",
       "source": {
         "source": "./upstream/engineering/skills/observability-designer",
@@ -2699,12 +3347,28 @@
       "description": "Design production-ready observability strategies combining metrics, logs, and traces. Includes SLI/SLO design, golden-signals monitoring, alert optimization. Use when adding observability to a new service, refactoring alerting that is too noisy, or designing an SLO program before scaling production load."
     },
     {
+      "name": "offer-codes-setup",
+      "source": {
+        "source": "./skills/apple/generators/offer-codes-setup",
+        "type": "directory"
+      },
+      "description": "Generates offer code distribution strategies and configuration guides for subscription and IAP promotions — including partner campaigns, influencer programs, and email re-engagement. Use when setting up offer codes for distribution."
+    },
+    {
       "name": "office-hours",
       "source": {
         "source": "./upstream/c-level-advisor/c-level-agents/skills/office-hours",
         "type": "directory"
       },
       "description": "/cs:office-hours <topic> — YC-style 6-question founder interrogation before any advice. Forces clarity on problem, customer, distribution, defensibility, capital, and founder fit."
+    },
+    {
+      "name": "offline-queue",
+      "source": {
+        "source": "./skills/apple/generators/offline-queue",
+        "type": "directory"
+      },
+      "description": "Generates an offline operation queue with persistence, automatic retry on connectivity, and conflict resolution. Use when user needs offline-first behavior, queued mutations, or pending operations that sync when back online."
     },
     {
       "name": "onboard",
@@ -2725,6 +3389,22 @@
       "author": "Alireza Rezvani",
       "license": "MIT",
       "category": "marketing"
+    },
+    {
+      "name": "onboarding-generator",
+      "source": {
+        "source": "./skills/apple/generators/onboarding-generator",
+        "type": "directory"
+      },
+      "description": "Generates multi-step onboarding flows with persistence for iOS/macOS apps. Use when user wants to add onboarding, welcome screens, or first-launch experience."
+    },
+    {
+      "name": "openrouter-docs-skill",
+      "source": {
+        "source": "./skills/openrouter-docs-skill",
+        "type": "directory"
+      },
+      "description": "USE THIS SKILL for any question about OpenRouter API, model routing, pricing, available AI models, API keys, or provider configuration. This skill has complete local documentation — do not use web search or WebFetch instead."
     },
     {
       "name": "org-health-diagnostic",
@@ -2751,6 +3431,14 @@
       "category": "marketing"
     },
     {
+      "name": "pagination",
+      "source": {
+        "source": "./skills/apple/generators/pagination",
+        "type": "directory"
+      },
+      "description": "Generates pagination infrastructure with offset or cursor-based patterns, infinite scroll, and search support. Use when user wants to add paginated lists, infinite scrolling, or load-more functionality."
+    },
+    {
       "name": "paid-ads",
       "source": {
         "source": "./upstream/marketing-skill/skills/paid-ads",
@@ -2761,6 +3449,14 @@
       "author": "Alireza Rezvani",
       "license": "MIT",
       "category": "marketing"
+    },
+    {
+      "name": "paywall-generator",
+      "source": {
+        "source": "./skills/apple/generators/paywall-generator",
+        "type": "directory"
+      },
+      "description": "Generates StoreKit 2 subscription paywall with modern SwiftUI views. Use when user wants to add subscriptions, paywall, or in-app purchases."
     },
     {
       "name": "paywall-upgrade-cro",
@@ -2781,6 +3477,30 @@
         "type": "directory"
       },
       "description": "Systematic performance profiling for Node.js, Python, and Go applications. Identifies CPU, memory, and I/O bottlenecks, generates flamegraphs, analyzes bundle sizes, optimizes database queries, runs load tests with k6 and Artillery. Always measures before and after. Use when investigating a slow endpoint, planning a performance budget, or hunting a memory leak in production."
+    },
+    {
+      "name": "permission-priming",
+      "source": {
+        "source": "./skills/apple/generators/permission-priming",
+        "type": "directory"
+      },
+      "description": "Generates pre-permission priming screens that explain benefits before showing iOS system permission dialogs. Use when user wants to increase permission grant rates, add pre-permission screens, or explain why the app needs access."
+    },
+    {
+      "name": "perplexity-search",
+      "source": {
+        "source": "./skills/perplexity-search",
+        "type": "directory"
+      },
+      "description": "Strategy guide for Perplexity MCP tools (perplexity_search, perplexity_ask, perplexity_reason, perplexity_research). Helps pick the right tool, craft queries, and use recency/domain filters. Reference when planning complex searches, literature reviews, or multi-step research — not needed for simple one-shot queries."
+    },
+    {
+      "name": "persistence-setup",
+      "source": {
+        "source": "./skills/apple/generators/persistence-setup",
+        "type": "directory"
+      },
+      "description": "Generates SwiftData or CoreData persistence layer with optional iCloud sync. Use when user wants to add local storage, data persistence, or cloud sync."
     },
     {
       "name": "playwright-pro",
@@ -2838,6 +3558,30 @@
       "description": "Use when the user asks to review pull requests, analyze code changes, check for security issues in PRs, or assess code quality of diffs."
     },
     {
+      "name": "prd-generator",
+      "source": {
+        "source": "./skills/apple/product/prd-generator",
+        "type": "directory"
+      },
+      "description": "Generates comprehensive Product Requirements Document from product plan. Creates PRD.md with features, user stories, acceptance criteria, and success metrics. Use when creating product requirements."
+    },
+    {
+      "name": "pre-orders",
+      "source": {
+        "source": "./skills/apple/generators/pre-orders",
+        "type": "directory"
+      },
+      "description": "Generates pre-order setup guides and launch timeline templates for App Store pre-orders. Use when planning a pre-order strategy for a new app launch or major update."
+    },
+    {
+      "name": "press-media",
+      "source": {
+        "source": "./skills/apple/growth/press-media",
+        "type": "directory"
+      },
+      "description": "Get press coverage and media attention for your indie app. Covers press kit preparation, finding journalists/bloggers/YouTubers, pitch timing, embargo strategy, and story angles that get coverage. Use when user wants press coverage, is preparing for a launch, or wants to build a media kit."
+    },
+    {
       "name": "pricing-strategy",
       "source": {
         "source": "./upstream/marketing-skill/skills/pricing-strategy",
@@ -2850,12 +3594,44 @@
       "category": "marketing"
     },
     {
+      "name": "privacy-manifests",
+      "source": {
+        "source": "./skills/apple/security/privacy-manifests",
+        "type": "directory"
+      },
+      "description": "Privacy manifest (PrivacyInfo.xcprivacy) implementation including required reason APIs, tracking domains, third-party SDK declarations, and App Tracking Transparency. Use when preparing apps for App Store privacy requirements."
+    },
+    {
+      "name": "privacy-policy",
+      "source": {
+        "source": "./skills/apple/legal/privacy-policy",
+        "type": "directory"
+      },
+      "description": "Generate privacy policies, terms of service, and EULAs for Apple platform apps. Detects data collection patterns, third-party SDKs, and generates region-specific legal documents with Apple Privacy Nutrition Label mapping. Use when user needs legal documents or data collection disclosure for App Store submission."
+    },
+    {
+      "name": "product-agent",
+      "source": {
+        "source": "./skills/apple/product/product-agent",
+        "type": "directory"
+      },
+      "description": "Discover and validate product ideas, analyze markets, scope MVPs, and optimize app store presence for iOS/macOS apps. Use when user asks to discover, validate, assess, scope, or analyze product ideas, market opportunities, or when they mention \"product agent\", \"app idea validation\", \"should I build this\", \"MVP\", \"market analysis\", or \"ASO\"."
+    },
+    {
       "name": "product-analytics",
       "source": {
         "source": "./upstream/product-team/skills/product-analytics",
         "type": "directory"
       },
       "description": "Use when defining product KPIs, building metric dashboards, running cohort or retention analysis, or interpreting feature adoption trends across product stages."
+    },
+    {
+      "name": "product-development",
+      "source": {
+        "source": "./skills/apple/product",
+        "type": "directory"
+      },
+      "description": "End-to-end product development for iOS/macOS apps. Covers market research, competitive analysis, PRD generation, architecture specs, UX design, implementation guides, testing, and App Store release. Use for product planning, validation, or generating specification documents."
     },
     {
       "name": "product-discovery",
@@ -2872,6 +3648,14 @@
         "type": "directory"
       },
       "description": "Comprehensive toolkit for product managers including RICE prioritization, customer interview analysis, PRD templates, discovery frameworks, and go-to-market strategies. Use for feature prioritization, user research synthesis, requirement documentation, and product strategy development."
+    },
+    {
+      "name": "product-page-optimization",
+      "source": {
+        "source": "./skills/apple/generators/product-page-optimization",
+        "type": "directory"
+      },
+      "description": "Generates A/B test plans and optimization checklists for your App Store product page — icon, screenshots, and app previews. Use when running Product Page Optimization tests or improving conversion rates."
     },
     {
       "name": "product-skills",
@@ -2913,6 +3697,14 @@
       "description": "Graduate a proven pattern from auto-memory (MEMORY.md) to CLAUDE.md or .claude/rules/ for permanent enforcement."
     },
     {
+      "name": "promoted-iap",
+      "source": {
+        "source": "./skills/apple/generators/promoted-iap",
+        "type": "directory"
+      },
+      "description": "Generates Promoted In-App Purchase setup with StoreKit 2 product configuration, paywall integration, and App Store product page display. Use when setting up promoted purchases that appear on the App Store product page."
+    },
+    {
       "name": "prompt-engineer-toolkit",
       "source": {
         "source": "./upstream/marketing-skill/skills/prompt-engineer-toolkit",
@@ -2931,6 +3723,14 @@
         "type": "directory"
       },
       "description": "Use when managing prompts in production at scale: versioning prompts, running A/B tests on prompts, building prompt registries, preventing prompt regressions, or creating eval pipelines for production AI features. Triggers: 'manage prompts in production', 'prompt versioning', 'prompt regression', 'prompt A/B test', 'prompt registry', 'eval pipeline'. NOT for writing or improving individual prompts (use senior-prompt-engineer). NOT for RAG pipeline design (use rag-architect). NOT for LLM cost reduction (use llm-cost-optimizer)."
+    },
+    {
+      "name": "push-notifications",
+      "source": {
+        "source": "./skills/apple/generators/push-notifications",
+        "type": "directory"
+      },
+      "description": "Generate push notification infrastructure with APNs registration, handling, and rich notifications. Use when adding push notifications, configuring APNs, notification categories/actions, or rich notifications with images and custom UI."
     },
     {
       "name": "qms-audit-expert",
@@ -2963,6 +3763,14 @@
         "type": "directory"
       },
       "description": "ISO 13485 Quality Management System implementation and maintenance for medical device organizations. Provides QMS design, documentation control, internal auditing, CAPA management, and certification support. Use when working with medical device quality systems, preparing for ISO 13485 audits, managing regulatory compliance documentation, setting up corrective actions, or building audit preparation programs. Useful for quality management, audit preparation, regulatory compliance, medical device documentation, and corrective action workflows."
+    },
+    {
+      "name": "quick-win-session",
+      "source": {
+        "source": "./skills/apple/generators/quick-win-session",
+        "type": "directory"
+      },
+      "description": "Generates guided first-action flows that help users achieve a meaningful result within 60 seconds to boost retention. Use when user wants quick win onboarding, time-to-value optimization, or first success moments."
     },
     {
       "name": "ra-qm-skills",
@@ -3004,6 +3812,14 @@
       "category": "marketing"
     },
     {
+      "name": "referral-system",
+      "source": {
+        "source": "./skills/apple/generators/referral-system",
+        "type": "directory"
+      },
+      "description": "Generates referral/invite infrastructure with unique codes, deep link sharing, reward tracking, and fraud prevention. Use when user wants referral codes, invite friends flow, or viral growth mechanics."
+    },
+    {
       "name": "regulatory-affairs-head",
       "source": {
         "source": "./upstream/ra-qm-team/skills/regulatory-affairs-head",
@@ -3012,12 +3828,36 @@
       "description": "Senior Regulatory Affairs Manager for HealthTech and MedTech companies. Prepares FDA 510(k), De Novo, and PMA submission packages; analyzes regulatory pathways for new medical devices; drafts responses to FDA deficiency letters and Notified Body queries; develops CE marking technical documentation under EU MDR 2017/745; coordinates multi-market approval strategies across FDA, EU, Health Canada, PMDA, and NMPA; and maintains regulatory intelligence on evolving standards. Use when users need to plan or execute FDA submissions, navigate 510(k) or PMA approval processes, achieve CE marking, prepare pre-submission meeting materials, write regulatory strategy documents, respond to agency queries, or manage compliance documentation for medical device market access."
     },
     {
+      "name": "rejection-handler",
+      "source": {
+        "source": "./skills/apple/app-store/rejection-handler",
+        "type": "directory"
+      },
+      "description": "Handle App Store rejections, prepare submissions to avoid common rejection reasons, write Resolution Center responses, and navigate the appeal process. Use when user's app was rejected, is preparing for submission, or needs help with App Review."
+    },
+    {
       "name": "release-manager",
       "source": {
         "source": "./upstream/engineering/skills/release-manager",
         "type": "directory"
       },
       "description": "Use when the user asks to plan releases, manage changelogs, coordinate deployments, create release branches, or automate versioning."
+    },
+    {
+      "name": "release-review",
+      "source": {
+        "source": "./skills/apple/release-review",
+        "type": "directory"
+      },
+      "description": "Senior developer-level release review for macOS/iOS apps. Identifies security, privacy, UX, and distribution issues with actionable fixes. Use when preparing an app for release, want a critical review, or before App Store submission."
+    },
+    {
+      "name": "release-spec",
+      "source": {
+        "source": "./skills/apple/product/release-spec",
+        "type": "directory"
+      },
+      "description": "Generates App Store release documentation including submission guide, assets, privacy compliance, and marketing strategy. Creates RELEASE_SPEC.md for app launch. Use when preparing for App Store submission."
     },
     {
       "name": "remember",
@@ -3070,6 +3910,22 @@
         "type": "directory"
       },
       "description": ">-"
+    },
+    {
+      "name": "review-prompt",
+      "source": {
+        "source": "./skills/apple/generators/review-prompt",
+        "type": "directory"
+      },
+      "description": "Generates smart App Store review prompt infrastructure with configurable conditions and platform detection. Use when user wants to add review prompts, request ratings, or implement StoreKit reviews."
+    },
+    {
+      "name": "review-response-writer",
+      "source": {
+        "source": "./skills/apple/app-store/review-response-writer",
+        "type": "directory"
+      },
+      "description": "Write professional, empathetic responses to App Store reviews that build trust and turn critics into fans. Use when responding to negative reviews, drafting templates for common review types, or improving review management strategy."
     },
     {
       "name": "risk-management-specialist",
@@ -3163,6 +4019,22 @@
       "category": "marketing"
     },
     {
+      "name": "screenshot-automation",
+      "source": {
+        "source": "./skills/apple/generators/screenshot-automation",
+        "type": "directory"
+      },
+      "description": "Generates an automated App Store screenshot pipeline with UI tests for screenshot capture, device framing, localized caption overlays, and multi-size batch export. Use when user wants automated screenshots, App Store screenshot generation, or a fastlane snapshot replacement."
+    },
+    {
+      "name": "screenshot-planner",
+      "source": {
+        "source": "./skills/apple/app-store/screenshot-planner",
+        "type": "directory"
+      },
+      "description": "Plan compelling App Store screenshot sequences that showcase your app's value. Use when preparing App Store assets, improving screenshot conversion, or drafting screenshot captions for a launch or major update."
+    },
+    {
       "name": "scrum-master",
       "source": {
         "source": "./upstream/project-management/skills/scrum-master",
@@ -3181,6 +4053,14 @@
         "type": "directory"
       },
       "description": "Use when the user asks to set up secret management infrastructure, integrate HashiCorp Vault, configure cloud secret stores (AWS Secrets Manager, Azure Key Vault, GCP Secret Manager), implement secret rotation, or audit secret access patterns."
+    },
+    {
+      "name": "security",
+      "source": {
+        "source": "./skills/apple/security",
+        "type": "directory"
+      },
+      "description": "Security review and guidance for iOS, macOS, and watchOS apps. Covers secure storage, biometric authentication, network security, and platform-specific patterns. Use when implementing security features or reviewing code for vulnerabilities."
     },
     {
       "name": "security-pen-testing",
@@ -3332,12 +4212,36 @@
       "category": "marketing"
     },
     {
+      "name": "settings-screen",
+      "source": {
+        "source": "./skills/apple/generators/settings-screen",
+        "type": "directory"
+      },
+      "description": "Generates a complete settings screen for iOS/macOS apps with common sections. Use when user wants to add settings, preferences, or configuration UI."
+    },
+    {
       "name": "setup",
       "source": {
         "source": "./upstream/engineering/autoresearch-agent/skills/setup",
         "type": "directory"
       },
       "description": "Set up a new autoresearch experiment interactively. Collects domain, target file, eval command, metric, direction, and evaluator."
+    },
+    {
+      "name": "share-card",
+      "source": {
+        "source": "./skills/apple/generators/share-card",
+        "type": "directory"
+      },
+      "description": "Generates shareable card images from app content (achievements, stats, quotes) for social media sharing. Use when user wants to create share images, social cards, shareable content cards, or export app content as images with ShareLink integration."
+    },
+    {
+      "name": "shared",
+      "source": {
+        "source": "./skills/apple/shared",
+        "type": "directory"
+      },
+      "description": "Platform-agnostic skills including skill creation templates and best practices. Use when creating new skills or improving existing ones."
     },
     {
       "name": "ship-gate",
@@ -3375,6 +4279,22 @@
       "category": "marketing"
     },
     {
+      "name": "skill-auditor",
+      "source": {
+        "source": "./skills/apple/shared/skill-auditor",
+        "type": "directory"
+      },
+      "description": "Audits skills in this repo for consistency, API drift, and structural gaps. Produces a prioritized report grouped by severity (Critical/High/Medium/Low). Use when asked to \"audit skills\", \"check the skill repo for drift\", or when planning bulk skill cleanup. Read-only — does not apply fixes."
+    },
+    {
+      "name": "skill-creator",
+      "source": {
+        "source": "./skills/apple/shared/skill-creator",
+        "type": "directory"
+      },
+      "description": "Guides you through creating well-structured Claude Code skills with proper modularization, templates, and best practices. Use when creating new skills or improving existing ones."
+    },
+    {
       "name": "skill-security-auditor",
       "source": {
         "source": "./upstream/engineering/skills/skill-security-auditor",
@@ -3400,6 +4320,14 @@
       "version": "2.4.4",
       "author": "claude-code-skills",
       "license": "MIT"
+    },
+    {
+      "name": "snapshot-test-setup",
+      "source": {
+        "source": "./skills/apple/testing/snapshot-test-setup",
+        "type": "directory"
+      },
+      "description": "Set up SwiftUI visual regression testing with swift-snapshot-testing. Generates snapshot test boilerplate and CI configuration. Use for UI regression prevention."
     },
     {
       "name": "snowflake-development",
@@ -3428,6 +4356,14 @@
       "author": "Alireza Rezvani",
       "license": "MIT",
       "category": "marketing"
+    },
+    {
+      "name": "social-export",
+      "source": {
+        "source": "./skills/apple/generators/social-export",
+        "type": "directory"
+      },
+      "description": "Generates infrastructure for exporting app content to social platforms (Instagram Stories, TikTok, Twitter/X) with platform-specific formatting, aspect ratios, and metadata. Use when user wants social media export, share to stories, or platform-specific sharing pipelines."
     },
     {
       "name": "social-media-analyzer",
@@ -3474,12 +4410,28 @@
       "description": "Use when the user says 'build me an app', 'create a project from this spec', 'scaffold a new repo', 'generate a starter', 'turn this idea into code', 'bootstrap a project', 'I have requirements and need a codebase', or provides a natural-language project specification and expects a complete, runnable repository. Stack-agnostic: Next.js, FastAPI, Rails, Go, Rust, Flutter, and more."
     },
     {
+      "name": "spotlight-indexing",
+      "source": {
+        "source": "./skills/apple/generators/spotlight-indexing",
+        "type": "directory"
+      },
+      "description": "Generates Core Spotlight indexing infrastructure for making app content searchable via system Spotlight with rich attributes and deep link integration. Use when user wants to index content for Spotlight search, Siri suggestions, or system-wide searchability."
+    },
+    {
       "name": "sql-database-assistant",
       "source": {
         "source": "./upstream/engineering/skills/sql-database-assistant",
         "type": "directory"
       },
       "description": "Use when the user asks to write SQL queries, optimize database performance, generate migrations, explore database schemas, or work with ORMs like Prisma, Drizzle, TypeORM, or SQLAlchemy."
+    },
+    {
+      "name": "state-restoration",
+      "source": {
+        "source": "./skills/apple/generators/state-restoration",
+        "type": "directory"
+      },
+      "description": "Generates state preservation and restoration infrastructure for navigation paths, tab selection, scroll positions, and form data across app launches and background termination. Use when user wants to save/restore app state, remember where the user left off, or persist UI state."
     },
     {
       "name": "statistical-analyst",
@@ -3510,6 +4462,14 @@
       "category": "c-level"
     },
     {
+      "name": "streak-tracker",
+      "source": {
+        "source": "./skills/apple/generators/streak-tracker",
+        "type": "directory"
+      },
+      "description": "Generates a streak tracking system with timezone-aware day boundaries, streak freeze protection, and streak-at-risk push notifications. Use when user wants daily/weekly engagement streaks, consecutive day tracking, or habit tracking."
+    },
+    {
       "name": "stress-test",
       "source": {
         "source": "./upstream/c-level-advisor/executive-mentor/skills/stress-test",
@@ -3526,6 +4486,46 @@
       "description": "Production-grade Stripe integrations: subscriptions with trials and proration, one-time payments, usage-based billing, checkout sessions, idempotent webhook handlers, customer portal, and invoicing. Covers Next.js, Express, and Django patterns. Use when integrating Stripe for the first time, debugging webhook reliability issues, migrating from a different payment provider, or adding usage-based billing to an existing subscription product."
     },
     {
+      "name": "subscription-lifecycle",
+      "source": {
+        "source": "./skills/apple/generators/subscription-lifecycle",
+        "type": "directory"
+      },
+      "description": "Generates StoreKit 2 subscription lifecycle management — grace periods, billing retry, offer codes, win-back offers, upgrade/downgrade paths, and subscription status monitoring. Use when user needs post-purchase subscription state handling beyond the initial paywall."
+    },
+    {
+      "name": "subscription-offers",
+      "source": {
+        "source": "./skills/apple/generators/subscription-offers",
+        "type": "directory"
+      },
+      "description": "Generates StoreKit 2 code for all subscription offer types — introductory, promotional, offer codes, and win-back. Includes eligibility checks, offer presentation, and the preferredSubscriptionOffer modifier. Use when adding subscription offers, free trials, or promotional pricing."
+    },
+    {
+      "name": "swift-concurrency-updates",
+      "source": {
+        "source": "./skills/apple/swift/concurrency",
+        "type": "directory"
+      },
+      "description": "Swift 6.2 concurrency updates including default MainActor inference, @concurrent for background work, isolated conformances, and approachable concurrency migration. Use when adopting Swift 6.2 concurrency features or fixing data-race errors."
+    },
+    {
+      "name": "swift-development",
+      "source": {
+        "source": "./skills/apple/swift",
+        "type": "directory"
+      },
+      "description": "Swift language patterns and best practices including concurrency, performance, and modern idioms. Use for Swift language-level code review or architecture guidance."
+    },
+    {
+      "name": "swiftdata-architecture",
+      "source": {
+        "source": "./skills/apple/macos/swiftdata-architecture",
+        "type": "directory"
+      },
+      "description": "Deep dive into SwiftData design patterns and best practices. Covers schema design, query patterns, repository pattern, and performance optimization. Use when designing data models or improving SwiftData usage."
+    },
+    {
       "name": "tc-tracker",
       "source": {
         "source": "./upstream/engineering/skills/tc-tracker",
@@ -3534,12 +4534,36 @@
       "description": "Use when the user asks to track technical changes, create change records, manage TC lifecycles, or hand off work between AI sessions. Covers init/create/update/status/resume/close/export workflows for structured code change documentation."
     },
     {
+      "name": "tdd-bug-fix",
+      "source": {
+        "source": "./skills/apple/testing/tdd-bug-fix",
+        "type": "directory"
+      },
+      "description": "Fix bugs using red-green-refactor — reproduce the bug as a failing test first, then fix it. Use when fixing bugs to ensure they never regress."
+    },
+    {
+      "name": "tdd-feature",
+      "source": {
+        "source": "./skills/apple/testing/tdd-feature",
+        "type": "directory"
+      },
+      "description": "Red-green-refactor scaffold for building new features with TDD. Write failing tests first, then implement to pass. Use when building new features test-first."
+    },
+    {
       "name": "tdd-guide",
       "source": {
         "source": "./upstream/engineering-team/skills/tdd-guide",
         "type": "directory"
       },
       "description": "Test-driven development skill for writing unit tests, generating test fixtures and mocks, analyzing coverage gaps, and guiding red-green-refactor workflows across Jest, Pytest, JUnit, Vitest, and Mocha. Use when the user asks to write tests, improve test coverage, practice TDD, generate mocks or stubs, or mentions testing frameworks like Jest, pytest, or JUnit."
+    },
+    {
+      "name": "tdd-refactor-guard",
+      "source": {
+        "source": "./skills/apple/testing/tdd-refactor-guard",
+        "type": "directory"
+      },
+      "description": "Pre-refactor safety checklist. Verifies test coverage exists before AI modifies existing code. Use before asking AI to refactor anything."
     },
     {
       "name": "team-communications",
@@ -3578,6 +4602,46 @@
       "category": "engineering"
     },
     {
+      "name": "test-contract",
+      "source": {
+        "source": "./skills/apple/testing/test-contract",
+        "type": "directory"
+      },
+      "description": "Generate protocol/interface test suites that any implementation must pass. Define the contract once, test every implementation. Use when designing protocols or swapping implementations."
+    },
+    {
+      "name": "test-data-factory",
+      "source": {
+        "source": "./skills/apple/testing/test-data-factory",
+        "type": "directory"
+      },
+      "description": "Generate test fixture factories for your models. Builder pattern and static factories for zero-boilerplate test data. Use when tests need sample data setup."
+    },
+    {
+      "name": "test-generator",
+      "source": {
+        "source": "./skills/apple/generators/test-generator",
+        "type": "directory"
+      },
+      "description": "Generate test templates for unit tests, integration tests, and UI tests using Swift Testing and XCTest. Use when adding tests to iOS/macOS apps."
+    },
+    {
+      "name": "test-spec",
+      "source": {
+        "source": "./skills/apple/product/test-spec",
+        "type": "directory"
+      },
+      "description": "Generates comprehensive test specification with unit tests, UI tests, accessibility testing, and beta testing plan. Creates TEST_SPEC.md from PRD and implementation specs. Use when creating QA strategy."
+    },
+    {
+      "name": "testing",
+      "source": {
+        "source": "./skills/apple/testing",
+        "type": "directory"
+      },
+      "description": "TDD and testing skills for iOS/macOS apps. Covers characterization tests, TDD workflows, test contracts, snapshot tests, and test infrastructure. Use for test-driven development, adding tests to existing code, or building test infrastructure."
+    },
+    {
       "name": "testrail",
       "source": {
         "source": "./upstream/engineering-team/playwright-pro/skills/testrail",
@@ -3594,12 +4658,44 @@
       "description": "Use when hunting for threats in an environment, analyzing IOCs, or detecting behavioral anomalies in telemetry. Covers hypothesis-driven threat hunting, IOC sweep generation, z-score anomaly detection, and MITRE ATT&CK-mapped signal prioritization."
     },
     {
+      "name": "tipkit-generator",
+      "source": {
+        "source": "./skills/apple/generators/tipkit-generator",
+        "type": "directory"
+      },
+      "description": "Generate TipKit infrastructure with inline/popover tips, rules, display frequency, and testing utilities. Use when adding contextual tips or feature discovery to an iOS/macOS app."
+    },
+    {
       "name": "ui-design-system",
       "source": {
         "source": "./upstream/product-team/skills/ui-design-system",
         "type": "directory"
       },
       "description": "UI design system toolkit for Senior UI Designer including design token generation, component documentation, responsive design calculations, and developer handoff tools. Use for creating design systems, maintaining visual consistency, and facilitating design-dev collaboration."
+    },
+    {
+      "name": "ui-review",
+      "source": {
+        "source": "./skills/apple/ios/ui-review",
+        "type": "directory"
+      },
+      "description": "Review SwiftUI code for iOS/watchOS Human Interface Guidelines compliance, font usage, Dynamic Type support, and accessibility. Use when user mentions UI review, HIG, accessibility audit, font checks, or wants to verify interface design against Apple standards."
+    },
+    {
+      "name": "ui-review-tahoe",
+      "source": {
+        "source": "./skills/apple/macos/ui-review-tahoe",
+        "type": "directory"
+      },
+      "description": "Comprehensive UI/UX review for macOS Tahoe apps. Covers Liquid Glass design, HIG compliance, SwiftUI patterns, and accessibility. Use when reviewing macOS UI or checking HIG compliance."
+    },
+    {
+      "name": "usage-insights",
+      "source": {
+        "source": "./skills/apple/generators/usage-insights",
+        "type": "directory"
+      },
+      "description": "Generates user-facing usage statistics, activity summaries, and personalized insights dashboards (weekly recaps, year-in-review, Spotify Wrapped-style). Use when user wants to show usage stats, activity insights, or shareable recap screens. Different from analytics-setup which sends data to a backend — this shows insights to the USER on-device."
     },
     {
       "name": "ux-researcher-designer",
@@ -3610,12 +4706,36 @@
       "description": "UX research and design toolkit for Senior UX Designer/Researcher including data-driven persona generation, journey mapping, usability testing frameworks, and research synthesis. Use for user research, persona creation, journey mapping, and design validation."
     },
     {
+      "name": "ux-spec",
+      "source": {
+        "source": "./skills/apple/product/ux-spec",
+        "type": "directory"
+      },
+      "description": "Generates UI/UX specifications with wireframes and design system. Creates UX_SPEC.md and DESIGN_SYSTEM.md from PRD and Architecture specs. Use when designing app interface and creating design system."
+    },
+    {
+      "name": "variable-rewards",
+      "source": {
+        "source": "./skills/apple/generators/variable-rewards",
+        "type": "directory"
+      },
+      "description": "Generates a variable reward system with randomized rewards, daily bonuses, mystery box mechanics, and ethical engagement caps. Use when user wants daily spins, mystery boxes, random rewards, or gamification reward systems."
+    },
+    {
       "name": "video-content-strategist",
       "source": {
         "source": "./upstream/marketing-skill/video-content-strategist/skills/video-content-strategist",
         "type": "directory"
       },
       "description": "Use when planning video content strategy, writing video scripts, optimizing YouTube channels, building short-form video pipelines (Reels, TikTok, Shorts), or repurposing long-form content into video. Triggers: 'start a YouTube channel', 'video content strategy', 'write a video script', 'repurpose into video', 'YouTube SEO', 'short-form video'. NOT for written blog content (use content-production). NOT for social captions without video (use social-media-manager)."
+    },
+    {
+      "name": "visual-intelligence",
+      "source": {
+        "source": "./skills/apple/apple-intelligence/visual-intelligence",
+        "type": "directory"
+      },
+      "description": "Integrate your app with iOS Visual Intelligence for camera-based search and object recognition. Use when adding visual search capabilities."
     },
     {
       "name": "vpe-advisor",
@@ -3636,6 +4756,54 @@
         "type": "directory"
       },
       "description": "/cs:vpe-review <plan> — Throughput-first VP of Engineering interrogation of any plan that touches delivery, eng hiring, team structure, or production discipline."
+    },
+    {
+      "name": "warp-docs-skill",
+      "source": {
+        "source": "./skills/warp-docs-skill",
+        "type": "directory"
+      },
+      "description": "USE THIS SKILL for any question about Warp terminal — agents, AI features, configuration, keybindings, workflows, or the Warp platform API. This skill has complete local documentation — do not use web search or WebFetch instead."
+    },
+    {
+      "name": "watchOS",
+      "source": {
+        "source": "./skills/apple/watchos",
+        "type": "directory"
+      },
+      "description": "watchOS development guidance including SwiftUI for Watch, Watch Connectivity, complications, and watch-specific UI patterns. Use for watchOS code review, best practices, or Watch app development."
+    },
+    {
+      "name": "watermark-engine",
+      "source": {
+        "source": "./skills/apple/generators/watermark-engine",
+        "type": "directory"
+      },
+      "description": "Generates a watermark overlay system for images and video with configurable positioning, opacity, tiling, and paywall integration for automatic removal on subscription or purchase. Use when user wants to add branding, attribution, or free-tier watermarks to visual content."
+    },
+    {
+      "name": "whats-new",
+      "source": {
+        "source": "./skills/apple/generators/whats-new",
+        "type": "directory"
+      },
+      "description": "Generates a \"What's New\" / changelog screen shown after app updates with version tracking, feature highlights, and one-time display per version. Use when user wants release notes UI, update notifications, or feature announcements."
+    },
+    {
+      "name": "widget-generator",
+      "source": {
+        "source": "./skills/apple/generators/widget-generator",
+        "type": "directory"
+      },
+      "description": "Generate WidgetKit widgets for iOS/macOS home screen and lock screen with timeline providers, interactive elements, and App Intent configuration. Use when adding widgets to an app."
+    },
+    {
+      "name": "win-back-offers",
+      "source": {
+        "source": "./skills/apple/generators/win-back-offers",
+        "type": "directory"
+      },
+      "description": "Generates the complete win-back offer flow for churned subscribers — StoreKit Message API handling, eligibility verification, offer sheet presentation, and analytics. Use when implementing win-back campaigns or re-engagement for lapsed subscribers."
     },
     {
       "name": "write-a-skill",
