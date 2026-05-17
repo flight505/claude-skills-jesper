@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
 """Regenerate .claude-plugin/marketplace.json from upstream/ + skills/.
 
-Sources merged:
-  1. upstream/.claude-plugin/marketplace.json  — 43 domain bundles (emitted as plugins[])
-  2. upstream/**/SKILL.md                      — individual skills (emitted as skills[])
-  3. skills/**/SKILL.md                        — first-party skills (emitted as skills[])
+Sources:
+  1. upstream/.claude-plugin/marketplace.json  — domain bundles (emitted as plugins[])
+  2. skills/<name>/SKILL.md                    — first-party skills, depth-capped:
+                                                  nested SKILL.md under skills/ are
+                                                  staged content and NOT exposed
 
-Overlap rule: by default, first-party skills override upstream skills with the
-same name. Exceptions are listed in OVERLAP.md (parsed line-by-line for
-`| name | winner | ...` rows).
+Bundle-internal SKILL.md files (upstream/<bundle>/skills/...) are intentionally
+NOT emitted as standalone entries in skills[] — they install with their parent
+plugin. The OVERLAP.md merge path is preserved for forward-compat but is a
+no-op for skills[] under this scheme.
 
 Forge schema reference:
   - internal/schemas/types.go — Entry, MarketplaceFile
   - SourceRef accepts either a string path or {source, path, type} object
-  - Currently supported types: "skill", "plugin"
-  - Agent/persona/command types are introduced by forge L2-A (see Task #6)
+  - First-class types: skill, plugin, agent, persona, command (since L2-A)
+  - Unknown Entry fields are silently ignored by forge (json.Unmarshal lenient)
 
 This script uses only the standard library.
 """
@@ -36,8 +38,9 @@ OVERLAP_PATH = ROOT / "OVERLAP.md"
 UPSTREAM_MARKETPLACE = UPSTREAM_DIR / ".claude-plugin" / "marketplace.json"
 
 # Roots for non-skill content. Personas live in agents/personas/; everything
-# else under agents/ is an agent. Commands are at the top-level commands/ dir
-# plus inside each bundle (we walk the bundle's commands/ as well).
+# else under agents/ is an agent. Commands are walked from the top-level
+# commands/ dir only — bundle-internal commands ride along with their plugin
+# install and are not promoted to the top-level commands[] array.
 PERSONAS_ROOT = UPSTREAM_DIR / "agents" / "personas"
 AGENTS_ROOT = UPSTREAM_DIR / "agents"
 COMMANDS_ROOT = UPSTREAM_DIR / "commands"
@@ -176,12 +179,17 @@ def load_upstream_marketplace() -> tuple[list[dict[str, Any]], list[Path]]:
     return rewritten, roots
 
 
-def find_skills(roots: list[Path]) -> list[dict[str, Any]]:
+def find_skills(roots: list[Path], max_depth: int | None = None) -> list[dict[str, Any]]:
     """Walk given roots for SKILL.md files and return entries with parsed frontmatter.
 
     Broken symlinks and unreadable files are skipped silently.
     Within each root, only follows real files (no symlinks) to avoid the
     `.gemini/skills/*` mirror-export build outputs in upstream.
+
+    If `max_depth` is set, only SKILL.md files at exactly that many path-segments
+    below `root` are accepted (e.g. max_depth=2 accepts root/<name>/SKILL.md and
+    rejects deeper nesting). Used to keep staged-not-promoted content out of the
+    catalog.
     """
     entries = []
     seen_paths: set[Path] = set()
@@ -190,6 +198,8 @@ def find_skills(roots: list[Path]) -> list[dict[str, Any]]:
             continue
         for skill_md in root.rglob("SKILL.md"):
             if skill_md.is_symlink() or not skill_md.is_file():
+                continue
+            if max_depth is not None and len(skill_md.relative_to(root).parts) > max_depth:
                 continue
             resolved = skill_md.resolve()
             if resolved in seen_paths:
@@ -316,17 +326,21 @@ def main(argv: list[str]) -> int:
         print(f"[overlap] {len(rules)} rule(s) loaded: {rules}", file=sys.stderr)
 
     bundles, upstream_roots = load_upstream_marketplace()
-    upstream_skills = find_skills(upstream_roots)
-    first_party_skills = find_skills([SKILLS_DIR])
+    # Bundle-internal SKILL.md files (under upstream/<bundle>/skills/...) are NOT
+    # walked here — they install with their parent plugin. upstream_roots is
+    # retained for forthcoming contains: enrichment.
+    first_party_skills = find_skills([SKILLS_DIR], max_depth=2)
     personas = dedup_by_name(find_md_entries(PERSONAS_ROOT))
     agents = dedup_by_name(find_md_entries(AGENTS_ROOT, exclude_subdirs={PERSONAS_ROOT}))
     commands = dedup_by_name(find_md_entries(COMMANDS_ROOT))
     if args.verbose:
-        print(f"[upstream] {len(bundles)} bundles, {len(upstream_skills)} SKILL.md", file=sys.stderr)
+        print(f"[upstream] {len(bundles)} bundles", file=sys.stderr)
         print(f"[upstream] {len(personas)} personas, {len(agents)} agents, {len(commands)} commands", file=sys.stderr)
-        print(f"[first-party] {len(first_party_skills)} SKILL.md", file=sys.stderr)
+        print(f"[first-party] {len(first_party_skills)} SKILL.md (depth-capped)", file=sys.stderr)
 
-    skills = merge_with_overlap(upstream_skills, first_party_skills, rules)
+    # OVERLAP.md merge path retained for forward-compat; with no upstream skill
+    # candidates it is effectively a no-op for skills[] under the current scheme.
+    skills = merge_with_overlap([], first_party_skills, rules)
 
     marketplace = {
         "name": "claude-skills-jesper",
@@ -343,7 +357,6 @@ def main(argv: list[str]) -> int:
             "counts": {
                 "bundles": len(bundles),
                 "skills": len(skills),
-                "skills_upstream": len(upstream_skills),
                 "skills_first_party": len(first_party_skills),
                 "agents": len(agents),
                 "personas": len(personas),
