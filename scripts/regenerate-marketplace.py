@@ -161,22 +161,108 @@ def _normalize_bundle_source(src: Any) -> str:
     return ""
 
 
-def load_upstream_marketplace() -> tuple[list[dict[str, Any]], list[Path]]:
-    """Return (rewritten bundle entries, canonical skill walk roots inside upstream/)."""
+def _nearest_declared(path: Path, declared: set[Path]) -> Path | None:
+    """Walk `path` and its parents; return the first one in `declared`."""
+    for ancestor in (path, *path.parents):
+        if ancestor in declared:
+            return ancestor
+    return None
+
+
+def enumerate_bundle_contents(bundle_dir: Path, declared_source_dirs: set[Path]) -> dict[str, list[str]]:
+    """Return {skills, agents, commands, sub_plugins} living inside `bundle_dir`.
+
+    Decoration for discovery — forge ignores unknown Entry fields. Identifiers
+    are directory names (stable, slug-safe), not frontmatter `name`.
+
+    "Nearest declared bundle" filtering: an item inside a sub-plugin that is
+    itself declared as a top-level plugin in the upstream marketplace belongs
+    to that sub-plugin, not to `bundle_dir`. Items inside *undeclared* sub-dirs
+    bubble up to the nearest declared ancestor.
+    """
+    own = bundle_dir.resolve()
+    if not own.exists():
+        return {}
+
+    buckets: dict[str, set[str]] = {"skills": set(), "agents": set(), "commands": set(), "sub_plugins": set()}
+
+    # Skills: every SKILL.md whose nearest declared bundle is `own`.
+    for skill_md in own.rglob("SKILL.md"):
+        if skill_md.is_symlink() or not skill_md.is_file():
+            continue
+        if _nearest_declared(skill_md.parent.resolve(), declared_source_dirs) != own:
+            continue
+        buckets["skills"].add(skill_md.parent.name)
+
+    # Agents/commands: only inside the bundle's own agents/ or commands/ subtree.
+    for kind, dirname in (("agents", "agents"), ("commands", "commands")):
+        sub = own / dirname
+        if not sub.exists():
+            continue
+        for md in sub.rglob("*.md"):
+            if md.is_symlink() or not md.is_file():
+                continue
+            if md.name in META_FILENAMES or md.name == "SKILL.md":
+                continue
+            if _nearest_declared(md.parent.resolve(), declared_source_dirs) != own:
+                continue
+            buckets[kind].add(md.stem)
+
+    # Sub-plugins: nested .claude-plugin/plugin.json (not own) whose containing
+    # dir is NOT itself declared top-level, AND whose nearest declared ancestor
+    # is `own` (so it lands in the right parent if double-nested).
+    own_plugin_json = (own / ".claude-plugin" / "plugin.json").resolve()
+    for pj in own.rglob(".claude-plugin/plugin.json"):
+        if pj.resolve() == own_plugin_json:
+            continue
+        plugin_dir = pj.parent.parent.resolve()
+        if plugin_dir in declared_source_dirs:
+            continue
+        if _nearest_declared(plugin_dir, declared_source_dirs) != own:
+            continue
+        buckets["sub_plugins"].add(plugin_dir.name)
+
+    return {k: sorted(v) for k, v in buckets.items() if v}
+
+
+def load_upstream_marketplace() -> tuple[list[dict[str, Any]], set[Path]]:
+    """Return (enriched bundle entries, resolved declared-bundle dirs).
+
+    Each returned bundle gets a `contains:` field listing its constituent
+    skills/agents/commands/sub-plugins (sub-plugins that are themselves
+    declared at top level are intentionally excluded — they appear in plugins[]
+    in their own right and would otherwise be listed twice).
+
+    The declared-bundle-dirs set is exposed so a caller (e.g. orphan-bundle
+    detection) can tell whether an arbitrary upstream/<dir> is already known.
+    """
     if not UPSTREAM_MARKETPLACE.exists():
-        return [], []
+        return [], set()
     data = json.loads(UPSTREAM_MARKETPLACE.read_text())
-    bundles = data.get("plugins", [])
-    rewritten = []
-    roots: list[Path] = []
-    for b in bundles:
-        b = dict(b)
+    bundles_raw = data.get("plugins", [])
+
+    # Pass 1: resolve every declared bundle source so contents/sub-plugin
+    # filtering can know which dirs belong to other declared plugins.
+    bundle_dirs: list[tuple[dict[str, Any], Path]] = []
+    declared_source_dirs: set[Path] = set()
+    for b in bundles_raw:
         rel = _normalize_bundle_source(b.get("source"))
-        if rel:
-            roots.append(UPSTREAM_DIR / rel)
-            b["source"] = {"source": "./upstream/" + rel, "type": "directory"}
+        if not rel:
+            continue
+        bdir = (UPSTREAM_DIR / rel).resolve()
+        bundle_dirs.append((dict(b), bdir))
+        declared_source_dirs.add(bdir)
+
+    # Pass 2: rewrite source ref + attach contains.
+    rewritten: list[dict[str, Any]] = []
+    for b, bdir in bundle_dirs:
+        rel = bdir.relative_to(UPSTREAM_DIR).as_posix()
+        b["source"] = {"source": "./upstream/" + rel, "type": "directory"}
+        contents = enumerate_bundle_contents(bdir, declared_source_dirs)
+        if contents:
+            b["contains"] = contents
         rewritten.append(b)
-    return rewritten, roots
+    return rewritten, declared_source_dirs
 
 
 def find_skills(roots: list[Path], max_depth: int | None = None) -> list[dict[str, Any]]:
@@ -279,6 +365,48 @@ def find_md_entries(root: Path, exclude_subdirs: set[Path] | None = None) -> lis
     return entries
 
 
+def find_orphan_bundles(declared_source_dirs: set[Path]) -> list[dict[str, Any]]:
+    """Detect bundle-level plugin.json files not declared in upstream marketplace.
+
+    Walks only depth-2 dirs (upstream/<dir>/.claude-plugin/plugin.json). Nested
+    sub-plugins are handled separately via enumerate_bundle_contents.
+
+    Each orphan is auto-included with a stderr warning so a stray dropped-in
+    plugin.json doesn't silently leak — and so an intentional case like
+    compliance-os (present but not yet declared upstream) shows up in the
+    catalog without manual intervention.
+    """
+    orphans: list[dict[str, Any]] = []
+    for child in sorted(UPSTREAM_DIR.iterdir()):
+        if not child.is_dir() or child.name.startswith("."):
+            continue
+        plugin_json = child / ".claude-plugin" / "plugin.json"
+        if not plugin_json.is_file():
+            continue
+        if child.resolve() in declared_source_dirs:
+            continue
+        try:
+            data = json.loads(plugin_json.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            print(f"[orphan] skipping {child.name}: unreadable plugin.json ({exc})", file=sys.stderr)
+            continue
+        name = data.get("name") or child.name
+        entry: dict[str, Any] = {
+            "name": name,
+            "source": {"source": "./upstream/" + child.name, "type": "directory"},
+        }
+        for key in ("description", "version", "author", "homepage", "repository", "license", "category", "keywords"):
+            val = data.get(key)
+            if val not in ("", None, [], {}):
+                entry[key] = val
+        contents = enumerate_bundle_contents(child, declared_source_dirs | {child.resolve()})
+        if contents:
+            entry["contains"] = contents
+        print(f"[orphan] auto-included plugin: {name} (./upstream/{child.name})", file=sys.stderr)
+        orphans.append(entry)
+    return orphans
+
+
 def dedup_by_name(entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
     seen: dict[str, dict[str, Any]] = {}
     for e in entries:
@@ -325,16 +453,18 @@ def main(argv: list[str]) -> int:
     if args.verbose:
         print(f"[overlap] {len(rules)} rule(s) loaded: {rules}", file=sys.stderr)
 
-    bundles, upstream_roots = load_upstream_marketplace()
-    # Bundle-internal SKILL.md files (under upstream/<bundle>/skills/...) are NOT
-    # walked here — they install with their parent plugin. upstream_roots is
-    # retained for forthcoming contains: enrichment.
+    bundles, declared_source_dirs = load_upstream_marketplace()
+    orphan_bundles = find_orphan_bundles(declared_source_dirs)
+    plugins = bundles + orphan_bundles
+    # Bundle-internal SKILL.md files (under upstream/<bundle>/skills/...) are
+    # NOT walked here — they install with their parent plugin and are listed
+    # under that plugin's contains: field (added inside load_upstream_marketplace).
     first_party_skills = find_skills([SKILLS_DIR], max_depth=2)
     personas = dedup_by_name(find_md_entries(PERSONAS_ROOT))
     agents = dedup_by_name(find_md_entries(AGENTS_ROOT, exclude_subdirs={PERSONAS_ROOT}))
     commands = dedup_by_name(find_md_entries(COMMANDS_ROOT))
     if args.verbose:
-        print(f"[upstream] {len(bundles)} bundles", file=sys.stderr)
+        print(f"[upstream] {len(bundles)} declared + {len(orphan_bundles)} orphan = {len(plugins)} plugins", file=sys.stderr)
         print(f"[upstream] {len(personas)} personas, {len(agents)} agents, {len(commands)} commands", file=sys.stderr)
         print(f"[first-party] {len(first_party_skills)} SKILL.md (depth-capped)", file=sys.stderr)
 
@@ -355,7 +485,9 @@ def main(argv: list[str]) -> int:
                 "subtree_prefix": "upstream",
             },
             "counts": {
-                "bundles": len(bundles),
+                "plugins": len(plugins),
+                "plugins_declared": len(bundles),
+                "plugins_orphan": len(orphan_bundles),
                 "skills": len(skills),
                 "skills_first_party": len(first_party_skills),
                 "agents": len(agents),
@@ -363,7 +495,7 @@ def main(argv: list[str]) -> int:
                 "commands": len(commands),
             },
         },
-        "plugins": bundles,
+        "plugins": plugins,
         "skills": skills,
         "agents": agents,
         "personas": personas,
@@ -377,7 +509,7 @@ def main(argv: list[str]) -> int:
     OUT_PATH.write_text(body, encoding="utf-8")
     if args.verbose:
         print(f"[write] {OUT_PATH} ({len(body):,} bytes)", file=sys.stderr)
-    print(f"marketplace.json regenerated: {len(bundles)} bundles + {len(skills)} skills")
+    print(f"marketplace.json regenerated: {len(plugins)} plugins + {len(skills)} skills")
     return 0
 
 

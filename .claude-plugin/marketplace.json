@@ -8,13 +8,15 @@
   "homepage": "https://github.com/flight505/claude-skills-jesper",
   "metadata": {
     "version": "0.1.0",
-    "generated": "2026-05-17T13:10:01Z",
+    "generated": "2026-05-17T13:13:45Z",
     "upstream": {
       "repo": "alirezarezvani/claude-skills",
       "subtree_prefix": "upstream"
     },
     "counts": {
-      "bundles": 43,
+      "plugins": 44,
+      "plugins_declared": 43,
+      "plugins_orphan": 1,
       "skills": 7,
       "skills_first_party": 7,
       "agents": 20,
@@ -48,7 +50,59 @@
         "twitter",
         "x-twitter"
       ],
-      "category": "marketing"
+      "category": "marketing",
+      "contains": {
+        "skills": [
+          "ab-test-setup",
+          "ad-creative",
+          "ai-seo",
+          "analytics-tracking",
+          "app-store-optimization",
+          "brand-guidelines",
+          "campaign-analytics",
+          "churn-prevention",
+          "cold-email",
+          "competitor-alternatives",
+          "content-creator",
+          "content-humanizer",
+          "content-production",
+          "content-strategy",
+          "copy-editing",
+          "copywriting",
+          "email-sequence",
+          "form-cro",
+          "free-tool-strategy",
+          "launch-strategy",
+          "marketing-context",
+          "marketing-demand-acquisition",
+          "marketing-ideas",
+          "marketing-ops",
+          "marketing-psychology",
+          "marketing-skills",
+          "marketing-strategy-pmm",
+          "onboarding-cro",
+          "page-cro",
+          "paid-ads",
+          "paywall-upgrade-cro",
+          "popup-cro",
+          "pricing-strategy",
+          "programmatic-seo",
+          "prompt-engineer-toolkit",
+          "referral-program",
+          "schema-markup",
+          "seo-audit",
+          "signup-flow-cro",
+          "site-architecture",
+          "social-content",
+          "social-media-analyzer",
+          "social-media-manager",
+          "video-content-strategist",
+          "x-twitter-growth"
+        ],
+        "sub_plugins": [
+          "video-content-strategist"
+        ]
+      }
     },
     {
       "name": "c-level-skills",
@@ -73,7 +127,44 @@
         "founder-mode",
         "boardroom"
       ],
-      "category": "leadership"
+      "category": "leadership",
+      "contains": {
+        "skills": [
+          "agent-protocol",
+          "board-deck-builder",
+          "board-meeting",
+          "c-level-skills",
+          "ceo-advisor",
+          "cfo-advisor",
+          "change-management",
+          "chief-ai-officer-advisor",
+          "chief-customer-officer-advisor",
+          "chief-data-officer-advisor",
+          "chief-of-staff",
+          "chro-advisor",
+          "ciso-advisor",
+          "cmo-advisor",
+          "company-os",
+          "competitive-intel",
+          "context-engine",
+          "coo-advisor",
+          "cpo-advisor",
+          "cro-advisor",
+          "cs-onboard",
+          "cto-advisor",
+          "culture-architect",
+          "decision-logger",
+          "founder-coach",
+          "general-counsel-advisor",
+          "internal-narrative",
+          "intl-expansion",
+          "ma-playbook",
+          "org-health-diagnostic",
+          "scenario-war-room",
+          "strategic-alignment",
+          "vpe-advisor"
+        ]
+      }
     },
     {
       "name": "c-level-agents",
@@ -126,7 +217,48 @@
         "decision-logging",
         "cross-model"
       ],
-      "category": "leadership"
+      "category": "leadership",
+      "contains": {
+        "skills": [
+          "boardroom",
+          "brief",
+          "c-level-agents",
+          "caio-review",
+          "cco-review",
+          "cdo-review",
+          "cfo-review",
+          "ciso-review",
+          "cmo-review",
+          "cpo-review",
+          "cro-review",
+          "cross-eval",
+          "cto-review",
+          "decide",
+          "execute",
+          "founder-mode",
+          "freeze",
+          "gc-review",
+          "office-hours",
+          "onboard",
+          "post-mortem",
+          "vpe-review"
+        ],
+        "agents": [
+          "cs-caio-advisor",
+          "cs-cco-advisor",
+          "cs-cdo-advisor",
+          "cs-cfo-advisor",
+          "cs-chief-of-staff",
+          "cs-chro-advisor",
+          "cs-ciso-advisor",
+          "cs-cmo-advisor",
+          "cs-coo-advisor",
+          "cs-cpo-advisor",
+          "cs-cro-advisor",
+          "cs-general-counsel-advisor",
+          "cs-vpe-advisor"
+        ]
+      }
     },
     {
       "name": "general-counsel-advisor",
@@ -151,7 +283,12 @@
         "indemnity",
         "liability-cap"
       ],
-      "category": "leadership"
+      "category": "leadership",
+      "contains": {
+        "skills": [
+          "general-counsel-advisor"
+        ]
+      }
     },
     {
       "name": "chief-data-officer-advisor",
@@ -176,7 +313,12 @@
         "data-as-asset",
         "data-team-org"
       ],
-      "category": "leadership"
+      "category": "leadership",
+      "contains": {
+        "skills": [
+          "chief-data-officer-advisor"
+        ]
+      }
     },
     {
       "name": "vpe-advisor",
@@ -203,7 +345,12 @@
         "manager-trigger",
         "production-discipline"
       ],
-      "category": "leadership"
+      "category": "leadership",
+      "contains": {
+        "skills": [
+          "vpe-advisor"
+        ]
+      }
     },
     {
       "name": "chief-customer-officer-advisor",
@@ -228,7 +375,12 @@
         "cs-coverage",
         "cs-team-org"
       ],
-      "category": "leadership"
+      "category": "leadership",
+      "contains": {
+        "skills": [
+          "chief-customer-officer-advisor"
+        ]
+      }
     },
     {
       "name": "chief-ai-officer-advisor",
@@ -254,7 +406,12 @@
         "ai-self-hosted-breakeven",
         "ai-team-org"
       ],
-      "category": "leadership"
+      "category": "leadership",
+      "contains": {
+        "skills": [
+          "chief-ai-officer-advisor"
+        ]
+      }
     },
     {
       "name": "engineering-advanced-skills",
@@ -280,7 +437,60 @@
         "mcp",
         "security-audit"
       ],
-      "category": "development"
+      "category": "development",
+      "contains": {
+        "skills": [
+          "agent-designer",
+          "agent-workflow-designer",
+          "api-design-reviewer",
+          "api-test-suite-builder",
+          "behuman",
+          "browser-automation",
+          "changelog-generator",
+          "chaos-engineering",
+          "ci-cd-pipeline-builder",
+          "codebase-onboarding",
+          "command-guide",
+          "database-designer",
+          "database-schema-designer",
+          "dependency-auditor",
+          "engineering-advanced-skills",
+          "env-secrets-manager",
+          "feature-flags-architect",
+          "focused-fix",
+          "full-page-screenshot",
+          "git-worktree-manager",
+          "interview-system-designer",
+          "kubernetes-operator",
+          "llm-cost-optimizer",
+          "mcp-server-builder",
+          "migration-architect",
+          "monorepo-navigator",
+          "observability-designer",
+          "performance-profiler",
+          "pr-review-expert",
+          "prompt-governance",
+          "rag-architect",
+          "release-manager",
+          "runbook-generator",
+          "sample-skill",
+          "secrets-vault-manager",
+          "self-eval",
+          "ship-gate",
+          "skill-security-auditor",
+          "skill-tester",
+          "slo-architect",
+          "spec-driven-workflow",
+          "sql-database-assistant",
+          "tc-tracker",
+          "tech-debt-tracker"
+        ],
+        "sub_plugins": [
+          "behuman",
+          "llm-cost-optimizer",
+          "prompt-governance"
+        ]
+      }
     },
     {
       "name": "engineering-skills",
@@ -310,7 +520,47 @@
         "google-drive",
         "google-sheets"
       ],
-      "category": "development"
+      "category": "development",
+      "contains": {
+        "skills": [
+          "adversarial-reviewer",
+          "ai-security",
+          "aws-solution-architect",
+          "azure-cloud-architect",
+          "cloud-security",
+          "code-reviewer",
+          "email-template-builder",
+          "engineering-skills",
+          "epic-design",
+          "gcp-cloud-architect",
+          "incident-commander",
+          "incident-response",
+          "ms365-tenant-manager",
+          "red-team",
+          "security-pen-testing",
+          "senior-architect",
+          "senior-backend",
+          "senior-computer-vision",
+          "senior-data-engineer",
+          "senior-data-scientist",
+          "senior-devops",
+          "senior-frontend",
+          "senior-fullstack",
+          "senior-ml-engineer",
+          "senior-prompt-engineer",
+          "senior-qa",
+          "senior-secops",
+          "senior-security",
+          "snowflake-development",
+          "stripe-integration-expert",
+          "tdd-guide",
+          "tech-stack-evaluator",
+          "threat-detection"
+        ],
+        "sub_plugins": [
+          "snowflake-development"
+        ]
+      }
     },
     {
       "name": "ra-qm-skills",
@@ -333,7 +583,31 @@
         "gdpr",
         "medtech"
       ],
-      "category": "compliance"
+      "category": "compliance",
+      "contains": {
+        "skills": [
+          "capa-officer",
+          "eu-ai-act-specialist",
+          "fda-consultant-specialist",
+          "gdpr-dsgvo-expert",
+          "information-security-manager-iso27001",
+          "isms-audit-expert",
+          "iso42001-specialist",
+          "mdr-745-specialist",
+          "qms-audit-expert",
+          "quality-documentation-manager",
+          "quality-manager-qmr",
+          "quality-manager-qms-iso13485",
+          "ra-qm-skills",
+          "regulatory-affairs-head",
+          "risk-management-specialist",
+          "soc2-compliance"
+        ],
+        "sub_plugins": [
+          "compliance-team-eu-ai-act",
+          "compliance-team-iso42001"
+        ]
+      }
     },
     {
       "name": "product-skills",
@@ -363,7 +637,24 @@
         "apple-hig",
         "design-guidelines"
       ],
-      "category": "product"
+      "category": "product",
+      "contains": {
+        "skills": [
+          "competitive-teardown",
+          "experiment-designer",
+          "landing-page-generator",
+          "product-analytics",
+          "product-discovery",
+          "product-manager-toolkit",
+          "product-skills",
+          "product-strategist",
+          "roadmap-communicator",
+          "saas-scaffolder",
+          "spec-to-repo",
+          "ui-design-system",
+          "ux-researcher-designer"
+        ]
+      }
     },
     {
       "name": "pm-skills",
@@ -384,7 +675,20 @@
         "confluence",
         "atlassian"
       ],
-      "category": "project-management"
+      "category": "project-management",
+      "contains": {
+        "skills": [
+          "atlassian-admin",
+          "atlassian-templates",
+          "confluence-expert",
+          "jira-expert",
+          "meeting-analyzer",
+          "pm-skills",
+          "scrum-master",
+          "senior-pm",
+          "team-communications"
+        ]
+      }
     },
     {
       "name": "business-growth-skills",
@@ -404,7 +708,16 @@
         "business-growth",
         "proposals"
       ],
-      "category": "business-growth"
+      "category": "business-growth",
+      "contains": {
+        "skills": [
+          "business-growth-skills",
+          "contract-and-proposal-writer",
+          "customer-success-manager",
+          "revenue-operations",
+          "sales-engineer"
+        ]
+      }
     },
     {
       "name": "finance-skills",
@@ -431,7 +744,18 @@
         "ltv",
         "cac"
       ],
-      "category": "finance"
+      "category": "finance",
+      "contains": {
+        "skills": [
+          "business-investment-advisor",
+          "finance-skills",
+          "financial-analyst",
+          "saas-metrics-coach"
+        ],
+        "sub_plugins": [
+          "business-investment-advisor"
+        ]
+      }
     },
     {
       "name": "pw",
@@ -453,7 +777,26 @@
         "browserstack",
         "testrail"
       ],
-      "category": "development"
+      "category": "development",
+      "contains": {
+        "skills": [
+          "browserstack",
+          "coverage",
+          "fix",
+          "generate",
+          "init",
+          "migrate",
+          "pw",
+          "report",
+          "review",
+          "testrail"
+        ],
+        "agents": [
+          "migration-planner",
+          "test-architect",
+          "test-debugger"
+        ]
+      }
     },
     {
       "name": "self-improving-agent",
@@ -472,7 +815,21 @@
         "self-improvement",
         "learning"
       ],
-      "category": "development"
+      "category": "development",
+      "contains": {
+        "skills": [
+          "extract",
+          "promote",
+          "remember",
+          "review",
+          "self-improving-agent",
+          "status"
+        ],
+        "agents": [
+          "memory-analyst",
+          "skill-extractor"
+        ]
+      }
     },
     {
       "name": "autoresearch-agent",
@@ -494,7 +851,20 @@
         "metrics",
         "evaluators"
       ],
-      "category": "development"
+      "category": "development",
+      "contains": {
+        "skills": [
+          "autoresearch-agent",
+          "loop",
+          "resume",
+          "run",
+          "setup",
+          "status"
+        ],
+        "agents": [
+          "experiment-runner"
+        ]
+      }
     },
     {
       "name": "google-workspace-cli",
@@ -516,7 +886,12 @@
         "google-calendar",
         "workspace-admin"
       ],
-      "category": "development"
+      "category": "development",
+      "contains": {
+        "skills": [
+          "google-workspace-cli"
+        ]
+      }
     },
     {
       "name": "code-to-prd",
@@ -546,7 +921,12 @@
         "fastapi",
         "express"
       ],
-      "category": "product"
+      "category": "product",
+      "contains": {
+        "skills": [
+          "code-to-prd"
+        ]
+      }
     },
     {
       "name": "agenthub",
@@ -571,7 +951,22 @@
         "research",
         "optimization"
       ],
-      "category": "development"
+      "category": "development",
+      "contains": {
+        "skills": [
+          "agenthub",
+          "board",
+          "eval",
+          "init",
+          "merge",
+          "run",
+          "spawn",
+          "status"
+        ],
+        "agents": [
+          "hub-coordinator"
+        ]
+      }
     },
     {
       "name": "a11y-audit",
@@ -593,7 +988,12 @@
         "contrast",
         "keyboard-navigation"
       ],
-      "category": "development"
+      "category": "development",
+      "contains": {
+        "skills": [
+          "a11y-audit"
+        ]
+      }
     },
     {
       "name": "executive-mentor",
@@ -614,7 +1014,20 @@
         "founder",
         "leadership"
       ],
-      "category": "leadership"
+      "category": "leadership",
+      "contains": {
+        "skills": [
+          "board-prep",
+          "challenge",
+          "executive-mentor",
+          "hard-call",
+          "postmortem",
+          "stress-test"
+        ],
+        "agents": [
+          "devils-advocate"
+        ]
+      }
     },
     {
       "name": "docker-development",
@@ -634,7 +1047,12 @@
         "docker-compose",
         "devops"
       ],
-      "category": "development"
+      "category": "development",
+      "contains": {
+        "skills": [
+          "docker-development"
+        ]
+      }
     },
     {
       "name": "helm-chart-builder",
@@ -654,7 +1072,12 @@
         "chart",
         "deployment"
       ],
-      "category": "development"
+      "category": "development",
+      "contains": {
+        "skills": [
+          "helm-chart-builder"
+        ]
+      }
     },
     {
       "name": "terraform-patterns",
@@ -674,7 +1097,12 @@
         "devops",
         "cloud"
       ],
-      "category": "development"
+      "category": "development",
+      "contains": {
+        "skills": [
+          "terraform-patterns"
+        ]
+      }
     },
     {
       "name": "research-summarizer",
@@ -694,7 +1122,12 @@
         "insights",
         "product"
       ],
-      "category": "product"
+      "category": "product",
+      "contains": {
+        "skills": [
+          "research-summarizer"
+        ]
+      }
     },
     {
       "name": "code-tour",
@@ -714,7 +1147,12 @@
         "code-review",
         "documentation"
       ],
-      "category": "development"
+      "category": "development",
+      "contains": {
+        "skills": [
+          "code-tour"
+        ]
+      }
     },
     {
       "name": "demo-video",
@@ -735,7 +1173,12 @@
         "ffmpeg",
         "tts"
       ],
-      "category": "development"
+      "category": "development",
+      "contains": {
+        "skills": [
+          "demo-video"
+        ]
+      }
     },
     {
       "name": "data-quality-auditor",
@@ -755,7 +1198,12 @@
         "missing-values",
         "data-audit"
       ],
-      "category": "development"
+      "category": "development",
+      "contains": {
+        "skills": [
+          "data-quality-auditor"
+        ]
+      }
     },
     {
       "name": "statistical-analyst",
@@ -775,7 +1223,12 @@
         "sample-size",
         "confidence-interval"
       ],
-      "category": "development"
+      "category": "development",
+      "contains": {
+        "skills": [
+          "statistical-analyst"
+        ]
+      }
     },
     {
       "name": "apple-hig-expert",
@@ -798,7 +1251,12 @@
         "accessibility",
         "ui-design"
       ],
-      "category": "design"
+      "category": "design",
+      "contains": {
+        "skills": [
+          "apple-hig-expert"
+        ]
+      }
     },
     {
       "name": "llm-wiki",
@@ -823,7 +1281,24 @@
         "incremental-knowledge",
         "cross-tool"
       ],
-      "category": "knowledge"
+      "category": "knowledge",
+      "contains": {
+        "skills": [
+          "llm-wiki"
+        ],
+        "agents": [
+          "wiki-ingestor",
+          "wiki-librarian",
+          "wiki-linter"
+        ],
+        "commands": [
+          "wiki-ingest",
+          "wiki-init",
+          "wiki-lint",
+          "wiki-log",
+          "wiki-query"
+        ]
+      }
     },
     {
       "name": "karpathy-coder",
@@ -846,7 +1321,18 @@
         "review",
         "discipline"
       ],
-      "category": "development"
+      "category": "development",
+      "contains": {
+        "skills": [
+          "karpathy-coder"
+        ],
+        "agents": [
+          "karpathy-reviewer"
+        ],
+        "commands": [
+          "karpathy-check"
+        ]
+      }
     },
     {
       "name": "feature-flags-architect",
@@ -871,7 +1357,12 @@
         "flipt",
         "release-engineering"
       ],
-      "category": "development"
+      "category": "development",
+      "contains": {
+        "skills": [
+          "feature-flags-architect"
+        ]
+      }
     },
     {
       "name": "kubernetes-operator",
@@ -896,7 +1387,12 @@
         "reconcile",
         "devops"
       ],
-      "category": "development"
+      "category": "development",
+      "contains": {
+        "skills": [
+          "kubernetes-operator"
+        ]
+      }
     },
     {
       "name": "chaos-engineering",
@@ -921,7 +1417,12 @@
         "gremlin",
         "aws-fis"
       ],
-      "category": "development"
+      "category": "development",
+      "contains": {
+        "skills": [
+          "chaos-engineering"
+        ]
+      }
     },
     {
       "name": "slo-architect",
@@ -945,7 +1446,12 @@
         "google-sre-workbook",
         "observability"
       ],
-      "category": "development"
+      "category": "development",
+      "contains": {
+        "skills": [
+          "slo-architect"
+        ]
+      }
     },
     {
       "name": "write-a-skill",
@@ -967,7 +1473,18 @@
         "skill-quality",
         "meta-skill"
       ],
-      "category": "development"
+      "category": "development",
+      "contains": {
+        "skills": [
+          "write-a-skill"
+        ],
+        "agents": [
+          "cs-skill-author"
+        ],
+        "commands": [
+          "cs-write-a-skill"
+        ]
+      }
     },
     {
       "name": "caveman",
@@ -988,7 +1505,18 @@
         "cost-reduction",
         "communication"
       ],
-      "category": "development"
+      "category": "development",
+      "contains": {
+        "skills": [
+          "caveman"
+        ],
+        "agents": [
+          "cs-caveman-mode"
+        ],
+        "commands": [
+          "cs-caveman"
+        ]
+      }
     },
     {
       "name": "grill-me",
@@ -1010,7 +1538,18 @@
         "stress-test",
         "socratic-method"
       ],
-      "category": "development"
+      "category": "development",
+      "contains": {
+        "skills": [
+          "grill-me"
+        ],
+        "agents": [
+          "cs-grill-master"
+        ],
+        "commands": [
+          "cs-grill-me"
+        ]
+      }
     },
     {
       "name": "handoff",
@@ -1031,7 +1570,18 @@
         "documentation",
         "no-duplication"
       ],
-      "category": "development"
+      "category": "development",
+      "contains": {
+        "skills": [
+          "handoff"
+        ],
+        "agents": [
+          "cs-handoff-author"
+        ],
+        "commands": [
+          "cs-handoff"
+        ]
+      }
     },
     {
       "name": "agile-product-owner",
@@ -1054,7 +1604,51 @@
         "acceptance-criteria",
         "epic-breakdown"
       ],
-      "category": "product"
+      "category": "product",
+      "contains": {
+        "skills": [
+          "agile-product-owner"
+        ]
+      }
+    },
+    {
+      "name": "compliance-os",
+      "source": {
+        "source": "./upstream/compliance-os",
+        "type": "directory"
+      },
+      "description": "Compliance OS — meta-orchestrator for multi-framework compliance programs. Configure-then-operate four stdlib Python tools: framework_selector.py (input: company profile across industry/geography/AI/medical/financial/headcount; output: applicable frameworks ranked across all 9 supported: ISO 27001, 13485, 42001, 14971, EU AI Act, MDR 745, GDPR, SOC 2, FDA QSR), cross_framework_mapper.py (input: 1+ framework control libraries; output: unified control matrix with overlap percentage + mapping confidence + unified evidence requirements per merged control), audit_simulator.py (input: framework scope; output: mock internal audit with 8-15 finding scenarios across 5 severity levels + interview questions per control), evidence_pool_generator.py (input: enabled framework configs; output: consolidated evidence checklist with reuse map). 4 in-depth references citing ISO 19011, IIA Standards, AICPA AT-C, NIST CSF, COSO ERM. Plus 3 cs-* persona agents (cs-compliance-officer, cs-aims-iso42001, cs-ai-act-compliance) + 3 /cs:* slash commands (/cs:compliance-readiness, /cs:aims-audit, /cs:ai-act-readiness). Reuses the 14 existing ra-qm-team skills and the 2 new compliance-team-* plugins.",
+      "version": "1.2.0",
+      "author": {
+        "name": "Alireza Rezvani",
+        "url": "https://alirezarezvani.com"
+      },
+      "homepage": "https://github.com/alirezarezvani/claude-skills/tree/main/compliance-os",
+      "repository": "https://github.com/alirezarezvani/claude-skills",
+      "license": "MIT",
+      "contains": {
+        "skills": [
+          "ai-act-readiness",
+          "aims-audit",
+          "compliance-os",
+          "compliance-readiness",
+          "fda-qsr-audit-prep",
+          "gdpr-audit-prep",
+          "iso13485-audit-prep",
+          "iso27001-audit-prep",
+          "soc2-audit-prep"
+        ],
+        "agents": [
+          "cs-ai-act-compliance",
+          "cs-aims-iso42001",
+          "cs-ciso-iso27001",
+          "cs-compliance-officer",
+          "cs-cqm-iso13485",
+          "cs-dpo-gdpr",
+          "cs-fda-qsr-auditor",
+          "cs-soc2-auditor"
+        ]
+      }
     }
   ],
   "skills": [
