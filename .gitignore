@@ -12,3 +12,8 @@ node_modules/
 
 # auto-generated full-tier docs (regenerated via skills/*/scripts/update-*.sh)
 skills/*/references/llms-full.txt
+
+# forge-managed: project-scoped Claude Code installs (not for commit)
+.claude/skills/
+.claude/commands/
+.claude/agents/
