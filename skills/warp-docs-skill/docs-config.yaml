@@ -3,7 +3,8 @@ base_url: "https://docs.warp.dev"
 
 discovery:
   method: sitemap
-  url: "https://docs.warp.dev/sitemap-pages.xml"
+  # Was sitemap-pages.xml; Warp renamed it to sitemap-index.xml (see robots.txt).
+  url: "https://docs.warp.dev/sitemap-index.xml"
 
 download:
   rate_limit: 0.2

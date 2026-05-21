@@ -181,9 +181,17 @@ def discover_llms_txt(url: str, locale: Optional[str] = None) -> list[Page]:
     return pages
 
 
-def discover_sitemap(url: str, locale: Optional[str] = None) -> list[Page]:
-    """Fetch an XML sitemap and extract <loc> URLs."""
-    log_section("Discovering pages from sitemap")
+def discover_sitemap(url: str, locale: Optional[str] = None, _depth: int = 0) -> list[Page]:
+    """Fetch an XML sitemap and extract <loc> URLs.
+
+    Handles both flat sitemaps (root <urlset>) and sitemap-index files
+    (root <sitemapindex>, pointing at one or more nested sitemaps).
+    For an index, recurses into each child sitemap and aggregates pages.
+    Recursion is bounded by _depth ≤ 3 to guard against malformed indexes
+    that point at themselves.
+    """
+    if _depth == 0:
+        log_section("Discovering pages from sitemap")
     log_info(f"Fetching {url}")
 
     try:
@@ -195,6 +203,20 @@ def discover_sitemap(url: str, locale: Optional[str] = None) -> list[Page]:
 
     root = ET.fromstring(resp.content)
     ns = {"ns": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+
+    # Sitemap-index: contains <sitemap><loc>...</loc></sitemap> entries
+    # pointing at nested sitemaps. Recurse to collect all pages.
+    nested = root.findall(".//ns:sitemap/ns:loc", ns)
+    if nested and _depth < 3:
+        pages: list[Page] = []
+        for loc in nested:
+            if not loc.text:
+                continue
+            pages.extend(discover_sitemap(loc.text.strip(), locale, _depth + 1))
+        if _depth == 0:
+            pages.sort(key=lambda p: p.url)
+            log_info(f"Discovered {len(pages)} pages")
+        return pages
 
     pages: list[Page] = []
     for url_elem in root.findall(".//ns:url", ns):
@@ -209,7 +231,8 @@ def discover_sitemap(url: str, locale: Optional[str] = None) -> list[Page]:
         pages.append(Page(url=page_url))
 
     pages.sort(key=lambda p: p.url)
-    log_info(f"Discovered {len(pages)} pages")
+    if _depth == 0:
+        log_info(f"Discovered {len(pages)} pages")
     return pages
 
 
