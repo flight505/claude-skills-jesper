@@ -110,12 +110,80 @@ The first dry-run flagged 5 doc-skills with empty `references/` on disk. `--fix`
 
 ## Open follow-ups
 
-Surfaced during the original tracks but explicitly deferred. None are blocking; pick up if real-world use of the chat makes any of these feel urgent.
+Two items remain after the 2026-05-24 culling pass. Other deferred items (cost guardrail, peer ranking on `pairs_with`, privacy disclosure, cross-marketplace pair targets, directory restructure) were retired — see commit `7687362` for rationale. `pairs_with:` itself stays in the codebase but isn't actively maintained; it's dormant metadata that the chat consumes when present, harmless when absent.
 
-- **Cost guardrail.** Chat shipped without a hard daily budget — running tally is visible in the statusbar but nothing stops a runaway loop. Worth revisiting if usage gets noisy: `FORGE_CHAT_DAILY_BUDGET_USD` env + a warning toast at 80% would respect the global "Claude Alerts" rule.
-- **Peer ranking on top of `pairs_with`.** Today `SelectPeers` uses `pairs_with` first, then same-type fill in catalog order. The same-type fill has no relevance ranking. Once chat sees real use, consider semantic ranking via `aisuggester` or frecency from `forge serve` install metrics.
-- **Streaming on the TUI.** Bubble Tea + SSE is awkward (channels through `tea.Cmd`). Skipped for v1. Reconsider if multi-paragraph replies feel sluggish in the TUI; the web side is already JSON-only and can switch to SSE without a wire-protocol change (the `chat_available` probe stays the same).
-- **Privacy disclosure.** All chat traffic goes to api.anthropic.com under the user's own credential — same trust boundary as `aisuggester` today. Mention in the chat pane's first-launch hint if we add a "first time?" overlay.
-- **Forge UI surface for `check-sources`** (deferred from Track 6.4.1). A Doctor-tab section or a TUI overlay would let you see "what's stale" without dropping to the shell. Wire to `scripts/check-sources.py --no-color` and parse the output.
-- **Directory restructure** (deferred from Track 6.4.2 — explicitly not pursued). `docs/`, `mirrors/`, `originals/`. Manifests already capture provenance; the structural change would break the install layer (7 launchd plists with baked-in paths, ~5 symlinks under `~/.claude/skills/`, every marketplace.json path, every existing forge install). Revisit only if metadata proves insufficient.
-- **External-marketplace pair targets.** `pairs_with:` names must match entries in this marketplace. Cross-marketplace links (e.g. naming `frontend-design` from `claude-plugins-official`) silently drop. If useful, add a `pairs_with_external:` field or import those plugins into our marketplace.
+- **Forge UI surface for `check-sources`** (was Track 6.4.1). A Doctor-tab section or TUI overlay that runs `scripts/check-sources.py --no-color` and parses the output, so "what's stale?" is one keypress away instead of a shell command.
+- **Streaming on the TUI.** Reconsider if multi-paragraph chat replies start feeling sluggish. The web side is JSON-only today and can flip to SSE later without a wire-protocol change.
+- **Document the third-party integration workflow.** Today's flow is informal: `cd` into this repo, start a Claude session, paste a git URL, ask Claude to review and propose how to integrate the upstream skill/plugin/agent. Probably doesn't need its own skill — a 10-line "Integrating a third-party repo" section in CLAUDE.md (steps: read the repo, check the SKILL.md frontmatter, classify provenance kind, draft a `_source.yaml`, propose a target dir under `skills/`, regenerate, smoke-test) would carry the workflow without new tooling. Revisit only if the informal flow starts feeling lossy.
+- **DGX Spark / Linux portability review.** This marketplace is personal-first today; eventually likely to be cloned onto the NVIDIA DGX Spark machine so Claude can use it from there. Known macOS-only pieces that need a story for Linux: `skills/_shared/install-refresh-daemons.sh` already errors loudly on non-darwin (the `[[ "$(uname)" == "Darwin" ]]` guard) — needs a systemd/cron variant. The macOS Keychain probe in `forge/internal/llm/client.go` is already darwin-gated and falls back to env vars on Linux, so chat works as long as `CLAUDE_CODE_OAUTH_TOKEN` or `ANTHROPIC_API_KEY` is exported. Walk the rest of the codebase for `darwin`-only assumptions (paths like `~/Library/`, `osascript`, `pbcopy`, etc.) and write a Linux-install README before the first DGX deploy.
+
+---
+
+## Track 7 — Project-aware `suggest` (planning only)
+
+**Goal:** from a `! forge` invocation inside a Claude Code session (or `forge tui` opened in a project), surface the question *"what skills/plugins/agents would help with this project right now?"* without making the user type a task description.
+
+Today's `forge agent suggest "<task>"` already calls `aisuggester` with a hand-typed task string. The missing piece is auto-deriving that task from the project's own context. The semantic-ranking backend stays unchanged; this is a context-collection layer + a UI affordance on top of it.
+
+### 7.1 Signal collection
+
+Read whatever the bound cwd offers and assemble into a "project profile" string. All sources are optional — missing ones just narrow the picture.
+
+| Source | What it contributes | Cost |
+|---|---|---|
+| `CLAUDE.md` (project) | The project's own intent + conventions, in the user's voice | free, 5-30 KB |
+| `README.md` (root) | Elevator pitch, install/usage docs | free, 3-15 KB |
+| `package.json` / `pyproject.toml` / `Cargo.toml` / `go.mod` | Stack + dependencies | free, 1-5 KB |
+| `.claude/settings.json` + already-installed `~/.claude/skills/` for this surface | **Negative signal** — don't re-suggest things already there | free, 1-2 KB |
+| `git log --oneline -20` | Recent activity — what we've been working on | free, ~1 KB |
+
+Cap the total context at ~10 KB to keep the API call cheap. Truncate the longest source first.
+
+### 7.2 Task assembly
+
+Format the collected signals as a single task string sent to `aisuggester.Suggest`. Two competing shapes:
+
+**A. Factual concatenation** (cheap, no extra API call):
+```
+Project at /Users/.../forge.
+README: <pitch>
+Stack: <deps>
+Recent commits: <log>
+Already installed: <names>
+Suggest skills/plugins/agents that would help develop, test, or extend this project.
+```
+
+**B. Pre-summarised** (extra Haiku call, ~$0.0005, cleaner intent signal):
+First ask Claude to summarise the project from the raw signals; feed that summary to `aisuggester`. Better semantic ranking, double the cost.
+
+Recommendation: **A for v1.** The aisuggester catalog is already cached in the system block, so the marginal cost of a long task string is just the task tokens (~2-3 KB). If results feel noisy, upgrade to B.
+
+### 7.3 Surfaces
+
+- **CLI**: `forge agent suggest --project` (no task arg). Reads cwd, prints ranked list. Output shape matches the existing `suggest` envelope so downstream parsers don't break.
+- **TUI**: a key on the Suggest view (proposed: `p` for "project") that auto-fills the textarea with the assembled task string + runs immediately. Lets users see and edit the auto-derived task before submission — keeps the existing manual flow intact.
+- **Web (`forge serve`)**: skip for v1. The web UI is already project-bound via `health().cwd`; we can add the button later if the CLI/TUI versions earn their keep.
+
+### 7.4 De-dup against installed
+
+Items already installed on the current target surface get a `(installed)` annotation in the output. Don't filter them out — sometimes the user wants to know "yes, I have the right tools, here are the ones that fit."
+
+### 7.5 Open design questions to check before coding
+
+- **Should the auto-fill be visible?** If the TUI shows the assembled task string before running, the user can fix obviously-wrong signals (e.g. a stale README). Tradeoff: extra keystroke before each run. Recommendation: show by default; offer a `--auto-submit` flag for the CLI / a shortcut in the TUI for "trust me, just run it."
+- **Should we honour `.gitignore` when reading project files?** Yes — never read files the user explicitly excluded from version control. Use `git ls-files` for the candidate file set.
+- **How aggressive should the cwd walk be?** v1: only the explicitly-named files above, at the project root. v2 could add `find -maxdepth 2 -name '*.md'` to pick up `docs/` README content, but that risks pulling irrelevant noise.
+- **Filter language? E.g. skip Python projects suggesting Apple Swift skills?** The `aisuggester` model is good enough at semantic filtering — explicit category filtering would be premature.
+
+### 7.6 Cost shape
+
+One `aisuggester` call per `--project` invocation. Same pricing as today's `suggest`: ~$0.002 at Haiku 4.5 (or $0 within Max). No background activity, no polling. The launchd daemons (Track 1b) stay unrelated — they refresh local doc snapshots, not API calls.
+
+### Tasks (when we start)
+
+- [ ] **7.1** Write `internal/project/profile.go`: collect-and-assemble signals; return the task string + a list of already-installed item names
+- [ ] **7.2** Add `--project` flag to `forge agent suggest` (CLI); wire profile → existing aisuggester path
+- [ ] **7.3** TUI Suggest view: `p` key auto-fills textarea via the profile collector
+- [ ] **7.4** De-dup annotation in output (CLI + TUI)
+- [ ] **7.5** Unit tests for profile assembly (signal absence, oversized truncation, gitignore respect)
+- [ ] **7.6** Smoke test: run `! forge agent suggest --project` from inside this repo and from inside the forge repo; check the suggestions look sensible
