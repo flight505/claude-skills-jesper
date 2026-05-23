@@ -1,0 +1,46 @@
+name: "NVIDIA DGX Spark"
+base_url: "https://docs.nvidia.com/dgx/"
+
+discovery:
+  method: sphinx_index
+  # Two doc trees, both Sphinx-generated, share the same base_url so they
+  # become top-level sections (dgx-spark, dgx-os-7-user-guide) in the output.
+  urls:
+    - "https://docs.nvidia.com/dgx/dgx-spark/index.html"
+    - "https://docs.nvidia.com/dgx/dgx-os-7-user-guide/index.html"
+
+download:
+  rate_limit: 0.3
+  timeout: 30
+
+processing:
+  strip_frontmatter: true
+  clean_blank_lines: true
+
+sections:
+  derive_from: url_path
+  descriptions:
+    dgx-spark: "NVIDIA DGX Spark — GB10 system overview, setup, hardware, software stack, dashboard, recovery, troubleshooting"
+    dgx-os-7-user-guide: "DGX OS 7 — Ubuntu-based OS that ships on DGX Spark; installation, networking, storage, additional software, security"
+
+output:
+  quick_reference:
+    file: quick-reference.md
+    max_chars_per_page: 3000
+    priority_paths:
+      - /dgx-spark/index.html
+      - /dgx-spark/system-overview.html
+      - /dgx-spark/first-boot.html
+      - /dgx-spark/hardware.html
+      - /dgx-spark/software.html
+      - /dgx-spark/dgx-os.html
+      - /dgx-spark/common-use-cases.html
+      - /dgx-spark/known-issues.html
+      - /dgx-os-7-user-guide/index.html
+      - /dgx-os-7-user-guide/additional_software.html
+
+  section_index:
+    file: section-index.md
+
+  full_docs:
+    file: full-docs.txt

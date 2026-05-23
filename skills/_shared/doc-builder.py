@@ -1,13 +1,13 @@
 #!/usr/bin/env -S uv run --script
 # /// script
 # requires-python = ">=3.11"
-# dependencies = ["requests", "pyyaml"]
+# dependencies = ["requests", "pyyaml", "beautifulsoup4"]
 # ///
 """
 doc-builder — Unified documentation fetcher for Claude Code skills.
 
 Discovers, downloads, and generates 3-tier LLM-optimized documentation
-from any docs site that provides llms.txt or a sitemap.
+from any docs site that provides llms.txt, a sitemap, or a Sphinx index.
 
 Usage:
     doc-builder.py /path/to/docs-config.yaml
@@ -27,9 +27,11 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Optional
+from urllib.parse import urljoin
 
 import requests
 import yaml
+from bs4 import BeautifulSoup, NavigableString, Tag
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -108,12 +110,18 @@ def load_config(path: Path) -> dict[str, Any]:
         sys.exit(1)
 
     discovery = config["discovery"]
-    if "method" not in discovery or "url" not in discovery:
-        log_error("discovery must have 'method' and 'url' keys")
+    if "method" not in discovery:
+        log_error("discovery must have a 'method' key")
+        sys.exit(1)
+    if "url" not in discovery and "urls" not in discovery:
+        log_error("discovery must have 'url' or 'urls'")
         sys.exit(1)
 
-    if discovery["method"] not in ("sitemap", "llms_txt"):
-        log_error(f"Unknown discovery method: {discovery['method']} (expected 'sitemap' or 'llms_txt')")
+    if discovery["method"] not in ("sitemap", "llms_txt", "sphinx_index"):
+        log_error(
+            f"Unknown discovery method: {discovery['method']} "
+            f"(expected 'sitemap', 'llms_txt', or 'sphinx_index')"
+        )
         sys.exit(1)
 
     # Apply defaults
@@ -237,6 +245,225 @@ def discover_sitemap(url: str, locale: Optional[str] = None, _depth: int = 0) ->
 
 
 # ---------------------------------------------------------------------------
+# Sphinx index discovery + HTML extraction
+# ---------------------------------------------------------------------------
+
+
+_SPHINX_NOISE_KEYWORDS = (
+    "sidebar",
+    "breadcrumb",
+    "prev-next",
+    "edit-this-page",
+    "headerlink",
+    "navbar",
+    "toctree-wrapper",
+    "search",
+    "footer",
+)
+
+
+def _is_relative_html(href: str) -> bool:
+    if not href:
+        return False
+    if href.startswith("#") or href.startswith("?"):
+        return False
+    if "://" in href or href.startswith("//") or href.startswith("mailto:"):
+        return False
+    if href.startswith("/"):
+        return False
+    base = href.split("#", 1)[0].split("?", 1)[0]
+    return base.endswith(".html")
+
+
+def discover_sphinx_index(urls: Any) -> list[Page]:
+    """Walk one or more Sphinx index pages and collect every sibling .html link.
+
+    Accepts a single URL string or a list. Each seed is fetched, every
+    relative ``.html`` link within is resolved against the seed and added to
+    the result set (deduplicated). The seed itself is also included so the
+    index page's prose isn't lost.
+    """
+    if isinstance(urls, str):
+        urls = [urls]
+    elif not isinstance(urls, list):
+        log_error(f"sphinx_index expects 'url' (str) or 'urls' (list), got {type(urls).__name__}")
+        sys.exit(1)
+
+    log_section("Discovering pages from Sphinx index")
+
+    discovered: dict[str, Page] = {}
+
+    for index_url in urls:
+        log_info(f"Fetching {index_url}")
+        try:
+            resp = requests.get(index_url, timeout=30)
+            resp.raise_for_status()
+        except requests.RequestException as exc:
+            log_error(f"Failed to fetch Sphinx index: {exc}")
+            sys.exit(1)
+
+        soup = BeautifulSoup(resp.text, "html.parser")
+        index_title = soup.find("title")
+        title_text = index_title.get_text(strip=True) if index_title else ""
+        discovered.setdefault(index_url, Page(url=index_url, title=title_text))
+
+        for anchor in soup.find_all("a", href=True):
+            href = anchor["href"].strip()
+            if not _is_relative_html(href):
+                continue
+            absolute = urljoin(index_url, href.split("#", 1)[0])
+            if absolute in discovered:
+                continue
+            link_text = anchor.get_text(strip=True)
+            discovered[absolute] = Page(url=absolute, title=link_text)
+
+    pages = sorted(discovered.values(), key=lambda p: p.url)
+    log_info(f"Discovered {len(pages)} pages")
+    return pages
+
+
+def _table_to_markdown(table: Tag) -> str:
+    rows: list[list[str]] = []
+    for tr in table.find_all("tr"):
+        cells = [
+            td.get_text(strip=True).replace("|", "\\|")
+            for td in tr.find_all(["th", "td"])
+        ]
+        if cells:
+            rows.append(cells)
+    if not rows:
+        return ""
+    width = max(len(r) for r in rows)
+    rows = [r + [""] * (width - len(r)) for r in rows]
+    lines = ["| " + " | ".join(rows[0]) + " |"]
+    lines.append("|" + "|".join("---" for _ in range(width)) + "|")
+    for r in rows[1:]:
+        lines.append("| " + " | ".join(r) + " |")
+    return "\n\n" + "\n".join(lines) + "\n\n"
+
+
+def _node_classes(node: Tag) -> str:
+    if not isinstance(node, Tag) or node.attrs is None:
+        return ""
+    cls = node.attrs.get("class")
+    if not cls:
+        return ""
+    if isinstance(cls, str):
+        return cls.lower()
+    return " ".join(cls).lower()
+
+
+def _strip_sphinx_noise(scope: Tag) -> None:
+    for tag in scope.find_all(["nav", "header", "footer", "script", "style", "form"]):
+        tag.decompose()
+    for tag in list(scope.find_all(True)):
+        # decompose() in a prior iteration detaches descendants; skip them.
+        if not isinstance(tag, Tag) or tag.parent is None or tag.attrs is None:
+            continue
+        cls = _node_classes(tag)
+        role = (tag.attrs.get("role") or "").lower() if isinstance(tag.attrs.get("role"), str) else ""
+        if role == "navigation":
+            tag.decompose()
+            continue
+        if any(kw in cls for kw in _SPHINX_NOISE_KEYWORDS):
+            tag.decompose()
+
+
+def _html_to_markdown(root: Tag) -> str:
+    def walk(node: Any) -> str:
+        if isinstance(node, NavigableString):
+            return re.sub(r"[ \t]+", " ", str(node))
+        if not isinstance(node, Tag):
+            return ""
+        name = (node.name or "").lower()
+        if name in ("script", "style"):
+            return ""
+
+        if name in ("h1", "h2", "h3", "h4", "h5", "h6"):
+            level = int(name[1])
+            text = "".join(walk(c) for c in node.children).strip()
+            return f"\n\n{'#' * level} {text}\n\n"
+        if name == "p":
+            text = "".join(walk(c) for c in node.children).strip()
+            return f"\n\n{text}\n\n" if text else ""
+        if name == "pre":
+            code = node.get_text()
+            return f"\n\n```\n{code.rstrip()}\n```\n\n"
+        if name == "code":
+            text = node.get_text(strip=True)
+            return f"`{text}`"
+        if name == "li":
+            text = "".join(walk(c) for c in node.children).strip()
+            return f"- {text}\n"
+        if name in ("ul", "ol"):
+            text = "".join(walk(c) for c in node.children).rstrip()
+            return f"\n{text}\n"
+        if name in ("strong", "b"):
+            text = "".join(walk(c) for c in node.children).strip()
+            return f"**{text}**"
+        if name in ("em", "i"):
+            text = "".join(walk(c) for c in node.children).strip()
+            return f"*{text}*"
+        if name == "a":
+            href = node.get("href", "")
+            text = "".join(walk(c) for c in node.children).strip()
+            if href and not href.startswith("#") and text:
+                return f"[{text}]({href})"
+            return text
+        if name == "br":
+            return "\n"
+        if name == "table":
+            return _table_to_markdown(node)
+        if name == "hr":
+            return "\n\n---\n\n"
+        # Generic container — descend
+        return "".join(walk(c) for c in node.children)
+
+    text = walk(root)
+    text = re.sub(r"[ \t]+\n", "\n", text)
+    text = re.sub(r"\n{3,}", "\n\n", text)
+    return text.strip()
+
+
+def _clean_heading_text(text: str) -> str:
+    # Sphinx renders headerlink anchors as `¶` or `#` next to every heading;
+    # strip whichever character is left behind after the anchor is removed.
+    return text.rstrip().rstrip("¶#").rstrip()
+
+
+def extract_sphinx_content(html: str) -> tuple[str, str]:
+    """Return (title, markdown_body) extracted from a Sphinx HTML page."""
+    soup = BeautifulSoup(html, "html.parser")
+
+    # Drop headerlink anchors site-wide so they don't pollute titles or bodies.
+    for anchor in soup.find_all("a", class_="headerlink"):
+        anchor.decompose()
+
+    title = ""
+    h1 = soup.find("h1")
+    if h1:
+        title = _clean_heading_text(h1.get_text(strip=True))
+    if not title and soup.title:
+        title = _clean_heading_text(soup.title.get_text(strip=True))
+
+    main = (
+        soup.find("article", attrs={"role": "main"})
+        or soup.find("div", attrs={"role": "main"})
+        or soup.find("article")
+        or soup.find("main")
+        or soup.find("div", class_="bd-article")
+        or soup.find("div", class_="document")
+        or soup.body
+    )
+    if not main:
+        return title, ""
+
+    _strip_sphinx_noise(main)
+    body = _html_to_markdown(main)
+    return title, body
+
+
+# ---------------------------------------------------------------------------
 # Content processing
 # ---------------------------------------------------------------------------
 
@@ -333,6 +560,12 @@ def download_page(url: str, timeout: int = 30) -> Optional[str]:
     try:
         resp = requests.get(url, timeout=timeout)
         if resp.status_code == 200:
+            # requests guesses ISO-8859-1 when Content-Type has no charset,
+            # which mangles UTF-8 sites like docs.nvidia.com. Prefer the
+            # apparent (sniffed) encoding when no explicit charset is set.
+            ct = resp.headers.get("content-type", "")
+            if "charset" not in ct.lower():
+                resp.encoding = resp.apparent_encoding or "utf-8"
             return resp.text
         return None
     except requests.RequestException:
@@ -347,6 +580,7 @@ def download_all(pages: list[Page], config: dict[str, Any]) -> tuple[list[Page],
     append_md = config["download"]["append_md"]
     strip_suffix = config["download"].get("strip_suffix")
     use_sections = config["sections"]["derive_from"] == "url_path"
+    is_sphinx = config["discovery"]["method"] == "sphinx_index"
 
     log_section(f"Downloading {len(pages)} pages")
 
@@ -379,17 +613,29 @@ def download_all(pages: list[Page], config: dict[str, Any]) -> tuple[list[Page],
             content = download_page(url, timeout)
 
         if content:
-            page.content = content
+            if is_sphinx:
+                extracted_title, body = extract_sphinx_content(content)
+                page.content = body
+                if extracted_title:
+                    page.title = extracted_title
+            else:
+                page.content = content
+
             page.path = get_path(url, base_url)
             if strip_suffix and page.path.endswith(strip_suffix):
                 page.path = page.path[: -len(strip_suffix)]
 
             if not page.title:
-                page.title = extract_title(content)
+                page.title = extract_title(page.content)
             if not page.description:
-                page.description = extract_description(content)
+                page.description = extract_description(page.content)
             if use_sections and not page.section:
                 page.section = get_section(url, base_url)
+
+            if is_sphinx and not page.content.strip():
+                failures += 1
+                print(f" {_YELLOW}empty body, skipped{_NC}", file=sys.stderr)
+                continue
 
             successful.append(page)
             title_short = page.title[:40]
@@ -701,9 +947,13 @@ def main() -> None:
     # ---- Discovery ----
     discovery = config["discovery"]
     locale = discovery.get("locale")
+    method = discovery["method"]
 
-    if discovery["method"] == "llms_txt":
+    if method == "llms_txt":
         pages = discover_llms_txt(discovery["url"], locale)
+    elif method == "sphinx_index":
+        seeds = discovery.get("urls") or discovery["url"]
+        pages = discover_sphinx_index(seeds)
     else:
         pages = discover_sitemap(discovery["url"], locale)
 

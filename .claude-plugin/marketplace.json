@@ -8,7 +8,7 @@
   "homepage": "https://github.com/flight505/claude-skills-jesper",
   "metadata": {
     "version": "0.1.0",
-    "generated": "2026-05-17T13:13:45Z",
+    "generated": "2026-05-23T01:26:53Z",
     "upstream": {
       "repo": "alirezarezvani/claude-skills",
       "subtree_prefix": "upstream"
@@ -17,8 +17,8 @@
       "plugins": 44,
       "plugins_declared": 43,
       "plugins_orphan": 1,
-      "skills": 7,
-      "skills_first_party": 7,
+      "skills": 9,
+      "skills_first_party": 9,
       "agents": 20,
       "personas": 7,
       "commands": 33
@@ -1685,6 +1685,14 @@
       "description": "USE THIS SKILL for any question about Google Gemini API — models, function calling, structured output, Live API, embeddings, pricing, or SDKs. This skill has complete local documentation — do not use web search or WebFetch instead."
     },
     {
+      "name": "nvidia-dgx-research",
+      "source": {
+        "source": "./skills/nvidia-dgx-research",
+        "type": "directory"
+      },
+      "description": "USE THIS SKILL for NVIDIA topics not covered by the local spark-docs-skill snapshot — community discussion on the NVIDIA developer forum, NVIDIA developer blog posts, and adjacent NVIDIA product docs (CUDA, NeMo, Jetson, Brev, Dynamo, and others listed in the docs.nvidia.com llms.txt catalog). This is a dispatcher skill that routes queries to WebSearch and WebFetch; it does NOT bundle bulk documentation."
+    },
+    {
       "name": "openrouter-docs-skill",
       "source": {
         "source": "./skills/openrouter-docs-skill",
@@ -1699,6 +1707,14 @@
         "type": "directory"
       },
       "description": "Strategy guide for Perplexity MCP tools (perplexity_search, perplexity_ask, perplexity_reason, perplexity_research). Helps pick the right tool, craft queries, and use recency/domain filters. Reference when planning complex searches, literature reviews, or multi-step research — not needed for simple one-shot queries."
+    },
+    {
+      "name": "spark-docs-skill",
+      "source": {
+        "source": "./skills/spark-docs-skill",
+        "type": "directory"
+      },
+      "description": "USE THIS SKILL for any question about NVIDIA DGX Spark hardware, DGX OS 7, system setup, first boot, recovery, dashboard, NGC, containers, or DGX-specific software. This skill has complete local documentation — do not use web search or WebFetch instead."
     },
     {
       "name": "warp-docs-skill",
