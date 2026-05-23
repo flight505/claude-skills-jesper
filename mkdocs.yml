@@ -1,6 +1,6 @@
 site_name: Claude Code Skills & Agent Plugins
 site_url: https://alirezarezvani.github.io/claude-skills/
-site_description: "272 production-ready skills, 37 cs-* agents (incl. founder-mode C-suite: GC, CDO, CAIO, CCO, VPE + Matt Pocock-derived productivity quartet: skill-author, caveman, grill-master, handoff), 7 personas, 25 /cs:* slash commands, and an orchestration protocol for 12 AI coding tools."
+site_description: "329 production-ready skills, 49+ cs-* agents (incl. founder-mode C-suite: GC, CDO, CAIO, CCO, VPE + Matt Pocock-derived productivity quartet: skill-author, caveman, grill-master, handoff + v2.8.2 productivity/handoff + v2.8.1 engineering role-skills + v2.7.0 megaprompt-derived research stack + v2.7.3 cs-aeo + v2.8.0 business-operations + commercial), 7 personas, 79+ /cs:* slash commands, and an orchestration protocol for 12 AI coding tools. v2.8.2 adds productivity/handoff (Matt Pocock-inspired: first-run setup, redaction linter, SessionStart + SessionEnd hooks, fidelity self-check, --refresh). v2.8.1 upgraded engineering role-skills with karpathy-coder + Matt Pocock decision engines. v2.8.0 added two new top-level domains: business-operations + commercial."
 site_author: Alireza Rezvani
 repo_url: https://github.com/alirezarezvani/claude-skills
 repo_name: alirezarezvani/claude-skills
@@ -221,6 +221,7 @@ nav:
       - "Release Manager": skills/engineering/release-manager.md
       - "Runbook Generator": skills/engineering/runbook-generator.md
       - "Secrets Vault Manager": skills/engineering/secrets-vault-manager.md
+      - "Security Guidance": skills/engineering/security-guidance.md
       - "Self-Eval": skills/engineering/self-eval.md
       - "Skill Security Auditor": skills/engineering/skill-security-auditor.md
       - "Skill Tester": skills/engineering/skill-tester.md
@@ -274,6 +275,7 @@ nav:
       - Overview: skills/marketing-skill/index.md
       - "A/B Test Setup": skills/marketing-skill/ab-test-setup.md
       - "Ad Creative": skills/marketing-skill/ad-creative.md
+      - "AEO (Answer Engine Optimization)": skills/marketing-skill/aeo.md
       - "AI SEO": skills/marketing-skill/ai-seo.md
       - "Analytics Tracking": skills/marketing-skill/analytics-tracking.md
       - "App Store Optimization": skills/marketing-skill/app-store-optimization.md
@@ -418,6 +420,45 @@ nav:
       - "Business Investment Advisor": skills/finance/business-investment-advisor.md
       - "Financial Analyst": skills/finance/financial-analyst.md
       - "SaaS Metrics Coach": skills/finance/saas-metrics-coach.md
+    - Productivity:
+      - Overview: skills/productivity/index.md
+      - "Capture (Brain-Dump-to-Action)": skills/productivity/capture.md
+      - "Inbox Setup (KB Builder)": skills/productivity/email-inbox-setup.md
+      - "Inbox Triage (Drafts-Only)": skills/productivity/email-inbox-triage.md
+      - "Reflect (Light-Prompt Journal)": skills/productivity/reflect.md
+      - "Handoff (Matt Pocock-inspired)": skills/productivity/handoff.md
+    - Marketing (Landing Pages):
+      - Overview: skills/marketing/index.md
+      - "Landing Page Generator (HTML)": skills/marketing/landing.md
+    - Research:
+      - Overview: skills/research/index.md
+      - "Research Orchestrator (Hybrid Router)": skills/research/research.md
+      - "Pulse (Recency + Sentiment)": skills/research/pulse.md
+      - "LitReview (Academic)": skills/research/litreview.md
+      - "Grants (NIH)": skills/research/grants.md
+      - "Dossier (Entity Research)": skills/research/dossier.md
+      - "Patent (Prior Art + IP Landscape)": skills/research/patent.md
+      - "Syllabus (Course Reading List)": skills/research/syllabus.md
+      - "NotebookLM (Browser Automation)": skills/research/notebooklm.md
+    - Business Operations:
+      - Overview: skills/business-operations/index.md
+      - "Business Operations Skills (Orchestrator)": skills/business-operations/business-operations-skills.md
+      - "Process Mapper (BPMN + Bottleneck + Cycle-Time)": skills/business-operations/process-mapper.md
+      - "Vendor Management (Scorecard + SLA + Risk)": skills/business-operations/vendor-management.md
+      - "Capacity Planner (Erlang-C for Ops Teams)": skills/business-operations/capacity-planner.md
+      - "Internal Comms (ADKAR + Kotter 8-Step)": skills/business-operations/internal-comms.md
+      - "Knowledge Ops (SOP + Runbook + KB Hygiene)": skills/business-operations/knowledge-ops.md
+      - "Procurement Optimizer (UNSPSC Spend + Consolidation)": skills/business-operations/procurement-optimizer.md
+    - Commercial:
+      - Overview: skills/commercial/index.md
+      - "Commercial Skills (Orchestrator)": skills/commercial/commercial-skills.md
+      - "Pricing Strategist (Model Picker + Van Westendorp + Packaging)": skills/commercial/pricing-strategist.md
+      - "Deal Desk (Scorer + Approval Router + Redline)": skills/commercial/deal-desk.md
+      - "Partnerships Architect (5-Tier + Joint GTM + Revshare)": skills/commercial/partnerships-architect.md
+      - "Channel Economics (Cost-to-Serve + ROI + Mix)": skills/commercial/channel-economics.md
+      - "Commercial Policy (Matrix + Exception + Linter)": skills/commercial/commercial-policy.md
+      - "RFP Responder (Shipley Method + Win-Theme + Winrate)": skills/commercial/rfp-responder.md
+      - "Commercial Forecaster (4Q-Weighted + Cohort + Confidence)": skills/commercial/commercial-forecaster.md
   - Plugins:
     - Overview: plugins/index.md
   - Personas:
@@ -429,6 +470,7 @@ nav:
   - Custom GPTs: custom-gpts.md
   - Agents:
     - Overview: agents/index.md
+    - "CS AEO (Answer Engine Optimization)": agents/cs-aeo.md
     - "CS Agile Product Owner": agents/cs-agile-product-owner.md
     - "CS CEO Advisor": agents/cs-ceo-advisor.md
     - "CS Content Creator": agents/cs-content-creator.md
@@ -462,6 +504,8 @@ nav:
     - "CS Caveman Mode (Matt Pocock-derived)": agents/cs-caveman-mode.md
     - "CS Grill Master (Matt Pocock-derived)": agents/cs-grill-master.md
     - "CS Handoff Author (Matt Pocock-derived)": agents/cs-handoff-author.md
+    - "CS BizOps Orchestrator (v2.8.0)": agents/cs-bizops-orchestrator.md
+    - "CS Commercial Orchestrator (v2.8.0)": agents/cs-commercial-orchestrator.md
   - Commands:
     - Overview: commands/index.md
     - "/a11y-audit": commands/a11y-audit.md
@@ -497,3 +541,21 @@ nav:
     - "/operator-audit": commands/operator-audit.md
     - "/chaos-experiment": commands/chaos-experiment.md
     - "/slo-design": commands/slo-design.md
+    - "/cs:aeo": commands/cs-aeo.md
+    - "/cs:bizops (v2.8.0 — BizOps router)": commands/cs-bizops.md
+    - "/cs:grill-bizops (v2.8.0 — Matt grill bizops)": commands/cs-grill-bizops.md
+    - "/cs:process-map (v2.8.0)": commands/cs-process-map.md
+    - "/cs:vendor-review (v2.8.0)": commands/cs-vendor-review.md
+    - "/cs:capacity-plan (v2.8.0)": commands/cs-capacity-plan.md
+    - "/cs:internal-comms (v2.8.0)": commands/cs-internal-comms.md
+    - "/cs:knowledge-ops (v2.8.0)": commands/cs-knowledge-ops.md
+    - "/cs:procurement (v2.8.0)": commands/cs-procurement.md
+    - "/cs:commercial (v2.8.0 — Commercial router)": commands/cs-commercial.md
+    - "/cs:grill-commercial (v2.8.0 — Matt grill commercial)": commands/cs-grill-commercial.md
+    - "/cs:pricing-strategy (v2.8.0)": commands/cs-pricing-strategy.md
+    - "/cs:deal-review (v2.8.0)": commands/cs-deal-review.md
+    - "/cs:partner-tier (v2.8.0)": commands/cs-partner-tier.md
+    - "/cs:channel-econ (v2.8.0)": commands/cs-channel-econ.md
+    - "/cs:commercial-policy (v2.8.0)": commands/cs-commercial-policy.md
+    - "/cs:rfp-respond (v2.8.0)": commands/cs-rfp-respond.md
+    - "/cs:commercial-forecast (v2.8.0)": commands/cs-commercial-forecast.md

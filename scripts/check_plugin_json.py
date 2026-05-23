@@ -1,11 +1,31 @@
 #!/usr/bin/env python3
-"""Validate plugin.json files against the strict ClawHub schema.
+"""Validate plugin.json files against the ClawHub schema.
 
-Required fields (exactly these 8, no others):
+Required fields (exactly these 8):
   name, description, version, author{name,url}, homepage, repository, license, skills
 
-skills: must be either a string ("./skills") or an array of relative paths.
-        The bare "./" form is REJECTED (Claude Code v2.1.107+ rejects it).
+Two approved extension fields (documented in CLAUDE.md, stripped at ClawHub-publish):
+  source, attribution
+
+skills layouts — per the live Claude Code plugin spec
+(https://code.claude.com/docs/en/plugins-reference), "All paths must be
+relative to the plugin root and start with ./". CC 2.1.145 returns
+`Validation errors: skills: Invalid input` on a bare string without "./".
+Legacy bare-string form is still accepted by this validator during the
+migration window, but emits a WARN line.
+
+  CANONICAL (post-CC 2.1.144):
+    - Single-skill plugin (SKILL.md at root):      "skills": ["./"]
+    - Plugin with skills/ subdir:                  "skills": "./skills"  (or ["./skills"])
+    - Multi-skill domain plugin (subfolders):      "skills": ["./sub1", "./sub2", ...]
+
+  LEGACY (pre-migration, still passes with WARN):
+    - "skills": "skills"  (bare subdir name, no "./" prefix)
+
+  REJECTED:
+    - Empty string / empty array
+    - Non-string array entries
+    - Strings that are neither "skills"-style legacy nor "./"-prefixed
 """
 import argparse
 import json
@@ -15,6 +35,7 @@ import sys
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ALLOWED = {"name", "description", "version", "author", "homepage", "repository", "license", "skills"}
+APPROVED_EXTENSIONS = {"source", "attribution"}
 STRING_FIELDS = ("name", "description", "homepage", "repository", "license")
 SEMVER = re.compile(r"^\d+\.\d+\.\d+(?:-[\w.]+)?$")
 
@@ -22,7 +43,7 @@ SEMVER = re.compile(r"^\d+\.\d+\.\d+(?:-[\w.]+)?$")
 def _check_keys(data):
     keys = set(data.keys())
     errors = []
-    extra = keys - ALLOWED
+    extra = keys - ALLOWED - APPROVED_EXTENSIONS
     missing = ALLOWED - keys
     if extra:
         errors.append(f"extra fields: {sorted(extra)}")
@@ -61,10 +82,21 @@ def _check_author(data):
     return errors
 
 
+_LEGACY_SKILLS_VALUES = {"skills"}
+
+
 def _check_skills_string(s):
-    if s in ("./", ""):
-        return ['skills: "./" is rejected by Claude Code v2.1.107+; use "./skills" or an array']
-    return []
+    if s == "":
+        return ["skills: empty string"]
+    if s == "./":
+        return ['skills: bare "./" must be wrapped in an array — use ["./"] for single-skill plugins']
+    if s.startswith("./"):
+        return []
+    if s in _LEGACY_SKILLS_VALUES:
+        return [f'WARN skills: legacy bare {s!r} — Claude Code 2.1.144+ requires the "./" prefix '
+                f'per the plugin spec. Migrate to "./{s}" or ["./{s}"].']
+    return [f'skills: {s!r} must start with "./" (Claude Code plugin spec: "All paths must be '
+            f'relative to the plugin root and start with ./")']
 
 
 def _check_skills_array(s):
@@ -74,8 +106,13 @@ def _check_skills_array(s):
     for entry in s:
         if not isinstance(entry, str):
             errors.append(f"skills: entries must be strings, got {entry!r}")
-        elif entry == "./":
-            errors.append('skills: "./" is rejected by Claude Code v2.1.107+; list explicit subfolders')
+            continue
+        if entry == "":
+            errors.append("skills: array contains empty string")
+            continue
+        if not entry.startswith("./"):
+            errors.append(f'skills: array entry {entry!r} must start with "./" '
+                          f'(Claude Code plugin spec)')
     return errors
 
 
@@ -120,16 +157,28 @@ def main():
 
     targets = find_all() if args.all else [args.path]
     failed = 0
+    warned = 0
     for t in targets:
-        errs = validate(t)
+        msgs = validate(t)
         rel = os.path.relpath(t, REPO)
-        if errs:
+        hard = [m for m in msgs if not m.startswith("WARN ")]
+        soft = [m for m in msgs if m.startswith("WARN ")]
+        if hard:
             failed += 1
             print(f"FAIL {rel}")
-            for e in errs:
+            for e in hard:
                 print(f"  - {e}")
+            for w in soft:
+                print(f"  - {w[5:]}")
+        elif soft:
+            warned += 1
+            print(f"WARN {rel}")
+            for w in soft:
+                print(f"  - {w[5:]}")
         else:
             print(f"OK   {rel}")
+    if warned:
+        print(f"\n{warned} file(s) passed with warnings (legacy schema)", file=sys.stderr)
     if failed:
         print(f"\n{failed} file(s) failed validation", file=sys.stderr)
         return 1
