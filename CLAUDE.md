@@ -49,6 +49,35 @@ skills/_shared/install-refresh-daemons.sh --uninstall
 
 Each daemon fires immediately on first install (so a fresh clone has docs within seconds) and then weekly on Sundays at 04:00 local. macOS-only (launchd); Linux users should map the printed commands to cron.
 
+## Source manifests
+
+Each first-party skill ships a `_source.yaml` declaring where it came from and how it stays current. `agents/` carries one manifest covering all first-party agents. `scripts/check-sources.py` reads every manifest and reports which items have updates available.
+
+Four kinds:
+
+| `kind` | meaning | refresh method |
+|---|---|---|
+| `original` | Hand-edited content I author | none |
+| `docs` | Snapshot of an upstream documentation site I maintain | launchd weekly (see daemon section above) |
+| `repo-mirror` | Snapshot of someone else's published artifact (npm package, GitHub repo, …) | launchd weekly; check-sources also probes the origin for newer versions |
+| `subtree` | Vendored marketplace pulled via `git subtree` | manual — `./scripts/sync-upstream.sh` |
+
+Schema (all fields optional unless noted; minimal `original` form is just `kind: original`):
+
+```yaml
+# skills/<name>/_source.yaml
+kind: docs                                 # required: original | docs | repo-mirror | subtree
+origin: https://platform.claude.com/...    # source URL or URI (npm:pkg, github:org/repo@ref)
+version: "0.6.20"                          # for repo-mirror: the vendored version
+refresh:
+  method: launchd                          # none | manual | launchd | subtree
+  script: scripts/update-cli-docs.sh       # relative path to the refresh script
+  schedule: "Sunday 04:00 weekly"          # human-readable cadence
+notes: "Tier-1/2/3 doc snapshot from platform.claude.com"
+```
+
+Adding a new skill? Drop a `_source.yaml` next to its `SKILL.md` with at minimum `kind:`. `original` is the default if you skip the manifest entirely, but writing it explicitly future-proofs `scripts/check-sources.py`.
+
 ## Overlap rules
 
 When upstream and first-party have the same skill name:

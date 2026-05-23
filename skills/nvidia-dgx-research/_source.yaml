@@ -1,0 +1,7 @@
+kind: docs
+origin: https://docs.nvidia.com/llms.txt
+refresh:
+  method: launchd
+  script: scripts/update-catalog.sh
+  schedule: "Sunday 04:00 weekly (com.flight505.nvidia-dgx-research-refresh)"
+notes: "Thin dispatcher skill — caches NVIDIA's docs catalog (llms.txt) so the skill can route queries to WebSearch/WebFetch without bulk doc downloads."

@@ -1,0 +1,8 @@
+kind: repo-mirror
+origin: npm:getdesign
+version: "0.6.20"
+refresh:
+  method: launchd
+  script: scripts/update-templates.sh
+  schedule: "Sunday 04:00 weekly (com.flight505.design-md-refresh)"
+notes: "DESIGN.md templates pulled from the getdesign npm package. check-sources should compare `version` against npm's latest tag and flag stale."

@@ -1,0 +1,7 @@
+kind: docs
+origin: https://ai.google.dev/gemini-api/docs/llms.txt
+refresh:
+  method: launchd
+  script: scripts/update-docs.sh
+  schedule: "Sunday 04:00 weekly (com.flight505.gemini-docs-refresh)"
+notes: "Snapshot of Gemini API docs via Google's llms.txt catalog."
