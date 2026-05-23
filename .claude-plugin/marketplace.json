@@ -8,20 +8,20 @@
   "homepage": "https://github.com/flight505/claude-skills-jesper",
   "metadata": {
     "version": "0.1.0",
-    "generated": "2026-05-23T13:40:52Z",
+    "generated": "2026-05-23T18:04:07Z",
     "upstream": {
       "repo": "alirezarezvani/claude-skills",
       "subtree_prefix": "upstream"
     },
     "counts": {
-      "plugins": 44,
-      "plugins_declared": 43,
+      "plugins": 61,
+      "plugins_declared": 60,
       "plugins_orphan": 1,
       "skills": 9,
       "skills_first_party": 9,
-      "agents": 20,
+      "agents": 24,
       "personas": 7,
-      "commands": 33
+      "commands": 38
     }
   },
   "plugins": [
@@ -422,6 +422,7 @@
           "changelog-generator",
           "chaos-engineering",
           "ci-cd-pipeline-builder",
+          "claude-coach",
           "codebase-onboarding",
           "command-guide",
           "database-designer",
@@ -433,6 +434,7 @@
           "focused-fix",
           "full-page-screenshot",
           "git-worktree-manager",
+          "grill-with-docs",
           "interview-system-designer",
           "kubernetes-operator",
           "llm-cost-optimizer",
@@ -460,6 +462,8 @@
         ],
         "sub_plugins": [
           "behuman",
+          "claude-coach",
+          "grill-with-docs",
           "llm-cost-optimizer",
           "prompt-governance"
         ]
@@ -468,8 +472,8 @@
     {
       "name": "engineering-skills",
       "source": "./upstream/engineering-team",
-      "description": "32 engineering skills: architecture, frontend, backend, fullstack, QA, DevOps, security, AI/ML, data engineering, Playwright (9 sub-skills), self-improving agent, Stripe integration, TDD guide, tech stack evaluator, Google Workspace CLI, a11y audit (WCAG 2.2), Azure cloud architect, GCP cloud architect, security pen testing, Snowflake development, adversarial-reviewer, ai-security, cloud-security, incident-response, red-team, threat-detection.",
-      "version": "2.2.3",
+      "description": "32 engineering skills: architecture, frontend, backend, fullstack, QA, DevOps, security, AI/ML, data engineering, Playwright (9 sub-skills), self-improving agent, Stripe integration, TDD guide, tech stack evaluator, Google Workspace CLI, a11y audit (WCAG 2.2), Azure cloud architect, GCP cloud architect, security pen testing, Snowflake development, adversarial-reviewer, ai-security, cloud-security, incident-response, red-team, threat-detection. v2.8.1 audits senior-fullstack / senior-frontend / senior-backend against karpathy-coder + Matt Pocock — each ships a 7-question forcing-question library, 4 customization profiles (JSON), deterministic decision engine, composition map into POWERFUL specialists, plus cs-fullstack-engineer / cs-frontend-engineer / cs-backend-engineer orchestrator agents (context: fork) + /cs:fullstack-review, /cs:frontend-review, /cs:backend-review, /cs:engineer-grill slash commands.",
+      "version": "2.8.1",
       "author": {
         "name": "Alireza Rezvani"
       },
@@ -1483,6 +1487,591 @@
       }
     },
     {
+      "name": "capture-skill",
+      "source": "./upstream/productivity/capture",
+      "description": "Brain-dump-to-action workspace skill. Routes vague captures into discoverable actions via classify→cluster→connect→clarify intake. Path-B from megaprompt 05.",
+      "version": "2.7.0",
+      "author": {
+        "name": "Alireza Rezvani"
+      },
+      "keywords": [
+        "capture",
+        "brain-dump",
+        "productivity",
+        "gtd",
+        "workspace",
+        "path-b-megaprompt"
+      ],
+      "category": "productivity",
+      "contains": {
+        "skills": [
+          "capture"
+        ],
+        "agents": [
+          "cs-capture"
+        ],
+        "commands": [
+          "cs-capture"
+        ]
+      }
+    },
+    {
+      "name": "email-pair",
+      "source": "./upstream/productivity/email",
+      "description": "Email-workflow skill pair: inbox-setup builds your taxonomy/KB; inbox-triage classifies + drafts (drafts-only, never auto-send). KB-file contract between them. Path-B from megaprompts 06+07.",
+      "version": "2.7.0",
+      "author": {
+        "name": "Alireza Rezvani"
+      },
+      "keywords": [
+        "email",
+        "inbox",
+        "triage",
+        "gmail",
+        "outlook",
+        "productivity",
+        "path-b-megaprompt"
+      ],
+      "category": "productivity",
+      "contains": {
+        "skills": [
+          "inbox-setup",
+          "inbox-triage"
+        ],
+        "agents": [
+          "cs-inbox-setup",
+          "cs-inbox-triage"
+        ],
+        "commands": [
+          "cs-inbox-setup",
+          "cs-inbox-triage"
+        ]
+      }
+    },
+    {
+      "name": "reflect-skill",
+      "source": "./upstream/productivity/reflect",
+      "description": "Light-prompt reflection skill. Single forcing question + structured journal capture. Path-B sibling of capture from megaprompt 08.",
+      "version": "2.7.0",
+      "author": {
+        "name": "Alireza Rezvani"
+      },
+      "keywords": [
+        "reflect",
+        "journaling",
+        "productivity",
+        "forcing-question",
+        "path-b-megaprompt"
+      ],
+      "category": "productivity",
+      "contains": {
+        "skills": [
+          "reflect"
+        ],
+        "agents": [
+          "cs-reflect"
+        ],
+        "commands": [
+          "cs-reflect"
+        ]
+      }
+    },
+    {
+      "name": "handoff",
+      "source": "./upstream/productivity/handoff",
+      "description": "Compact the current conversation into a handoff document for another agent to pick up. Configurable save location, redaction enforcement, SessionStart auto-load + SessionEnd reminder, self-check fidelity script, --refresh flag, mtime-guarded cleanup. Inspired by Matt Pocock's handoff (MIT).",
+      "version": "2.8.2",
+      "author": {
+        "name": "Alireza Rezvani"
+      },
+      "keywords": [
+        "handoff",
+        "productivity",
+        "session-continuity",
+        "redaction",
+        "session-start-hook",
+        "session-end-hook",
+        "self-check",
+        "matt-pocock"
+      ],
+      "category": "productivity",
+      "contains": {
+        "skills": [
+          "handoff"
+        ],
+        "agents": [
+          "cs-handoff-author"
+        ],
+        "commands": [
+          "cs-handoff",
+          "cs-handoff-setup"
+        ]
+      }
+    },
+    {
+      "name": "landing",
+      "source": "./upstream/marketing/landing",
+      "description": "Single-file HTML landing-page generator with 4 design styles, brand palette validation, GSAP animation patterns, kebab-slug URL hygiene. Path-B from megaprompt 04.",
+      "version": "2.7.0",
+      "author": {
+        "name": "Alireza Rezvani"
+      },
+      "keywords": [
+        "landing-page",
+        "html",
+        "marketing",
+        "generator",
+        "gsap",
+        "brand",
+        "path-b-megaprompt"
+      ],
+      "category": "marketing",
+      "contains": {
+        "skills": [
+          "landing"
+        ],
+        "agents": [
+          "cs-landing"
+        ],
+        "commands": [
+          "cs-landing"
+        ]
+      }
+    },
+    {
+      "name": "pulse",
+      "source": "./upstream/research/pulse",
+      "description": "Multi-source recency research. Reddit/HN/X/web sentiment + trending. Research-pack convention (1 q/sec, three-count tracking). Path-B from megaprompt 01.",
+      "version": "2.7.0",
+      "author": {
+        "name": "Alireza Rezvani"
+      },
+      "keywords": [
+        "research",
+        "pulse",
+        "sentiment",
+        "reddit",
+        "hn",
+        "trending",
+        "research-pack",
+        "path-b-megaprompt"
+      ],
+      "category": "research",
+      "contains": {
+        "skills": [
+          "pulse"
+        ],
+        "agents": [
+          "cs-pulse"
+        ],
+        "commands": [
+          "cs-pulse"
+        ]
+      }
+    },
+    {
+      "name": "litreview",
+      "source": "./upstream/research/litreview",
+      "description": "Academic literature orientation skill. PICO/SPIDER frameworks, systematic review structure, 8-section DOCX guide. Research-pack convention. Path-B from megaprompt 09.",
+      "version": "2.7.0",
+      "author": {
+        "name": "Alireza Rezvani"
+      },
+      "keywords": [
+        "research",
+        "literature-review",
+        "pico",
+        "spider",
+        "systematic-review",
+        "academic",
+        "research-pack",
+        "path-b-megaprompt"
+      ],
+      "category": "research",
+      "contains": {
+        "skills": [
+          "litreview"
+        ],
+        "agents": [
+          "cs-litreview"
+        ],
+        "commands": [
+          "cs-litreview"
+        ]
+      }
+    },
+    {
+      "name": "grants",
+      "source": "./upstream/research/grants",
+      "description": "NIH grant-funding intelligence skill. RePORTER/NOSI/study-section navigation, R01/R21/K-award strategy. Research-pack convention. Path-B from megaprompt 11.",
+      "version": "2.7.0",
+      "author": {
+        "name": "Alireza Rezvani"
+      },
+      "keywords": [
+        "research",
+        "grants",
+        "nih",
+        "r01",
+        "k-award",
+        "reporter",
+        "nosi",
+        "research-pack",
+        "path-b-megaprompt"
+      ],
+      "category": "research",
+      "contains": {
+        "skills": [
+          "grants"
+        ],
+        "agents": [
+          "cs-grants"
+        ],
+        "commands": [
+          "cs-grants"
+        ]
+      }
+    },
+    {
+      "name": "dossier",
+      "source": "./upstream/research/dossier",
+      "description": "Decision-grade entity research. Due-diligence/background-check/competitor-prep with tier-weighted verdict + citation tracker. Research-pack convention. Path-B from megaprompt 02.",
+      "version": "2.7.0",
+      "author": {
+        "name": "Alireza Rezvani"
+      },
+      "keywords": [
+        "research",
+        "dossier",
+        "due-diligence",
+        "background-check",
+        "competitor",
+        "entity-research",
+        "research-pack",
+        "path-b-megaprompt"
+      ],
+      "category": "research",
+      "contains": {
+        "skills": [
+          "dossier"
+        ],
+        "agents": [
+          "cs-dossier"
+        ],
+        "commands": [
+          "cs-dossier"
+        ]
+      }
+    },
+    {
+      "name": "patent",
+      "source": "./upstream/research/patent",
+      "description": "Patent prior-art + IP landscape skill. FTO/novelty/family-resolver via 3-pass Jaccard heuristic. Research-pack convention. Path-B from megaprompt 12.",
+      "version": "2.7.0",
+      "author": {
+        "name": "Alireza Rezvani"
+      },
+      "keywords": [
+        "research",
+        "patent",
+        "prior-art",
+        "fto",
+        "freedom-to-operate",
+        "ip-landscape",
+        "research-pack",
+        "path-b-megaprompt"
+      ],
+      "category": "research",
+      "contains": {
+        "skills": [
+          "patent"
+        ],
+        "agents": [
+          "cs-patent"
+        ],
+        "commands": [
+          "cs-patent"
+        ]
+      }
+    },
+    {
+      "name": "syllabus",
+      "source": "./upstream/research/syllabus",
+      "description": "Course supplementary-reading skill. Topic-grouper + bundled Node.js DOCX generator for syllabus-anchored reading lists. Research-pack convention. Path-B from megaprompt 10.",
+      "version": "2.7.0",
+      "author": {
+        "name": "Alireza Rezvani"
+      },
+      "keywords": [
+        "research",
+        "syllabus",
+        "curriculum",
+        "reading-list",
+        "docx",
+        "course",
+        "research-pack",
+        "path-b-megaprompt"
+      ],
+      "category": "research",
+      "contains": {
+        "skills": [
+          "syllabus"
+        ],
+        "agents": [
+          "cs-syllabus"
+        ],
+        "commands": [
+          "cs-syllabus"
+        ]
+      }
+    },
+    {
+      "name": "notebooklm",
+      "source": "./upstream/research/notebooklm",
+      "description": "Google NotebookLM browser-automation skill. 4 actions (read/extract, add-source, Studio outputs, create notebook). Screenshot-first + find-before-click + fire-and-notify async discipline. Path-B from megaprompt 03.",
+      "version": "2.7.0",
+      "author": {
+        "name": "Alireza Rezvani"
+      },
+      "keywords": [
+        "research",
+        "notebooklm",
+        "google",
+        "browser-automation",
+        "studio",
+        "audio-overview",
+        "research-pack",
+        "path-b-megaprompt"
+      ],
+      "category": "research",
+      "contains": {
+        "skills": [
+          "notebooklm"
+        ],
+        "agents": [
+          "cs-notebooklm"
+        ],
+        "commands": [
+          "cs-notebooklm"
+        ]
+      }
+    },
+    {
+      "name": "research-orchestrator",
+      "source": "./upstream/research/research",
+      "description": "Research orchestrator (hybrid router + fallback). Deterministic SIGNALS classification routes to 6 specialists (pulse/litreview/grants/dossier/patent/syllabus) at >=2 signals, else runs own 8-step plan-decompose-search-synthesize-cite fallback. Routing transparency mandatory. Path-B from megaprompt 13.",
+      "version": "2.7.0",
+      "author": {
+        "name": "Alireza Rezvani"
+      },
+      "keywords": [
+        "research",
+        "router",
+        "orchestrator",
+        "classifier",
+        "fallback",
+        "hybrid-architecture",
+        "research-pack",
+        "path-b-megaprompt"
+      ],
+      "category": "research",
+      "contains": {
+        "skills": [
+          "research"
+        ],
+        "agents": [
+          "cs-research"
+        ],
+        "commands": [
+          "cs-research"
+        ]
+      }
+    },
+    {
+      "name": "aeo",
+      "source": "./upstream/marketing-skill/skills/aeo",
+      "description": "Answer Engine Optimization (AEO) skill — optimize content to be cited by AI language models (ChatGPT, Perplexity, Claude, Gemini, Mistral) as authoritative sources. Distinct from SEO (which optimizes for search rankings), AEO optimizes for citation in LLM-generated responses. 3 stdlib Python tools (aeo_audit, aeo_optimizer, citation_tracker), 3 references citing 8 sources each, industry-aware thresholds for 8 industries (saas/healthcare/finance/legal/ecommerce/b2b/media/education). Ported from alirezarezvani/aeo-box.",
+      "version": "2.7.3",
+      "author": {
+        "name": "Alireza Rezvani"
+      },
+      "keywords": [
+        "aeo",
+        "answer-engine-optimization",
+        "llm-citation",
+        "eeat",
+        "chatgpt",
+        "perplexity",
+        "claude",
+        "gemini",
+        "marketing",
+        "seo-complement"
+      ],
+      "category": "marketing",
+      "contains": {
+        "skills": [
+          "aeo"
+        ]
+      }
+    },
+    {
+      "name": "security-guidance",
+      "source": "./upstream/engineering/security-guidance",
+      "description": "PreToolUse security reminder hook for Claude Code. Catches 12 common security anti-patterns in Edit/Write/MultiEdit operations BEFORE they happen — command injection (exec, os.system, subprocess shell=True), XSS (innerHTML, dangerouslySetInnerHTML, document.write), SQL injection (f-string queries, .format), unsafe deserialization (pickle, yaml.unsafe_load), code injection (eval, new Function), and GitHub Actions workflow injection. Session-state caching prevents duplicate warnings; 30-day auto-cleanup. Disable per-session with ENABLE_SECURITY_REMINDER=0. Ported from David Dworken at Anthropic.",
+      "version": "2.7.3",
+      "author": {
+        "name": "Alireza Rezvani"
+      },
+      "keywords": [
+        "security",
+        "hook",
+        "pretooluse",
+        "command-injection",
+        "xss",
+        "sql-injection",
+        "eval",
+        "pickle",
+        "engineering",
+        "static-analysis"
+      ],
+      "category": "development",
+      "contains": {
+        "skills": [
+          "security-guidance"
+        ]
+      }
+    },
+    {
+      "name": "business-operations-skills",
+      "source": "./upstream/business-operations",
+      "description": "Internal BizOps domain. v2.8.0 ships 7 skills: orchestrator + process-mapper (BPMN/bottleneck/cycle-time, Lean+TOC) + vendor-management (scorecard+SLA+3rd-party risk, NIST SP 800-161/ISO 27036) + capacity-planner (Erlang-C queueing math for ops teams, NOT engineering) + internal-comms (ADKAR+Kotter 8-step, NOT marketing) + knowledge-ops (SOP+runbook+KB hygiene with 5W2H, context: fork) + procurement-optimizer (UNSPSC spend categorization + supplier consolidation). Orchestrator uses context: fork to route inquiries via Matt Pocock grill discipline (one question per turn, recommended answer, canon-cited challenge). Every SKILL.md ships a Forcing-question library section. 18 stdlib Python tools, 24+ reference docs. Distinct from business-growth (external sales) and c-level-advisor (strategic).",
+      "version": "2.8.0",
+      "author": {
+        "name": "Alireza Rezvani"
+      },
+      "keywords": [
+        "bizops",
+        "operations",
+        "process-mapping",
+        "bottleneck",
+        "vendor-management",
+        "sla",
+        "third-party-risk",
+        "lean",
+        "theory-of-constraints",
+        "value-stream",
+        "capacity-planning",
+        "erlang-c",
+        "queueing-theory",
+        "internal-comms",
+        "change-management",
+        "adkar",
+        "kotter",
+        "knowledge-ops",
+        "sop",
+        "runbook",
+        "5w2h",
+        "procurement",
+        "spend-categorization",
+        "unspsc",
+        "supplier-consolidation",
+        "matt-pocock",
+        "grill-with-docs"
+      ],
+      "category": "operations",
+      "contains": {
+        "skills": [
+          "business-operations-skills",
+          "capacity-planner",
+          "internal-comms",
+          "knowledge-ops",
+          "process-mapper",
+          "procurement-optimizer",
+          "vendor-management"
+        ],
+        "agents": [
+          "cs-bizops-orchestrator"
+        ],
+        "commands": [
+          "cs-bizops",
+          "cs-capacity-plan",
+          "cs-grill-bizops",
+          "cs-internal-comms",
+          "cs-knowledge-ops",
+          "cs-process-map",
+          "cs-procurement",
+          "cs-vendor-review"
+        ]
+      }
+    },
+    {
+      "name": "commercial-skills",
+      "source": "./upstream/commercial",
+      "description": "Per-deal-and-packaging Commercial domain. v2.8.0 ships 8 skills: orchestrator + pricing-strategist (model picker + Van Westendorp WTP + packaging) + deal-desk (deal scorer + discount approval routing + redline) + partnerships-architect (5-tier classifier + joint GTM + revshare modeler) + channel-economics (cost-to-serve + ROI + mix optimizer) + commercial-policy (data-backed discount matrix + exception flow + linter) + rfp-responder (Shipley structured RFP/RFI/RFQ + win-theme + winrate predictor, context: fork) + commercial-forecaster (4Q-weighted bookings + cohort NRR/GRR + funnel-confidence with mandatory assumption disclosure). Hard rules: pricing outputs model+range (never a single number), deal outputs route to named human approver (never auto-approve), forecast outputs surface conversion assumption, RFP never invents claims for GAP requirements. 21 stdlib Python tools, 28+ reference docs. Distinct from business-growth (sales execution), c-level-advisor/cro-advisor (strategic), finance (close+report).",
+      "version": "2.8.0",
+      "author": {
+        "name": "Alireza Rezvani"
+      },
+      "keywords": [
+        "commercial",
+        "pricing",
+        "deal-desk",
+        "discount-approval",
+        "van-westendorp",
+        "wtp",
+        "packaging",
+        "saas-pricing",
+        "redline",
+        "margin",
+        "partnerships",
+        "channel-partners",
+        "joint-gtm",
+        "revshare",
+        "channel-economics",
+        "cost-to-serve",
+        "channel-roi",
+        "commercial-policy",
+        "discount-matrix",
+        "exception-flow",
+        "rfp",
+        "rfi",
+        "shipley-method",
+        "winrate-predictor",
+        "bookings-forecast",
+        "cohort-arr",
+        "funnel-confidence",
+        "matt-pocock",
+        "grill-with-docs"
+      ],
+      "category": "commercial",
+      "contains": {
+        "skills": [
+          "channel-economics",
+          "commercial-forecaster",
+          "commercial-policy",
+          "commercial-skills",
+          "deal-desk",
+          "partnerships-architect",
+          "pricing-strategist",
+          "rfp-responder"
+        ],
+        "agents": [
+          "cs-commercial-orchestrator"
+        ],
+        "commands": [
+          "cs-channel-econ",
+          "cs-commercial",
+          "cs-commercial-forecast",
+          "cs-commercial-policy",
+          "cs-deal-review",
+          "cs-grill-commercial",
+          "cs-partner-tier",
+          "cs-pricing-strategy",
+          "cs-rfp-respond"
+        ]
+      }
+    },
+    {
       "name": "compliance-os",
       "source": "./upstream/compliance-os",
       "description": "Compliance OS — meta-orchestrator for multi-framework compliance programs. Configure-then-operate four stdlib Python tools: framework_selector.py (input: company profile across industry/geography/AI/medical/financial/headcount; output: applicable frameworks ranked across all 9 supported: ISO 27001, 13485, 42001, 14971, EU AI Act, MDR 745, GDPR, SOC 2, FDA QSR), cross_framework_mapper.py (input: 1+ framework control libraries; output: unified control matrix with overlap percentage + mapping confidence + unified evidence requirements per merged control), audit_simulator.py (input: framework scope; output: mock internal audit with 8-15 finding scenarios across 5 severity levels + interview questions per control), evidence_pool_generator.py (input: enabled framework configs; output: consolidated evidence checklist with reuse map). 4 in-depth references citing ISO 19011, IIA Standards, AICPA AT-C, NIST CSF, COSO ERM. Plus 3 cs-* persona agents (cs-compliance-officer, cs-aims-iso42001, cs-ai-act-compliance) + 3 /cs:* slash commands (/cs:compliance-readiness, /cs:aims-audit, /cs:ai-act-readiness). Reuses the 14 existing ra-qm-team skills and the 2 new compliance-team-* plugins.",
@@ -1595,12 +2184,28 @@
   ],
   "agents": [
     {
+      "name": "cs-aeo",
+      "source": {
+        "source": "./upstream/agents/marketing/cs-aeo.md",
+        "type": "file"
+      },
+      "description": "Answer Engine Optimization (AEO) specialist agent. Use when content needs to be optimized for citation by AI language models (ChatGPT, Perplexity, Claude, Gemini, Mistral) rather than for traditional search rankings. Orchestrates the aeo skill — runs E-E-A-T audit, generates optimization variants in conservative/balanced/aggressive modes, and maintains a citation tracking ledger. Industry-aware (8 industries with calibrated thresholds). Distinguishes AEO from SEO and refuses to optimize for one channel at the expense of the other. Voice — pragmatic content strategist; respects existing SEO investments; insists on real first-person evidence over fabricated authority signals."
+    },
+    {
       "name": "cs-agile-product-owner",
       "source": {
         "source": "./upstream/agents/product/cs-agile-product-owner.md",
         "type": "file"
       },
       "description": "Agile product owner agent for epic breakdown, sprint planning, backlog refinement, and INVEST-compliant user story generation"
+    },
+    {
+      "name": "cs-backend-engineer",
+      "source": {
+        "source": "./upstream/agents/engineering/cs-backend-engineer.md",
+        "type": "file"
+      },
+      "description": "Backend-engineering orchestrator. Walks the 7 Matt Pocock forcing questions (read/write ratio + QPS, tenancy, sync vs async, data sensitivity, pattern, RPO/RTO, SLO), picks the language + pattern profile, forks into specialists (api-design-reviewer, database-designer, migration-architect, observability-designer, slo-architect — listed alphabetically; workflow order is dependency-driven) rather than reimplementing their scope. Forks own context. Invoke via /cs:backend-review or Agent({subagent_type:\"cs-backend-engineer\",...})."
     },
     {
       "name": "cs-ceo-advisor",
@@ -1649,6 +2254,22 @@
         "type": "file"
       },
       "description": "Financial Analyst agent for DCF valuation, financial modeling, budgeting, forecasting, and SaaS metrics (ARR, MRR, churn, CAC, LTV, NRR). Orchestrates finance skills. Spawn when users need financial analysis, valuation models, budget planning, ratio analysis, SaaS health checks, or unit economics projections."
+    },
+    {
+      "name": "cs-frontend-engineer",
+      "source": {
+        "source": "./upstream/agents/engineering/cs-frontend-engineer.md",
+        "type": "file"
+      },
+      "description": "Frontend-engineering orchestrator. Walks the 7 Matt Pocock forcing questions (device, LCP target, rendering, bundle budget, SEO vs auth, design system, WCAG), picks the framework/rendering profile, forks into specialists (a11y-audit, apple-hig-expert, epic-design, performance-profiler, playwright-pro — listed alphabetically; workflow order is dependency-driven) rather than reimplementing their scope. Forks own context. Invoke via /cs:frontend-review or Agent({subagent_type:\"cs-frontend-engineer\",...})."
+    },
+    {
+      "name": "cs-fullstack-engineer",
+      "source": {
+        "source": "./upstream/agents/engineering/cs-fullstack-engineer.md",
+        "type": "file"
+      },
+      "description": "Fullstack-engineering orchestrator. Walks the Matt Pocock 7-question forcing-question grill, runs the deterministic profile picker, then forks into the POWERFUL-tier specialists (api-design-reviewer, ci-cd-pipeline-builder, database-designer, performance-profiler, slo-architect — listed alphabetically; workflow order is dependency-driven) rather than reimplementing their scope. Forks own context so heavy ingestion does not pollute parent thread. Invoke via /cs:fullstack-review or Agent({subagent_type:\"cs-fullstack-engineer\",...})."
     },
     {
       "name": "cs-growth-strategist",
@@ -1853,6 +2474,46 @@
         "type": "file"
       },
       "description": "Build competitive analysis matrices with scoring and gap analysis. Usage: /competitive-matrix <analyze> [options]"
+    },
+    {
+      "name": "cs-aeo",
+      "source": {
+        "source": "./upstream/commands/cs-aeo.md",
+        "type": "file"
+      },
+      "description": "/cs:aeo — Answer Engine Optimization workflow. Audit content for E-E-A-T + structure signals that drive LLM citation (ChatGPT, Perplexity, Claude, Gemini, Mistral). Optimize content in 3 modes (conservative/balanced/aggressive). Track which LLMs cite which pages via local ledger. Industry-aware thresholds (8 industries with YMYL calibration). Distinct from SEO — refuses to optimize one at expense of the other."
+    },
+    {
+      "name": "cs-backend-review",
+      "source": {
+        "source": "./upstream/commands/cs-backend-review.md",
+        "type": "file"
+      },
+      "description": "Backend engineering review — walks the 7 Matt Pocock forcing questions (read/write ratio + QPS, tenancy, sync vs async, data sensitivity, pattern, RPO/RTO, SLO), picks the language + pattern profile, forks into specialists (api-design-reviewer, database-designer, migration-architect, slo-architect). Invokes the cs-backend-engineer agent with context fork."
+    },
+    {
+      "name": "cs-engineer-grill",
+      "source": {
+        "source": "./upstream/commands/cs-engineer-grill.md",
+        "type": "file"
+      },
+      "description": "Cross-role engineering grill — Matt Pocock 7 questions per role × 3 roles (fullstack / frontend / backend) = up to 21 forcing questions, one per turn, with canon citations and kill criteria. Default: ask which lane first; `--all` runs all 21."
+    },
+    {
+      "name": "cs-frontend-review",
+      "source": {
+        "source": "./upstream/commands/cs-frontend-review.md",
+        "type": "file"
+      },
+      "description": "Frontend engineering review — walks the 7 Matt Pocock forcing questions (device, LCP target, rendering, bundle budget, SEO vs auth, design system, WCAG), picks the framework + rendering profile, forks into specialists (a11y-audit, performance-profiler, epic-design). Invokes the cs-frontend-engineer agent with context fork."
+    },
+    {
+      "name": "cs-fullstack-review",
+      "source": {
+        "source": "./upstream/commands/cs-fullstack-review.md",
+        "type": "file"
+      },
+      "description": "Fullstack engineering review — walks the 7 Matt Pocock forcing questions, picks the profile, forks into POWERFUL specialists (api-design-reviewer, database-designer, slo-architect). Invokes the cs-fullstack-engineer agent with context fork."
     },
     {
       "name": "financial-health",

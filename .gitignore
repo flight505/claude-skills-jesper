@@ -17,3 +17,4 @@ skills/*/references/llms-full.txt
 .claude/skills/
 .claude/commands/
 .claude/agents/
+.claude/settings.json
