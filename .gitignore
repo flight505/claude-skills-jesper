@@ -19,6 +19,14 @@ skills/openrouter-docs-skill/references/*
 !skills/openrouter-docs-skill/references/.gitkeep
 skills/warp-docs-skill/references/*
 !skills/warp-docs-skill/references/.gitkeep
+skills/design-md/references/*
+!skills/design-md/references/.gitkeep
+skills/gemini-docs-skill/references/*
+!skills/gemini-docs-skill/references/.gitkeep
+skills/spark-docs-skill/references/*
+!skills/spark-docs-skill/references/.gitkeep
+skills/nvidia-dgx-research/references/*
+!skills/nvidia-dgx-research/references/.gitkeep
 
 # forge-managed: project-scoped Claude Code installs (not for commit)
 .claude/skills/
