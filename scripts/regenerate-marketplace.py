@@ -45,6 +45,12 @@ PERSONAS_ROOT = UPSTREAM_DIR / "agents" / "personas"
 AGENTS_ROOT = UPSTREAM_DIR / "agents"
 COMMANDS_ROOT = UPSTREAM_DIR / "commands"
 
+# First-party agents live at the repo root (./agents/), mirroring how
+# first-party skills live at ./skills/. Discovered separately from upstream
+# agents and merged into the same agents[] array (first-party wins on name
+# collision via merge_with_overlap).
+FIRST_PARTY_AGENTS_DIR = ROOT / "agents"
+
 # .md filenames we never treat as installable content.
 META_FILENAMES = {"README.md", "TEMPLATE.md", "CHANGELOG.md", "CLAUDE.md", "GEMINI.md", "AGENTS.md"}
 
@@ -467,16 +473,18 @@ def main(argv: list[str]) -> int:
     # under that plugin's contains: field (added inside load_upstream_marketplace).
     first_party_skills = find_skills([SKILLS_DIR], max_depth=2)
     personas = dedup_by_name(find_md_entries(PERSONAS_ROOT))
-    agents = dedup_by_name(find_md_entries(AGENTS_ROOT, exclude_subdirs={PERSONAS_ROOT}))
+    upstream_agents = dedup_by_name(find_md_entries(AGENTS_ROOT, exclude_subdirs={PERSONAS_ROOT}))
+    first_party_agents = dedup_by_name(find_md_entries(FIRST_PARTY_AGENTS_DIR))
     commands = dedup_by_name(find_md_entries(COMMANDS_ROOT))
     if args.verbose:
         print(f"[upstream] {len(bundles)} declared + {len(orphan_bundles)} orphan = {len(plugins)} plugins", file=sys.stderr)
-        print(f"[upstream] {len(personas)} personas, {len(agents)} agents, {len(commands)} commands", file=sys.stderr)
-        print(f"[first-party] {len(first_party_skills)} SKILL.md (depth-capped)", file=sys.stderr)
+        print(f"[upstream] {len(personas)} personas, {len(upstream_agents)} agents, {len(commands)} commands", file=sys.stderr)
+        print(f"[first-party] {len(first_party_skills)} SKILL.md, {len(first_party_agents)} agent(s)", file=sys.stderr)
 
     # OVERLAP.md merge path retained for forward-compat; with no upstream skill
     # candidates it is effectively a no-op for skills[] under the current scheme.
     skills = merge_with_overlap([], first_party_skills, rules)
+    agents = merge_with_overlap(upstream_agents, first_party_agents, rules)
 
     marketplace = {
         "name": "claude-skills-jesper",

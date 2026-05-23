@@ -1,0 +1,465 @@
+/* ============================================================
+   lesson-base.css — typography + layout for frontend-learning
+   v2: CSS Grid breakout pattern, real responsive design.
+
+   The article is a 3-column grid: [gutter | content | gutter].
+   Prose stays in the centered `content` lane (38em measure).
+   Widgets opt into `breakout` to span the wider middle area.
+   On wide screens (>=1280px), the TOC docks left as a sticky lane.
+   ============================================================ */
+
+:root {
+  /* Lane widths */
+  --measure: 38em;            /* comfortable line length for prose */
+  --widget-max: 56em;         /* widget breakout container */
+  --layout-max: 1280px;       /* outer article frame */
+  --toc-width: 200px;
+  --gutter: 2rem;
+
+  /* Colors (3B1B Dark default — preset files override) */
+  --bg: #0e0f12;
+  --bg-card: #1a1d22;
+  --bg-callout: #1f1a0e;
+  --bg-quiz: #0e1a25;
+  --bg-predict: #1a1410;
+  --bg-retrieval: #0e1a14;
+  --bg-wrong: #1f0e0e;
+  --fg: #e8e6e0;
+  --fg-strong: #fff;
+  --muted: #8a8a90;
+  --border: #2a2d34;
+  --accent: #ffb86c;   /* Q — orange */
+  --accent2: #6ab0e8;  /* K — blue */
+  --accent3: #b0d977;  /* V — green */
+
+  /* Typography stacks */
+  --serif: "Source Serif Pro", "Source Serif 4", Georgia, serif;
+  --sans: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+  --mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+
+  /* Type scale — clamp() everywhere for responsive sizing */
+  --fs-base: clamp(1rem, 0.92rem + 0.4vw, 1.125rem);
+  --fs-h1: clamp(2rem, 1.4rem + 2.5vw, 3rem);
+  --fs-h2: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+  --fs-h3: clamp(1.15rem, 1rem + 0.5vw, 1.35rem);
+  --fs-small: clamp(0.85rem, 0.8rem + 0.2vw, 0.95rem);
+}
+
+/* ---- Reset / base ---- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { background: var(--bg); color: var(--fg); }
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--sans);
+  font-size: var(--fs-base);
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  /* Subtle ambient gradient so the dark void feels intentional, not empty */
+  background:
+    radial-gradient(ellipse 1200px 800px at 50% 0%, color-mix(in srgb, var(--accent) 4%, transparent), transparent 70%),
+    var(--bg);
+  background-attachment: fixed;
+}
+
+/* ============================================================
+   LAYOUT — CSS Grid breakout pattern
+   ============================================================ */
+
+/* Outer page container */
+.lesson {
+  max-width: var(--layout-max);
+  margin: 0 auto;
+  padding: clamp(2rem, 4vw, 5rem) clamp(1rem, 3vw, 2rem);
+}
+
+/* Article uses a 3-column grid: gutter | content | gutter.
+   Children default to the content column; widgets and other
+   "breakout" elements span the full grid. */
+article {
+  display: grid;
+  grid-template-columns:
+    [breakout-start] minmax(0, 1fr)
+    [content-start] min(100%, var(--measure)) [content-end]
+    minmax(0, 1fr) [breakout-end];
+  row-gap: clamp(1rem, 1.5vw, 1.5rem);
+}
+
+article > *,
+article > section > *,
+article > header > * {
+  grid-column: content;
+  min-width: 0; /* prevent grid blowout */
+}
+
+/* Sections are themselves grids so their children participate */
+article > section {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: 1 / -1;
+  row-gap: clamp(0.75rem, 1.2vw, 1.25rem);
+  margin-bottom: clamp(2rem, 4vw, 4rem);
+  scroll-margin-top: 2rem;
+}
+
+article > header {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  row-gap: 0.5rem;
+  margin-bottom: clamp(2rem, 3vw, 3rem);
+}
+
+/* Breakout: widgets and SVG-heavy items use more horizontal room */
+.breakout,
+article .widget,
+article > section > .widget {
+  grid-column: breakout;
+  width: min(var(--widget-max), 100%);
+  margin-inline: auto;
+}
+
+/* ---- Typography ---- */
+h1, h2, h3, h4 {
+  font-family: var(--sans);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--fg-strong);
+  margin: 0;
+}
+h1 { font-size: var(--fs-h1); margin-bottom: 0.5rem; }
+h2 { font-size: var(--fs-h2); margin-top: clamp(1.5rem, 3vw, 3rem); }
+h3 { font-size: var(--fs-h3); margin-top: 1.5rem; }
+h4 { font-size: 1.05rem; color: var(--muted); margin-top: 1rem; }
+
+p { margin: 0; }
+.subtitle {
+  color: var(--muted);
+  font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.25rem);
+  font-style: italic;
+  line-height: 1.45;
+}
+
+a { color: var(--accent2); }
+a:hover { color: var(--accent); }
+
+/* Color-coded variables for Q / K / V (and generic x / y / z) */
+.var-q { color: var(--accent); font-weight: 600; }
+.var-k { color: var(--accent2); font-weight: 600; }
+.var-v { color: var(--accent3); font-weight: 600; }
+.var-x { color: #d8d6d0; font-weight: 600; }
+.var-y { color: var(--accent2); font-weight: 600; }
+.var-z { color: var(--accent3); font-weight: 600; }
+
+/* ---- Reading progress bar ---- */
+#progress {
+  position: fixed; top: 0; left: 0;
+  height: 3px; background: var(--accent);
+  width: 0; z-index: 100;
+  transition: width 80ms linear;
+}
+
+/* ============================================================
+   WIDGET CONTAINER + RESPONSIVE SVG
+   ============================================================ */
+.widget {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: clamp(1rem, 2vw, 1.75rem);
+  font-size: var(--fs-small);
+  overflow: hidden;        /* keep contents inside the card */
+}
+
+.widget > * + * { margin-top: 0.75rem; }
+
+.widget label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.25rem 0.75rem 0.25rem 0;
+}
+
+.widget input[type="range"] {
+  vertical-align: middle;
+  width: clamp(140px, 30vw, 240px);
+  max-width: 100%;
+}
+
+/* SVG: responsive, scale by viewBox, never overflow */
+.widget svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.widget .readout {
+  font-family: var(--mono);
+  color: var(--muted);
+  font-size: 0.9em;
+}
+.widget .readout strong { color: var(--fg); }
+
+/* ---- Inline code (don't let it overflow narrow columns) ---- */
+p code, li code {
+  background: var(--bg-card);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 0.85em;
+  word-break: break-word;
+}
+
+/* ---- Pre blocks (code / matrices). Allow horizontal scroll if needed ---- */
+pre {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1rem;
+  overflow-x: auto;
+  font-family: var(--mono);
+  font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.95rem);
+  line-height: 1.5;
+}
+pre code { background: transparent; padding: 0; }
+
+/* ============================================================
+   PEDAGOGICAL CALLOUTS
+   ============================================================ */
+.predict {
+  background: var(--bg-predict);
+  border-left: 4px solid var(--accent);
+  padding: clamp(1rem, 1.5vw, 1.25rem) clamp(1rem, 2vw, 1.5rem);
+  border-radius: 0 8px 8px 0;
+}
+.predict-q { font-weight: 600; margin-bottom: 0.75rem; }
+.predict-input {
+  display: block; width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  margin: 0 0 0.75rem;
+  font: inherit;
+  background: var(--bg);
+  color: var(--fg);
+}
+.predict-reveal {
+  background: var(--accent); color: #1a1a1a; border: none;
+  padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;
+  font-family: var(--sans); font-weight: 600;
+}
+.predict-a {
+  margin-top: 1rem; padding-top: 1rem;
+  border-top: 1px dashed var(--border);
+}
+
+.quiz {
+  background: var(--bg-quiz);
+  border-left: 4px solid var(--accent2);
+  padding: clamp(1rem, 1.5vw, 1.25rem) clamp(1rem, 2vw, 1.5rem);
+  border-radius: 0 8px 8px 0;
+}
+.quiz-q { font-weight: 600; margin-bottom: 1rem; }
+.quiz button {
+  display: block; width: 100%; text-align: left;
+  padding: 0.65rem 1rem; margin: 0.4rem 0;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 4px; cursor: pointer;
+  font: inherit; color: var(--fg);
+  transition: background 100ms, border-color 100ms;
+}
+.quiz button:hover { background: #232730; border-color: var(--accent2); }
+.quiz-fb { margin-top: 0.75rem; padding: 0.75rem 1rem; background: var(--bg-card); border-radius: 4px; }
+.quiz-fb.correct { border-left: 3px solid var(--accent3); }
+
+.wrong-intuition {
+  background: var(--bg-wrong);
+  border-left: 4px solid #d44;
+  padding: clamp(1rem, 1.5vw, 1.25rem) clamp(1rem, 2vw, 1.5rem);
+  border-radius: 0 8px 8px 0;
+}
+.wrong-intuition h4 { margin-top: 0; color: #ff6b6b; }
+
+.retrieval {
+  background: var(--bg-retrieval);
+  border-left: 4px solid var(--accent3);
+  padding: clamp(1rem, 1.5vw, 1.25rem) clamp(1rem, 2vw, 1.5rem);
+  border-radius: 0 8px 8px 0;
+}
+.retrieval h4 { margin-top: 0; color: var(--accent3); }
+.retrieval ol { margin: 0; padding-left: 1.25rem; }
+.retrieval li { margin: 0.5rem 0; }
+
+.adept {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: clamp(1rem, 2vw, 1.5rem);
+  background: var(--bg-card);
+}
+.adept > * + * { margin-top: 0.75rem; }
+.adept h3 { margin: 0; }
+.adept strong:first-child { color: var(--accent); }
+
+.socratic {
+  font-style: italic;
+  padding-left: 1.25rem;
+  border-left: 2px solid var(--border);
+  color: var(--muted);
+  margin: 0;
+}
+
+/* Ask-Claude button */
+.ask-claude {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: 1px dashed var(--accent2);
+  border-radius: 6px; cursor: pointer;
+  font: inherit; font-size: 0.9rem;
+  color: var(--accent2);
+  transition: background 150ms;
+  align-self: start;
+}
+.ask-claude:hover { background: var(--bg-quiz); }
+
+/* Step-through widget */
+.step-controls {
+  display: flex; align-items: center; gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.step-controls button {
+  background: var(--bg); color: var(--fg);
+  border: 1px solid var(--border);
+  padding: 0.4rem 0.85rem; border-radius: 5px; cursor: pointer;
+  font: inherit; font-size: 0.9rem;
+}
+.step-controls button:hover { border-color: var(--accent); }
+.step-controls input[type="range"] { flex: 1; min-width: 100px; }
+.step-caption {
+  font-style: italic; color: var(--muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ============================================================
+   CONCEPT MAP — sticky left lane on wide, dropdown on narrow
+   ============================================================ */
+.concept-map {
+  font-family: var(--sans);
+  font-size: 0.85rem;
+}
+.concept-map ol {
+  list-style: none; padding: 0; margin: 0;
+  border-left: 2px solid var(--border);
+}
+.concept-map li {
+  padding: 0.35rem 0.85rem;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 100ms;
+}
+.concept-map li:hover { color: var(--fg); }
+.concept-map li.active {
+  color: var(--accent);
+  font-weight: 600;
+  border-left: 2px solid var(--accent);
+  margin-left: -2px;
+}
+
+/* On narrow screens, show TOC as a collapsible <details> at top */
+.concept-map-mobile {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+.concept-map-mobile summary {
+  cursor: pointer;
+  padding: 0.6rem 1rem;
+  font-weight: 600;
+  color: var(--accent);
+  list-style: none;
+}
+.concept-map-mobile summary::after {
+  content: "▾"; float: right; transition: transform 200ms;
+}
+.concept-map-mobile[open] summary::after { transform: rotate(180deg); }
+.concept-map-mobile .concept-map { padding: 0 1rem 0.75rem; }
+
+@media (min-width: 1280px) {
+  /* Wide screens: TOC docks as a sticky sidebar in its own grid track */
+  .lesson {
+    display: grid;
+    grid-template-columns: var(--toc-width) 1fr;
+    gap: clamp(2rem, 3vw, 3rem);
+    align-items: start;
+  }
+  .lesson > article { grid-column: 2; }
+  .lesson > .concept-map-fixed {
+    grid-column: 1;
+    position: sticky;
+    top: 3rem;
+    align-self: start;
+    padding-top: 0.5rem;
+  }
+  .concept-map-mobile { display: none; }
+}
+
+@media (max-width: 1279px) {
+  .concept-map-fixed { display: none; }
+}
+
+/* ============================================================
+   MOBILE / NARROW VIEWPORT RULES
+   ============================================================ */
+@media (max-width: 640px) {
+  .lesson { padding: 1.5rem 1rem 3rem; }
+  article { row-gap: 1rem; }
+  .widget { padding: 1rem; }
+  .widget input[type="range"] { width: 100%; }
+  .step-controls { gap: 0.5rem; }
+  .step-controls button { padding: 0.35rem 0.6rem; font-size: 0.85rem; }
+  pre { font-size: 0.78rem; padding: 0.75rem; }
+  .concept-map-mobile { font-size: 0.9rem; }
+}
+
+/* ============================================================
+   MATH (KaTeX) — keep inside columns, allow display-math scroll
+   ============================================================ */
+.katex { color: var(--fg); }
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.25rem 0;
+  margin: 0.5rem 0;
+}
+.katex-display > .katex {
+  white-space: nowrap;
+}
+
+/* ============================================================
+   ACCESSIBILITY
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* High-contrast outline on draggable elements when keyboard-focused */
+[draggable], [role="slider"] { outline: none; }
+[draggable]:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
