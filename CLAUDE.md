@@ -36,6 +36,19 @@ This runs `git subtree pull --squash` and regenerates `marketplace.json`. Previe
 
 Managed via [`forge`](https://github.com/flight505/forge). This repo is content + sync only — no CLI of its own.
 
+## Doc-skill refresh daemons
+
+Several skills (`claude-docs-skill`, `openrouter-docs-skill`, `warp-docs-skill`, `gemini-docs-skill`, `spark-docs-skill`, `nvidia-dgx-research`, `design-md`) ship `scripts/update-*.sh` that regenerate their `references/` content from upstream sources. The generated files are **not committed** — they're gitignored. To keep them fresh on a clone:
+
+```bash
+skills/_shared/install-refresh-daemons.sh           # install missing launchd daemons (macOS)
+skills/_shared/install-refresh-daemons.sh --list    # preview without installing
+skills/_shared/install-refresh-daemons.sh --force   # rewrite existing
+skills/_shared/install-refresh-daemons.sh --uninstall
+```
+
+Each daemon fires immediately on first install (so a fresh clone has docs within seconds) and then weekly on Sundays at 04:00 local. macOS-only (launchd); Linux users should map the printed commands to cron.
+
 ## Overlap rules
 
 When upstream and first-party have the same skill name:

@@ -10,8 +10,23 @@ node_modules/
 *.log
 .cache/
 
-# auto-generated full-tier docs (regenerated via skills/*/scripts/update-*.sh)
-skills/*/references/llms-full.txt
+# auto-generated docs (refreshed by launchd weekly via _shared/install-refresh-daemons.sh)
+# Source of truth: the upstream sites the update-*.sh scripts pull from.
+skills/claude-docs-skill/references/*.md
+skills/claude-docs-skill/references/*.txt
+!skills/claude-docs-skill/references/cookbook/
+skills/openrouter-docs-skill/references/*
+!skills/openrouter-docs-skill/references/.gitkeep
+skills/warp-docs-skill/references/*
+!skills/warp-docs-skill/references/.gitkeep
+skills/design-md/references/*
+!skills/design-md/references/.gitkeep
+skills/gemini-docs-skill/references/*
+!skills/gemini-docs-skill/references/.gitkeep
+skills/spark-docs-skill/references/*
+!skills/spark-docs-skill/references/.gitkeep
+skills/nvidia-dgx-research/references/*
+!skills/nvidia-dgx-research/references/.gitkeep
 
 # forge-managed: project-scoped Claude Code installs (not for commit)
 .claude/skills/
