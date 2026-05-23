@@ -145,7 +145,7 @@ def probe_docs(item_dir: Path, manifest: dict, stale_days: int) -> ProbeResult:
         if p.is_file() and not p.name.startswith("."):
             newest = max(newest, p.stat().st_mtime)
     if newest == 0:
-        fix = ["launchctl", "kickstart", "-k", f"gui/{os.getuid()}", label]
+        fix = ["launchctl", "kickstart", "-k", f"gui/{os.getuid()}/{label}"]
         return ProbeResult(item_dir.name, "docs", "stale",
                            f"references/ empty — fire {label} to populate", fix)
     age_sec = time.time() - newest
@@ -153,7 +153,7 @@ def probe_docs(item_dir: Path, manifest: dict, stale_days: int) -> ProbeResult:
     if age_days <= stale_days:
         return ProbeResult(item_dir.name, "docs", "ok", f"last refreshed {age_days:.1f}d ago")
     # Stale — kickstart the daemon.
-    fix = ["launchctl", "kickstart", "-k", f"gui/{os.getuid()}", label]
+    fix = ["launchctl", "kickstart", "-k", f"gui/{os.getuid()}/{label}"]
     return ProbeResult(item_dir.name, "docs", "stale",
                        f"last refreshed {age_days:.1f}d ago — daemon {label}", fix)
 
