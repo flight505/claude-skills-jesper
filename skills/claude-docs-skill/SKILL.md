@@ -1,6 +1,7 @@
 ---
 name: claude-docs-skill
 description: USE THIS SKILL for any question about Claude API, Claude Code CLI, hooks, plugins, skills, subagents, MCP servers, SDKs, extended thinking, tool use, streaming, or deployment. This skill has complete local documentation — do not use web search, WebFetch, or claude-code-guide instead.
+pairs_with: openrouter-docs-skill, gemini-docs-skill, perplexity-search
 ---
 
 # Claude Documentation Skill

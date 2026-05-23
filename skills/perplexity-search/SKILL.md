@@ -1,6 +1,7 @@
 ---
 name: perplexity-search
 description: Strategy guide for Perplexity MCP tools (perplexity_search, perplexity_ask, perplexity_reason, perplexity_research). Helps pick the right tool, craft queries, and use recency/domain filters. Reference when planning complex searches, literature reviews, or multi-step research — not needed for simple one-shot queries.
+pairs_with: claude-docs-skill
 ---
 
 # Perplexity Search Strategy Guide

@@ -1,6 +1,7 @@
 ---
 name: design-md
 description: Drop-in DESIGN.md design-system files for 71 popular brands (Claude, Linear, Stripe, Vercel, Apple, Figma, Tesla…). Use when the user wants to match a brand's look and feel, asks to "apply a design system", says "make it look like <brand>", mentions DESIGN.md, or needs design tokens (colors, typography, components) extracted from a known site.
+pairs_with: frontend-learning
 ---
 
 # DESIGN.md Library

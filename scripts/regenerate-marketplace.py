@@ -57,6 +57,7 @@ META_FILENAMES = {"README.md", "TEMPLATE.md", "CHANGELOG.md", "CLAUDE.md", "GEMI
 FRONTMATTER_RE = re.compile(r"^---\s*\n(.*?)\n---\s*(?:\n|$)", re.DOTALL)
 TOP_KEY_RE = re.compile(r"^([a-zA-Z_][\w-]*)\s*:\s*(.*?)\s*$")
 NESTED_KEY_RE = re.compile(r"^[ \t]+([a-zA-Z_][\w-]*)\s*:\s*(.*?)\s*$")
+LIST_DASH_RE = re.compile(r"^\s+-\s+(.+?)\s*$")
 
 
 def strip_quotes(s: str) -> str:
@@ -91,6 +92,17 @@ def parse_frontmatter(text: str) -> dict[str, Any]:
         target_now = out if current_parent is None else out[current_parent]
         if not raw.strip() or raw.lstrip().startswith("#"):
             flush_pending(target_now)
+            continue
+        # `key:\n  - item\n  - item` — list of scalars under the current parent.
+        # First dash promotes the parent from {} to []; subsequent dashes append.
+        list_item = LIST_DASH_RE.match(raw) if current_parent is not None else None
+        if list_item and current_parent is not None:
+            parent_key: str = current_parent  # narrow for type checker
+            flush_pending(target_now if isinstance(target_now, dict) else {})
+            if isinstance(out.get(parent_key), dict) and not out[parent_key]:
+                out[parent_key] = []
+            if isinstance(out.get(parent_key), list):
+                out[parent_key].append(strip_quotes(list_item.group(1)))
             continue
         nested = NESTED_KEY_RE.match(raw) if current_parent is not None else None
         top = TOP_KEY_RE.match(raw)
@@ -131,6 +143,16 @@ def parse_frontmatter(text: str) -> dict[str, Any]:
         for k in ("version", "author", "category"):
             if k in md and k not in out:
                 out[k] = md[k]
+    # Normalize pairs_with to a clean list[str] regardless of whether the
+    # frontmatter used `pairs_with: a, b, c` or YAML-list `pairs_with:\n - a\n - b`.
+    pw = out.get("pairs_with")
+    if isinstance(pw, str):
+        out["pairs_with"] = [s.strip() for s in pw.split(",") if s.strip()]
+    elif isinstance(pw, list):
+        out["pairs_with"] = [str(s).strip() for s in pw if str(s).strip()]
+    elif pw is not None:
+        # malformed shape (dict, etc.) — drop quietly
+        out.pop("pairs_with", None)
     return out
 
 
@@ -321,8 +343,9 @@ def find_skills(roots: list[Path], max_depth: int | None = None) -> list[dict[st
                 "author": fm.get("author", ""),
                 "license": fm.get("license", ""),
                 "category": fm.get("category", ""),
+                "pairs_with": fm.get("pairs_with") or [],
             }
-            entry = {k: v for k, v in entry.items() if v not in ("", None, {})}
+            entry = {k: v for k, v in entry.items() if v not in ("", None, [], {})}
             entries.append(entry)
     return entries
 
@@ -371,8 +394,9 @@ def find_md_entries(root: Path, exclude_subdirs: set[Path] | None = None) -> lis
             "author": fm.get("author", ""),
             "license": fm.get("license", ""),
             "category": fm.get("category", ""),
+            "pairs_with": fm.get("pairs_with") or [],
         }
-        entry = {k: v for k, v in entry.items() if v not in ("", None, {})}
+        entry = {k: v for k, v in entry.items() if v not in ("", None, [], {})}
         entries.append(entry)
     return entries
 
