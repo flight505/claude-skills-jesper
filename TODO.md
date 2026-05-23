@@ -1,21 +1,10 @@
 # TODO — claude-skills-jesper
 
+> **Status (2026-05-24)**: all 6 originally planned tracks shipped. The catalog has an item-context chat in both `forge tui` (press `c` on a row) and `forge serve` (collapsible panel on the Item detail page), pulling explicit `pairs_with:` hints from frontmatter when present. Provenance + update-check tooling is in place. Open follow-ups live at the bottom of this file.
+
 ## Background
 
-The catalog (~150 items: skills, plugins, agents, personas, orchestrators, commands)
-mixes first-party content under `skills/` with the vendored `upstream/` from
-[alirezarezvani/claude-skills](https://github.com/alirezarezvani/claude-skills).
-Many upstream items have terse one-liners or no usage hints, so users open `forge`
-and can't tell:
-- what the item actually does in practice
-- which surface(s) it makes sense on
-- which other items it pairs with (e.g. a persona + an orchestrator + a skill)
-
-`forge` already has `internal/aisuggester/aisuggester.go` calling the Messages API
-(via Claude Code OAuth / Keychain / `ANTHROPIC_API_KEY`) for the **suggest** command.
-The next step is to reuse that auth + transport for an **item-context chat** so the
-user can ask "what does this do?" / "what should I pair it with?" right inside
-`forge tui` and `forge serve`.
+The catalog (~160 items: skills, plugins, agents, personas, orchestrators, commands) mixes first-party content under `skills/` with the vendored `upstream/` from [alirezarezvani/claude-skills](https://github.com/alirezarezvani/claude-skills), plus first-party agents under `agents/`. Items now self-declare their provenance via `_source.yaml` manifests (Track 6) and their pairing hints via `pairs_with:` frontmatter (Track 4). The chat panes consume both.
 
 ---
 
@@ -65,159 +54,68 @@ Merged in `flight505/forge`. Three commits: llm extraction, aichat backend + tes
 
 ---
 
-## Track 3 — Item-context chat in `forge serve` (web UI)
+## Track 3 — Item-context chat in `forge serve` (web UI) ✅ DONE
 
-Parity goal: same chat capability on the SPA. Reuses the new `internal/aichat`
-backend; web only adds a route + a UI panel.
+Merged in `flight505/forge` (PR #3). Two commits: server endpoint + Solid panel + regenerated SPA bundle. 8 new server tests, 54 total green. Live smoke-tested: POST returned an on-target SKILL.md-grounded reply, ~$0.003.
 
-- [ ] **3.1 HTTP route** `POST /api/item/:name/chat` with body
-  `{ history: Message[], message: string, type?: string }` → SSE or JSON
-  response. **Recommendation: SSE** — the web client benefits from streaming
-  visibly more than the TUI does.
-- [ ] **3.2 Solid component `web/src/components/ItemChat.tsx`** rendered inside
-  the Item detail screen, collapsible (default collapsed so the existing layout
-  isn't disrupted).
-- [ ] **3.3 Token-usage badge** mirroring the TUI status bar; rate-limit guidance
-  if 429.
-- [ ] **3.4 Health probe** in `/api/health` should expose `chat_available: bool`
-  so the UI can hide the panel cleanly when no credential is configured.
+- [x] **3.1** `POST /api/item/<name>/chat` — non-streaming JSON v1 (matches TUI). SSE deferred; the wire protocol leaves room because the front-end already polls `/api/health` for capability.
+- [x] **3.2** `web/src/components/ItemChat.tsx` — collapsible panel inside `Item.tsx`, Cmd/Ctrl+Enter submit, hidden when `health.chat_available` is false
+- [x] **3.3** Token tally + USD estimate in the section header (mirrors TUI format); 429 → "rate-limited" callout
+- [x] **3.4** `/api/health` exposes `chat_available: bool` via `llm.ResolveAuth`
 
 ---
 
-## Track 4 — Catalog enrichment so chat answers are better
+## Track 4 — Catalog enrichment so chat answers are better ✅ DONE
 
-Even with chat, vague item descriptions degrade the model's answers. These are
-content-side fixes inside `claude-skills-jesper`, not code in `forge`.
+Shipped across two PRs: marketplace side (`claude-skills-jesper#5`) and forge consumer (`flight505/forge#4`). End-to-end: a chat opened on `frontend-learning` now sees `design-md` and `lesson-reviewer` in its peer set ahead of the same-type fill, sourced from `pairs_with:` in frontmatter.
 
-- [ ] **4.1 Audit first-party `skills/` for thin descriptions** (one-liner only,
-  no usage example): list them with `python3 scripts/regenerate-marketplace.py
-  --verbose 2>&1 | grep -i 'no description'` — then expand each.
-- [ ] **4.2 Add a `pairs_with:` frontmatter field** (optional) to SKILL.md /
-  agent / persona files. Update `regenerate-marketplace.py` to surface it in
-  `marketplace.json`. The chat system prompt (Track 2.1.2) reads this and uses
-  it for pairing suggestions instead of guessing.
-- [ ] **4.3 Document the convention** in `CLAUDE.md` under "Adding a first-party
-  skill" — short paragraph + example block.
-- [ ] **4.4 Backfill pairing hints** for the most-used items first (top 10 by
-  install frequency once `forge serve` exposes that metric, otherwise pick
-  manually: handoff, code-reviewer, frontend-design, etc).
+- [x] **4.1** Audit thin descriptions — no remediation needed. All 10 first-party SKILL.md descriptions are ≥130 chars with clear trigger phrases.
+- [x] **4.2** `pairs_with:` frontmatter (CSV or YAML-list shape), `regenerate-marketplace.py` parses both, emits as array on the marketplace entry, `Entry.PairsWith` + `Item.PairsWith` in forge schemas, `internal/aichat.SelectPeers` consolidates the TUI + server duplicates and applies pairs-first selection
+- [x] **4.3** CLAUDE.md gained a "`pairs_with:` — pairing hints for the chat" section with both syntactic forms + the dangling-name rule
+- [x] **4.4** Backfilled 9 items: the design trio (`frontend-learning` ↔ `design-md` ↔ `lesson-reviewer`), the docs trio (`claude-docs` ↔ `openrouter-docs` ↔ `gemini-docs`), the NVIDIA pair (`spark-docs` ↔ `nvidia-dgx-research`), and `perplexity-search` → `claude-docs-skill`. 6 new tests on `internal/aichat.SelectPeers` cover priority ordering, dangling-name drop, dedup, and limit truncation.
 
 ---
 
-## Track 5 — Integrate `frontend-learning` as a first-party skill
+## Track 5 — Integrate `frontend-learning` as a first-party skill ✅ DONE
 
-`/Users/jesper/Projects/Dev_projects/Claude_SDK/frontend-learning/` (not a git repo) is a standalone Claude Code plugin that generates single-file HTML explainers in the spirit of 3Blue1Brown/Distill/Ciechanowski. ~150KB total: 1 SKILL.md, 1 agent (`lesson-reviewer`), 5 shell/python scripts, 4 reference docs (html-template, interactive-patterns, pedagogy-principles, STYLE_PRESETS, lesson-qa-checklist), 1 CSS file. The standalone `plugins/` wrapper exists because of a one-off Claude Desktop install path — dropping it for now.
+Merged as PR #3. Catalog grew from 9→10 skills, 24→25 agents (the first-party `lesson-reviewer` agent at the new top-level `agents/` dir). The standalone source at `~/Projects/Dev_projects/Claude_SDK/frontend-learning/` is gone (`mv` was the deletion). `regenerate-marketplace.py` learned to walk `./agents/` for first-party agents in addition to `upstream/agents/`.
 
-Goal: land it under `skills/frontend-learning/` so `regenerate-marketplace.py` picks it up and `forge install frontend-learning` works.
+- [x] **5.1** Cleanup (demo lesson, _test dir, .DS_Store, standalone marketplace.json, plugins/ wrapper)
+- [x] **5.2** Shape decided: `skills/frontend-learning/` for skill content, repo-root `agents/` for first-party agents (mirrors the `skills/` pattern)
+- [x] **5.3** Move complete; `lesson-base.css` left at top level (SKILL.md path references stayed correct)
+- [x] **5.4** Marketplace regenerator extended (+10 lines) + first-party agents discovery + `OVERLAP.md` merge for collisions
+- [x] **5.5** End-to-end install verified: `forge install frontend-learning` populated `~/.claude/skills/frontend-learning/`, Claude Code's skill loader picked it up immediately; agent lands at `~/.claude/agents/lesson-reviewer.md` and becomes discoverable on next session restart
+- [x] **5.6** Source dir deletion verified; no launchd plists referenced the old path
 
-### 5.1 Cleanup in the source directory (before move)
-- [ ] **5.1.1** `trash lessons/2026-05-21-attention-in-transformers.html lessons/2026-05-21-attention-in-transformers.meta.json` — demo lesson, generated output
-- [ ] **5.1.2** `trash lessons/_test/` — hash-function test artifacts
-- [ ] **5.1.3** `find . -name .DS_Store -delete`
-- [ ] **5.1.4** `trash .claude-plugin/marketplace.json` — standalone marketplace shape, superseded by parent
-- [ ] **5.1.5** `trash plugins/` — Claude Desktop wrapper, no longer needed
-
-### 5.2 Decide shape under `skills/frontend-learning/`
-- [ ] **5.2.1** Read `scripts/regenerate-marketplace.py` to confirm what first-party agents look like (current first-party agents: check if there are any examples; if not, this is the first one). Decide whether the agent lives at `skills/frontend-learning/agents/lesson-reviewer.md` (likely) or top-level `skills/agents/`.
-- [ ] **5.2.2** Confirm scripts/ subdir is supported. Likely yes — claude-docs-skill, design-md, etc. all have scripts/.
-- [ ] **5.2.3** Confirm a top-level `lesson-base.css` is OK as a reference asset (not in `references/`). Either move to `references/lesson-base.css` to match the convention, or leave at top level and update SKILL.md path references.
-
-### 5.3 Move
-- [ ] **5.3.1** `mv /Users/jesper/Projects/Dev_projects/Claude_SDK/frontend-learning skills/frontend-learning` (post-cleanup)
-- [ ] **5.3.2** Adjust SKILL.md internal paths if 5.2.3 reorganized anything
-- [ ] **5.3.3** Verify `.gitignore` patterns still make sense — the standalone gitignore had `lessons/*.html`, `lessons/*.meta.json`; either fold those into the top-level `.gitignore` or keep a skills-local `.gitignore`
-
-### 5.4 Wire into marketplace
-- [ ] **5.4.1** `python3 scripts/regenerate-marketplace.py --verbose` — verify frontend-learning appears under `skills:` (or `plugins:` if treated that way)
-- [ ] **5.4.2** Verify the agent `lesson-reviewer` appears under `agents:`
-- [ ] **5.4.3** Commit + push
-
-### 5.5 Verify forge installs cleanly
-- [ ] **5.5.1** `forge agent search frontend-learning` — should return at least one match
-- [ ] **5.5.2** `forge install frontend-learning --surface claude-cli-user --method link` — verify symlink lands, scripts are executable, SKILL.md frontmatter parses
-- [ ] **5.5.3** Trigger the skill from a Claude Code session (e.g. "teach me X") — confirm Claude picks it up
-
-### 5.6 Delete the source
-- [ ] **5.6.1** Only after 5.5 passes: `trash /Users/jesper/Projects/Dev_projects/Claude_SDK/frontend-learning` (the now-empty original location)
-- [ ] **5.6.2** Check the macOS launchd daemons — does anything reference the old path? (Should be none; frontend-learning doesn't have an update script.)
-- [ ] **5.6.3** Update any external docs/notes that pointed at the old path (the user's CLAUDE.md if it does, mental model, etc.)
-
-### Notes
-- All work happens on a feature branch (`feat/integrate-frontend-learning`), not main.
-- The new skill becomes a candidate for Track 4.2 `pairs_with:` enrichment — natural pair with `frontend-design` and `design-md`.
+Side benefit picked up during Track 4: `frontend-learning ↔ design-md ↔ lesson-reviewer` got declared as a `pairs_with:` triangle, so chats opened on any of them surface the others as suggested pairings.
 
 ---
 
-## Track 6 — Sources taxonomy + unified update check
+## Track 6 — Sources taxonomy + unified update check ✅ DONE
 
-Today the `skills/` directory mixes four different provenance kinds, all visually equal:
+Merged as PR #4 + follow-up bug-fix (`3c6f9e3`, `launchctl kickstart gui/$UID/<label>` needed to be one arg). Eleven manifests + a stdlib-only aggregator. The directory restructure (6.4.2) was deferred per the recommendation — metadata captured provenance without breaking the install layer.
 
-| Kind | Examples | Refresh mechanism today |
-|---|---|---|
-| **Original** (mine, hand-edited) | `apple`, `frontend-learning`, `perplexity-search`, `nvidia-dgx-research` | None — manual edits |
-| **Docs** (mine, scraped from upstream sites) | `claude-docs-skill`, `openrouter-docs-skill`, `warp-docs-skill`, `gemini-docs-skill`, `spark-docs-skill` | Launchd weekly via `install-refresh-daemons.sh` (Track 1b) |
-| **Repo-mirror** (third-party origin, vendored snapshot) | `design-md` (from `getdesign` npm) | Launchd weekly via the same daemon — but conceptually distinct |
-| **Subtree** (third-party marketplace, vendored) | `upstream/` (alirezarezvani/claude-skills) | Manual: `./scripts/sync-upstream.sh` |
+- [x] **6.1** Manifest schema (`kind`, `origin`, `version`, `refresh.{method,script,schedule}`, `notes`) documented in CLAUDE.md
+- [x] **6.2** Backfilled 11 manifests: 4 originals (`apple`, `frontend-learning`, `perplexity-search`, `agents/`), 6 docs (claude/openrouter/warp/gemini/spark/nvidia-dgx-research), 1 repo-mirror (`design-md` ← `npm:getdesign`). Reclassified `nvidia-dgx-research` from "original" to "docs" — it does fetch a llms.txt catalog on cron.
+- [x] **6.3** `scripts/check-sources.py` — walks every manifest, probes per-kind (mtime for docs, npm registry for repo-mirror, `git log` against the subtree squash for upstream). `--fix` runs the right refresh action (launchctl kickstart for docs, update script for repo-mirror, sync-upstream.sh for subtree).
 
-Three problems this causes:
-- No single command answers "what updates are available across all my sources?"
-- Adding a new repo-mirror skill (e.g. some github-hosted set of agents) has no documented pattern
-- A reader of the repo can't tell from `skills/<name>/` whether a directory is mine-original, mine-docs, or mirrored
+### Side finding surfaced + cleared
+The first dry-run flagged 5 doc-skills with empty `references/` on disk. `--fix` fired the daemons; all populated within a few minutes. The launchctl bug-fix above was discovered + landed in the same session.
 
-**Recommendation: metadata over restructure.** Keep the current directory layout (avoids breaking forge paths, launchd plists, ~/.claude/ symlinks, and ~14 entries in marketplace.json) and add a per-item `_source.yaml` declaring provenance + refresh method. Then build one aggregator script that reads every manifest, runs the right "check for updates" probe per kind, and prints a punch list.
-
-### 6.1 Define the manifest schema
-- [ ] **6.1.1** Decide schema. Strawman:
-  ```yaml
-  # skills/<name>/_source.yaml
-  kind: original | docs | repo-mirror | subtree
-  origin: ""                # empty for original; URL/npm-pkg/etc for others
-  refresh:
-    method: none | launchd | manual | subtree
-    script: scripts/update-*.sh   # optional, when relevant
-    schedule: weekly-sunday-0400  # for launchd kind
-  notes: ""                 # one-liner explaining why this skill is here
-  ```
-- [ ] **6.1.2** Document the schema in `CLAUDE.md` (one paragraph + the example).
-- [ ] **6.1.3** Add a top-level `agents/_source.yaml` too — first-party agents are conceptually originals.
-
-### 6.2 Backfill manifests for the current catalog
-- [ ] **6.2.1** `original`: apple, frontend-learning, perplexity-search, nvidia-dgx-research
-- [ ] **6.2.2** `docs`: claude-docs-skill, openrouter-docs-skill, warp-docs-skill, gemini-docs-skill, spark-docs-skill (origin = the live docs URL the update script scrapes)
-- [ ] **6.2.3** `repo-mirror`: design-md (origin = `npm:getdesign`)
-- [ ] **6.2.4** `subtree`: skip — `upstream/` itself stays manifest-less because its metadata lives in `.git/refs/upstream-skills` + the squash commit subject.
-
-### 6.3 Build `scripts/check-sources.py` (stdlib only)
-- [ ] **6.3.1** Walk every `skills/*/_source.yaml` and `agents/_source.yaml`. Group by kind.
-- [ ] **6.3.2** For each kind, probe "what's newer than what we have?":
-  - `original`: no-op (skip)
-  - `docs`: check the last-modified timestamp of `references/` files vs `.last-fetch` sentinel; "stale if older than N days"
-  - `repo-mirror`: query the origin (npm registry for `getdesign`, etc.) and compare against a `version:` field in the manifest
-  - `subtree`: shell out to `git fetch upstream-skills main` + `git log <last-squash>..upstream-skills/main` count
-- [ ] **6.3.3** Output as a punch list:
-  ```
-  [docs]
-    claude-docs-skill        last fetched 3 days ago — fresh
-    openrouter-docs-skill    last fetched 8 days ago — STALE (run scripts/update-*.sh or wait for Sunday)
-  [repo-mirror]
-    design-md                local 0.6.20 → npm latest 0.6.21 — UPDATE AVAILABLE
-  [subtree]
-    upstream                 12 new commits since last sync — review with scripts/upstream-changelog.py
-  ```
-- [ ] **6.3.4** Add `--fix` mode that runs the appropriate refresh action per item (`launchctl kickstart` for docs, `update-templates.sh` for design-md, `sync-upstream.sh` for subtree). Default is read-only.
-
-### 6.4 Optional follow-ups (defer unless useful)
-- [ ] **6.4.1** Forge UI: expose the check-sources output in a new Doctor section or as a TUI overlay.
-- [ ] **6.4.2** Directory restructure (`docs/`, `mirrors/`, `originals/`). Only if 6.1-6.3 prove insufficient. Cost is high: rebake 7 launchd plists, re-point ~5 symlinks under `~/.claude/skills/`, update `regenerate-marketplace.py`, every marketplace.json path, every doc-skill `.gitignore` rule, every existing forge install anywhere. Benefit is mostly cosmetic given the manifest already exposes provenance.
-
-### Why this order
-6.1-6.3 are non-breaking — the existing layout keeps working. Once those land, you have the unified-update-check you wanted AND each item self-declares its provenance, so the directory restructure (6.4.2) becomes a pure cosmetic call rather than a mixed cosmetic + functional one.
+### Deferred
+- **6.4.1** Forge UI surface for check-sources output (Doctor section). Open follow-up — not blocking.
+- **6.4.2** Directory restructure. Not pursued; the manifest captures provenance, the structural change would break the install layer. Revisit only if metadata proves insufficient.
 
 ---
 
-## Notes & open questions
+## Open follow-ups
 
-- **Cost guardrail.** Track 2 shipped without a hard daily budget — running tally is visible in the statusbar but nothing stops a runaway loop. Worth revisiting if usage gets noisy: `FORGE_CHAT_DAILY_BUDGET_USD` env + a warning toast at 80% would respect the global "Claude Alerts" rule.
-- **Catalog peer list size.** Currently uses `SelectPeers` (same-type, take first 10 — no relevance ranking). Each first turn sends ~2–3KB of peer summaries. Worth A/B-ing ranking strategies once chat sees real use (semantic via aisuggester? frecency? `pairs_with:` from Track 4.2?).
-- **Streaming on the TUI.** Bubble Tea + SSE is awkward (channels through `tea.Cmd`). Skipped for v1. Reconsider if multi-paragraph replies feel sluggish.
-- **Privacy.** All chat traffic goes to api.anthropic.com under the user's own credential — same trust boundary as `aisuggester` today. Mention in chat pane's first-launch hint when we add one.
+Surfaced during the original tracks but explicitly deferred. None are blocking; pick up if real-world use of the chat makes any of these feel urgent.
+
+- **Cost guardrail.** Chat shipped without a hard daily budget — running tally is visible in the statusbar but nothing stops a runaway loop. Worth revisiting if usage gets noisy: `FORGE_CHAT_DAILY_BUDGET_USD` env + a warning toast at 80% would respect the global "Claude Alerts" rule.
+- **Peer ranking on top of `pairs_with`.** Today `SelectPeers` uses `pairs_with` first, then same-type fill in catalog order. The same-type fill has no relevance ranking. Once chat sees real use, consider semantic ranking via `aisuggester` or frecency from `forge serve` install metrics.
+- **Streaming on the TUI.** Bubble Tea + SSE is awkward (channels through `tea.Cmd`). Skipped for v1. Reconsider if multi-paragraph replies feel sluggish in the TUI; the web side is already JSON-only and can switch to SSE without a wire-protocol change (the `chat_available` probe stays the same).
+- **Privacy disclosure.** All chat traffic goes to api.anthropic.com under the user's own credential — same trust boundary as `aisuggester` today. Mention in the chat pane's first-launch hint if we add a "first time?" overlay.
+- **Forge UI surface for `check-sources`** (deferred from Track 6.4.1). A Doctor-tab section or a TUI overlay would let you see "what's stale" without dropping to the shell. Wire to `scripts/check-sources.py --no-color` and parse the output.
+- **Directory restructure** (deferred from Track 6.4.2 — explicitly not pursued). `docs/`, `mirrors/`, `originals/`. Manifests already capture provenance; the structural change would break the install layer (7 launchd plists with baked-in paths, ~5 symlinks under `~/.claude/skills/`, every marketplace.json path, every existing forge install). Revisit only if metadata proves insufficient.
+- **External-marketplace pair targets.** `pairs_with:` names must match entries in this marketplace. Cross-marketplace links (e.g. naming `frontend-design` from `claude-plugins-official`) silently drop. If useful, add a `pairs_with_external:` field or import those plugins into our marketplace.
