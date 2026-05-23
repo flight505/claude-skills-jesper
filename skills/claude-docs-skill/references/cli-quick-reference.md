@@ -1,92 +1,59 @@
 # Claude Code CLI Quick Reference
 
 Source: https://code.claude.com/docs/en
-Generated: 2026-05-06
+Generated: 2026-05-21
 
-### Claude Code overview
+### Overview
 *Source: /overview.md*
 
 > ## Documentation Index
 > Fetch the complete documentation index at: https://code.claude.com/docs/llms.txt
 > Use this file to discover all available pages before exploring further.
 
-# Claude Code overview
+# Overview
 
 > Claude Code is an agentic coding tool that reads your codebase, edits files, runs commands, and integrates with your development tools. Available in your terminal, IDE, desktop app, and browser.
 
-export const InstallConfigurator = ({defaultSurface = 'terminal'}) => {
-  const TERM = {
-    mac: {
-      label: 'macOS / Linux',
-      cmd: 'curl -fsSL https://claude.ai/install.sh | bash'
-    },
-    win: {
-      label: 'Windows'
-    },
-    brew: {
-      label: 'Homebrew',
-      cmd: 'brew install --cask claude-code'
-    },
-    winget: {
-      label: 'WinGet',
-      cmd: 'winget install Anthropic.ClaudeCode'
-    }
-  };
-  const WIN_VARIANTS = {
-    ps: 'irm https://claude.ai/install.ps1 | iex',
-    cmd: 'curl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd'
-  };
-  const TABS = [{
-    key: 'terminal',
-    label: 'Terminal'
-  }, {
-    key: 'desktop',
-    label: 'Desktop'
-  }, {
-    key: 'vscode',
-    label: 'VS Code'
-  }, {
-    key: 'jetbrains',
-    label: 'JetBrains'
-  }];
-  const ALT_TARGETS = {
-    desktop: {
-      name: 'Desktop',
-      tagline: 'The full agent in a native app for macOS and Windows.',
-      installLabel: 'Download the app',
-      installHref: 'https://claude.com/download?utm_source=claude_code&utm_medium=docs&utm_content=configurator_desktop_download',
-      guideHref: '/en/desktop-quickstart'
-    },
-    vscode: {
-      name: 'VS Code',
-      tagline: 'Review diffs, manage context, and chat without leaving your editor.',
-      installLabel: 'Install from Marketplace',
-      installHref: 'https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code',
-      altCmd: 'code --install-extension anthropic.claude-code',
-      guideHref: '/en/vs-code'
-    },
-    jetbrains: {
-      name: 'JetBrains',
-      tagline: 'Native plugin for IntelliJ, PyCharm, WebStorm, and other JetBrains IDEs.',
-      installLabel: 'Install from Marketplace',
-      installHref: 'https://plugins.jetbrains.com/plugin/27310-claude-code-beta-',
-      guideHref: '/en/jetbrains'
-    }
-  };
-  const PROVIDERS = [{
-    key: 'anthropic',
-    label: 'Anthropic'
-  }, {
-    key: 'bedrock',
-    label: 'Amazon Bedrock'
-  }, {
-    key: 'foundry',
-    label: 'Microsoft Foundry'
-  }, {
-    key: 'vertex',
-    label: 'Google Vertex AI'
-  }];
- 
+Claude Code is an AI-powered coding assistant that helps you build features, fix bugs, and automate development tasks. It understands your entire codebase and can work across multiple files and tools to get things done.
+
+## Get started
+
+Choose your environment to get started. Most surfaces require a [Claude subscription](https://claude.com/pricing?utm_source=claude_code\&utm_medium=docs\&utm_content=overview_pricing) or [Anthropic Console](https://console.anthropic.com/) account. The Terminal CLI and VS Code also support [third-party providers](/en/third-party-integrations).
+
+<Tabs>
+  <Tab title="Terminal">
+    The full-featured CLI for working with Claude Code directly in your terminal. Edit files, run commands, and manage your entire project from the command line.
+
+    To install Claude Code, use one of the following methods:
+
+    <Tabs>
+      <Tab title="Native Install (Recommended)">
+        **macOS, Linux, WSL:**
+
+        ```bash theme={null}
+        curl -fsSL https://claude.ai/install.sh | bash
+        ```
+
+        **Windows PowerShell:**
+
+        ```powershell theme={null}
+        irm https://claude.ai/install.ps1 | iex
+        ```
+
+        **Windows CMD:**
+
+        ```batch theme={null}
+        curl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd
+        ```
+
+        If you see `The token '&&' is not a valid statement separator`, you're in PowerShell, not CMD. If you see `'irm' is not recognized as an internal or external command`, you're in CMD, not PowerShell. Your prompt shows `PS C:\` when you're in PowerShell and `C:\` without the `PS` when you're in CMD.
+
+        [Git for Windows](https://git-scm.com/downloads/win) is recommended on native Windows so Claude Code can use the Bash tool. If Git for Windows is not installed, Claude Code uses PowerShell as the shell tool instead. WSL setups do not need Git for Windows.
+
+        <Info>
+          Native installations automatically update in the background to keep you on the latest version.
+        </Info>
+      </Tab>
 
 *[See full documentation for more...]*
 
@@ -103,82 +70,48 @@ export const InstallConfigurator = ({defaultSurface = 'terminal'}) => {
 
 > Welcome to Claude Code!
 
-export const InstallConfigurator = ({defaultSurface = 'terminal'}) => {
-  const TERM = {
-    mac: {
-      label: 'macOS / Linux',
-      cmd: 'curl -fsSL https://claude.ai/install.sh | bash'
-    },
-    win: {
-      label: 'Windows'
-    },
-    brew: {
-      label: 'Homebrew',
-      cmd: 'brew install --cask claude-code'
-    },
-    winget: {
-      label: 'WinGet',
-      cmd: 'winget install Anthropic.ClaudeCode'
-    }
-  };
-  const WIN_VARIANTS = {
-    ps: 'irm https://claude.ai/install.ps1 | iex',
-    cmd: 'curl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd'
-  };
-  const TABS = [{
-    key: 'terminal',
-    label: 'Terminal'
-  }, {
-    key: 'desktop',
-    label: 'Desktop'
-  }, {
-    key: 'vscode',
-    label: 'VS Code'
-  }, {
-    key: 'jetbrains',
-    label: 'JetBrains'
-  }];
-  const ALT_TARGETS = {
-    desktop: {
-      name: 'Desktop',
-      tagline: 'The full agent in a native app for macOS and Windows.',
-      installLabel: 'Download the app',
-      installHref: 'https://claude.com/download?utm_source=claude_code&utm_medium=docs&utm_content=configurator_desktop_download',
-      guideHref: '/en/desktop-quickstart'
-    },
-    vscode: {
-      name: 'VS Code',
-      tagline: 'Review diffs, manage context, and chat without leaving your editor.',
-      installLabel: 'Install from Marketplace',
-      installHref: 'https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code',
-      altCmd: 'code --install-extension anthropic.claude-code',
-      guideHref: '/en/vs-code'
-    },
-    jetbrains: {
-      name: 'JetBrains',
-      tagline: 'Native plugin for IntelliJ, PyCharm, WebStorm, and other JetBrains IDEs.',
-      installLabel: 'Install from Marketplace',
-      installHref: 'https://plugins.jetbrains.com/plugin/27310-claude-code-beta-',
-      guideHref: '/en/jetbrains'
-    }
-  };
-  const PROVIDERS = [{
-    key: 'anthropic',
-    label: 'Anthropic'
-  }, {
-    key: 'bedrock',
-    label: 'Amazon Bedrock'
-  }, {
-    key: 'foundry',
-    label: 'Microsoft Foundry'
-  }, {
-    key: 'vertex',
-    label: 'Google Vertex AI'
-  }];
-  const PROVIDER_NOTICE = {
-    bedrock: <>
-        <strong>Configure your AWS account first.</strong> Running on Bedrock
-        requires model access enabled in the AWS console and
+This quickstart guide will have you using AI-powered coding assistance in a few minutes. By the end, you'll understand how to use Claude Code for common development tasks.
+
+## Before you begin
+
+Make sure you have:
+
+* A terminal or command prompt open
+  * If you've never used the terminal before, check out the [terminal guide](/en/terminal-guide)
+* A code project to work with
+* A [Claude subscription](https://claude.com/pricing?utm_source=claude_code\&utm_medium=docs\&utm_content=quickstart_prereq) (Pro, Max, Team, or Enterprise), [Claude Console](https://console.anthropic.com/) account, or access through a [supported cloud provider](/en/third-party-integrations)
+
+<Note>
+  This guide covers the terminal CLI. Claude Code is also available on the [web](https://claude.ai/code), as a [desktop app](/en/desktop), in [VS Code](/en/vs-code) and [JetBrains IDEs](/en/jetbrains), in [Slack](/en/slack), and in CI/CD with [GitHub Actions](/en/github-actions) and [GitLab](/en/gitlab-ci-cd). See [all interfaces](/en/overview#use-claude-code-everywhere).
+</Note>
+
+## Step 1: Install Claude Code
+
+To install Claude Code, use one of the following methods:
+
+<Tabs>
+  <Tab title="Native Install (Recommended)">
+    **macOS, Linux, WSL:**
+
+    ```bash theme={null}
+    curl -fsSL https://claude.ai/install.sh | bash
+    ```
+
+    **Windows PowerShell:**
+
+    ```powershell theme={null}
+    irm https://claude.ai/install.ps1 | iex
+    ```
+
+    **Windows CMD:**
+
+    ```batch theme={null}
+    curl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd
+    ```
+
+    If you see `The token '&&' is not a valid statement separator`, you're in PowerShell, not CMD. If you see `'irm' is not recognized as an internal or external command`, you're in CMD, not PowerShell. Your prompt shows `PS C:\` when you're in PowerShell and `C:\` without the `PS` when you're in CMD.
+
+    [Git for Windows](https://git-scm.com/downloads/win) is recommended on native Windows so Claude Code can use the Bash tool. If Git for Windows is not installed, Claude Code uses PowerShell as the shell tool instead. WSL setups do not need Git for Windows.
 
 *[See full documentation for more...]*
 
@@ -332,6 +265,7 @@ Extensions plug into different parts of the agentic loop:
 
 * **[CLAUDE.md](/en/memory)** adds persistent context Claude sees every session
 * **[Skills](/en/skills)** add reusable knowledge and invocable workflows
+* **[Code intelligence](/en/tools-reference#lsp-tool-behavior)** connects Claude to a language server for symbol-level navigation and live type errors
 * **[MCP](/en/mcp)** connects Claude to external services and tools
 * **[Subagents](/en/sub-agents)** run their own loops in isolated context, returning summaries
 * **[Agent teams](/en/agent-teams)** coordinate multiple independent sessions with shared tasks and peer-to-peer messaging
@@ -459,9 +393,7 @@ Claude Code includes a set of bundled skills that are available in every session
 
 Bundled skills are listed alongside built-in commands in the [commands reference](/en/commands), marked **Skill** in the Purpose column.
 
-## Getting started
-
-### Create your first skill
+### Run and verify your app
 
 *[See full documentation for more...]*
 
@@ -534,7 +466,7 @@ Subagents are specialized AI assistants that handle specific types of tasks. Use
 Each subagent runs in its own context window with a custom system prompt, specific tool access, and independent permissions. When Claude encounters a task that matches a subagent's description, it delegates to that subagent, which works independently and returns results. To see the context savings in practice, the [context window visualization](/en/context-window) walks through a session where a subagent handles research in its own separate window.
 
 <Note>
-  If you need multiple agents working in parallel and communicating with each other, see [agent teams](/en/agent-teams) instead. Subagents work within a single session; agent teams coordinate across separate sessions.
+  Subagents work within a single session. To run many independent sessions in parallel and monitor them from one place, see [background agents](/en/agent-view). For sessions that communicate with each other, see [agent teams](/en/agent-teams).
 </Note>
 
 Subagents help you:
@@ -555,8 +487,6 @@ Claude Code includes several built-in subagents like **Explore**, **Plan**, and 
 * [Patterns for working with subagents](#work-with-subagents)
 * [Forked subagents](#fork-the-current-conversation)
 * [Example subagents](#example-subagents)
-
-## Built-in subagents
 
 *[See full documentation for more...]*
 

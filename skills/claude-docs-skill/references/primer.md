@@ -133,6 +133,7 @@ message = anthropic.Anthropic().messages.create(
         {"role": "assistant", "content": "The answer is ("},
     ],
 )
+print(message.content[0].text)
 ```
 
 </CodeGroup>
@@ -211,6 +212,7 @@ message = anthropic.Anthropic().messages.create(
         }
     ],
 )
+print(message.content[0].text)
 
 # Option 2: URL-referenced image
 message_from_url = anthropic.Anthropic().messages.create(
@@ -232,6 +234,7 @@ message_from_url = anthropic.Anthropic().messages.create(
         }
     ],
 )
+print(message_from_url.content[0].text)
 ```
 
 </CodeGroup>
@@ -242,10 +245,16 @@ Extended thinking can sometimes help Claude with very hard tasks. On models befo
 
 Extended thinking is supported in the following models:
 
-- Claude Opus 4.1 (`claude-opus-4-1-20250805`)
-- Claude Opus 4 (deprecated) (`claude-opus-4-20250514`)
+- Claude Opus 4.7 (`claude-opus-4-7`)
+- Claude Opus 4.6 (`claude-opus-4-6`)
+- Claude Opus 4.5 (`claude-opus-4-5-20251101`)
 - Claude Sonnet 4.6 (`claude-sonnet-4-6`)
 - Claude Sonnet 4.5 (`claude-sonnet-4-5-20250929`)
+- Claude Haiku 4.5 (`claude-haiku-4-5-20251001`)
+
+<Note>
+  On Claude Opus 4.7, manual extended thinking (`type: enabled` with a `budget_tokens` value) is no longer supported. Use [adaptive thinking](/docs/en/build-with-claude/adaptive-thinking) (`type: adaptive`) instead.
+</Note>
 
 ### How extended thinking works
 
@@ -294,7 +303,7 @@ for block in response.content:
 
 </CodeGroup>
 
-The `budget_tokens` parameter determines the maximum number of tokens Claude is allowed to use for its internal reasoning process. In Claude 4 models, this limit applies to full thinking tokens, and not to the summarized output. Larger budgets can improve response quality by enabling more thorough analysis for complex problems. One rule: the value of max_tokens must be strictly greater than the value of budget_tokens so that Claude has space to write its response after thinking is complete.
+When using manual extended thinking (`type: enabled`), the `budget_tokens` parameter determines the maximum number of tokens Claude is allowed to use for its internal reasoning process. In Claude 4 and later models, this limit applies to full thinking tokens, and not to the summarized output. Larger budgets can improve response quality by enabling more thorough analysis for complex problems. Unless you are using [interleaved thinking](#interleaved-thinking), `budget_tokens` must be less than `max_tokens` so that Claude has space to write its response after thinking is complete.
 
 ## Extended thinking with tool use
 
@@ -425,6 +434,10 @@ continuation = client.messages.create(
         },
     ],
 )
+
+for block in continuation.content:
+    if block.type == "text":
+        print(block.text)
 ```
 
 </CodeGroup>
@@ -440,8 +453,8 @@ ant beta:messages create --beta interleaved-thinking-2025-05-14 <<'YAML'
 model: claude-sonnet-4-6
 max_tokens: 16000
 thinking:
-  type: adaptive
-  display: summarized
+  type: enabled
+  budget_tokens: 10000
 tools:
   - name: calculator
     description: Perform arithmetic calculations.
@@ -514,6 +527,14 @@ response = client.beta.messages.create(
     ],
     betas=["interleaved-thinking-2025-05-14"],
 )
+
+for block in response.content:
+    if block.type == "thinking":
+        print(f"Thinking: {block.thinking}")
+    elif block.type == "tool_use":
+        print(f"Tool call: {block.name}({block.input})")
+    elif block.type == "text":
+        print(f"Response: {block.text}")
 ```
 
 </CodeGroup>
@@ -521,10 +542,10 @@ response = client.beta.messages.create(
 With interleaved thinking and ONLY with interleaved thinking (not regular extended thinking), the `budget_tokens` can exceed the `max_tokens` parameter, as `budget_tokens` in this case represents the total budget across all thinking blocks within one assistant turn.
 
 <Info>
-  For Claude Opus 4.6, interleaved thinking is automatically enabled when using [adaptive thinking](/docs/en/build-with-claude/adaptive-thinking) (`thinking: {type: "adaptive"}`). No beta header is needed. Sonnet 4.6 supports both the `interleaved-thinking-2025-05-14` beta header with manual extended thinking and adaptive thinking.
+  For Claude Opus 4.7 and Claude Opus 4.6, interleaved thinking is automatically enabled when using [adaptive thinking](/docs/en/build-with-claude/adaptive-thinking) (`thinking: {type: "adaptive"}`). No beta header is needed. Sonnet 4.6 supports both the `interleaved-thinking-2025-05-14` beta header with manual extended thinking and adaptive thinking.
 </Info>
 
-## Tool Use
+## Tool use
 
 ### Specifying client tools
 
@@ -611,7 +632,7 @@ Tools do not necessarily need to be client functions. You can use tools anytime 
 
 ### Chain of thought
 
-When using tools, Claude will often show its "chain of thought", i.e. the step-by-step reasoning it uses to break down the problem and decide which tools to use.
+When using tools, Claude will often show its "chain of thought," that is, the step-by-step reasoning it uses to break down the problem and decide which tools to use.
 
 ```json
 {
@@ -696,7 +717,7 @@ If the tool itself throws an error during execution, return the error message wi
 
 If Claude's attempted use of a tool is invalid (e.g. missing required parameters), try the request again with more-detailed `description` values in your tool definitions.
 
-## Streaming Messages
+## Streaming messages
 
 When creating a Message, you can set `"stream": true` to incrementally stream the response using server-sent events (SSE).
 

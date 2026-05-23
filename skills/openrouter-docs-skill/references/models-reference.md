@@ -1,6 +1,6 @@
 # OpenRouter Models Reference
 
-**Total Models:** 370
+**Total Models:** 358
 **Last Updated:** Generated from OpenRouter API
 
 ## Models by Provider
@@ -63,20 +63,6 @@
 - **Pricing:** $0.00000015/1M prompt, $N/A/1M completion
 - **Description:** Olmo 3 32B Think is a large-scale, 32-billion-parameter model purpose-built for deep reasoning, complex logic chains and advanced instruction-following scenarios. Its capacity enables strong performan...
 
-#### AllenAI: Olmo 3.1 32B Instruct
-- **ID:** `allenai/olmo-3.1-32b-instruct`
-- **Context:** 65,536 tokens
-- **Pricing:** $0.0000002/1M prompt, $N/A/1M completion
-- **Description:** Olmo 3.1 32B Instruct is a large-scale, 32-billion-parameter instruction-tuned language model engineered for high-performance conversational AI, multi-turn dialogue, and practical instruction followin...
-
-### ALPINDALE
-
-#### Goliath 120B
-- **ID:** `alpindale/goliath-120b`
-- **Context:** 6,144 tokens
-- **Pricing:** $0.00000375/1M prompt, $N/A/1M completion
-- **Description:** A large LLM created by combining two fine-tuned Llama 70B models into one 120B model. Combines Xwin and Euryale. Credits to - [@chargoddard](https://huggingface.co/chargoddard) for developing the fram...
-
 ### AMAZON
 
 #### Amazon: Nova 2 Lite
@@ -113,7 +99,7 @@
 
 #### Magnum v4 72B
 - **ID:** `anthracite-org/magnum-v4-72b`
-- **Context:** 16,384 tokens
+- **Context:** 32,768 tokens
 - **Pricing:** $0.000003/1M prompt, $N/A/1M completion
 - **Description:** This is a series of models designed to replicate the prose quality of the Claude 3 models, specifically Sonnet(https://openrouter.ai/anthropic/claude-3.5-sonnet) and Opus(https://openrouter.ai/anthrop...
 
@@ -133,18 +119,6 @@ See the launch announcement and benchmark results [here](https:/...
 - **Context:** 200,000 tokens
 - **Pricing:** $0.0000008/1M prompt, $N/A/1M completion
 - **Description:** Claude 3.5 Haiku features offers enhanced capabilities in speed, coding accuracy, and tool use. Engineered to excel in real-time applications, it delivers quick response times that are essential for d...
-
-#### Anthropic: Claude 3.7 Sonnet
-- **ID:** `anthropic/claude-3.7-sonnet`
-- **Context:** 200,000 tokens
-- **Pricing:** $0.000003/1M prompt, $N/A/1M completion
-- **Description:** Claude 3.7 Sonnet is an advanced large language model with improved reasoning, coding, and problem-solving capabilities. It introduces a hybrid reasoning approach, allowing users to choose between rap...
-
-#### Anthropic: Claude 3.7 Sonnet (thinking)
-- **ID:** `anthropic/claude-3.7-sonnet:thinking`
-- **Context:** 200,000 tokens
-- **Pricing:** $0.000003/1M prompt, $N/A/1M completion
-- **Description:** Claude 3.7 Sonnet is an advanced large language model with improved reasoning, coding, and problem-solving capabilities. It introduces a hybrid reasoning approach, allowing users to choose between rap...
 
 #### Anthropic: Claude Haiku 4.5
 - **ID:** `anthropic/claude-haiku-4.5`
@@ -190,6 +164,14 @@ Learn more in Anthropic's docs: https://platform.claude.com/docs/e...
 - **Pricing:** $0.000005/1M prompt, $N/A/1M completion
 - **Description:** Opus 4.7 is the next generation of Anthropic's Opus family, built for long-running, asynchronous agents. Building on the coding and agentic strengths of Opus 4.6, it delivers stronger performance on.....
 
+#### Anthropic: Claude Opus 4.7 (Fast)
+- **ID:** `anthropic/claude-opus-4.7-fast`
+- **Context:** 1,000,000 tokens
+- **Pricing:** $0.00003/1M prompt, $N/A/1M completion
+- **Description:** Fast-mode variant of [Opus 4.7](/anthropic/claude-opus-4.7) - identical capabilities with higher output speed at premium 6x pricing.
+
+Learn more in Anthropic's docs: https://platform.claude.com/docs/e...
+
 #### Anthropic: Claude Sonnet 4
 - **ID:** `anthropic/claude-sonnet-4`
 - **Context:** 1,000,000 tokens
@@ -228,16 +210,16 @@ Learn more in Anthropic's docs: https://platform.claude.com/docs/e...
 - **Pricing:** $0.00000018/1M prompt, $N/A/1M completion
 - **Description:** Spotlight is a 7‑billion‑parameter vision‑language model derived from Qwen 2.5‑VL and fine‑tuned by Arcee AI for tight image‑text grounding tasks. It offers a 32 k‑token context window, enabling rich ...
 
-#### Arcee AI: Trinity Large Preview
-- **ID:** `arcee-ai/trinity-large-preview`
-- **Context:** 131,000 tokens
-- **Pricing:** $0.00000015/1M prompt, $N/A/1M completion
-- **Description:** Trinity-Large-Preview is a frontier-scale open-weight language model from Arcee, built as a 400B-parameter sparse Mixture-of-Experts with 13B active parameters per token using 4-of-256 expert routing....
-
 #### Arcee AI: Trinity Large Thinking
 - **ID:** `arcee-ai/trinity-large-thinking`
 - **Context:** 262,144 tokens
 - **Pricing:** $0.00000022/1M prompt, $N/A/1M completion
+- **Description:** Trinity Large Thinking is a powerful open source reasoning model from the team at Arcee AI. It shows strong performance in PinchBench, agentic workloads, and reasoning tasks. Launch video: https://you...
+
+#### Arcee AI: Trinity Large Thinking (free)
+- **ID:** `arcee-ai/trinity-large-thinking:free`
+- **Context:** 262,144 tokens
+- **Pricing:** $0/1M prompt, $N/A/1M completion
 - **Description:** Trinity Large Thinking is a powerful open source reasoning model from the team at Arcee AI. It shows strong performance in PinchBench, agentic workloads, and reasoning tasks. Launch video: https://you...
 
 #### Arcee AI: Trinity Mini
@@ -262,7 +244,7 @@ Learn more in Anthropic's docs: https://platform.claude.com/docs/e...
 
 #### Baidu: ERNIE 4.5 21B A3B
 - **ID:** `baidu/ernie-4.5-21b-a3b`
-- **Context:** 120,000 tokens
+- **Context:** 131,072 tokens
 - **Pricing:** $0.00000007/1M prompt, $N/A/1M completion
 - **Description:** A sophisticated text-based Mixture-of-Experts (MoE) model featuring 21B total parameters with 3B activated per token, delivering exceptional multimodal understanding and generation through heterogeneo...
 
@@ -274,26 +256,26 @@ Learn more in Anthropic's docs: https://platform.claude.com/docs/e...
 
 #### Baidu: ERNIE 4.5 300B A47B 
 - **ID:** `baidu/ernie-4.5-300b-a47b`
-- **Context:** 123,000 tokens
+- **Context:** 131,072 tokens
 - **Pricing:** $0.00000028/1M prompt, $N/A/1M completion
 - **Description:** ERNIE-4.5-300B-A47B is a 300B parameter Mixture-of-Experts (MoE) language model developed by Baidu as part of the ERNIE 4.5 series. It activates 47B parameters per token and supports text generation i...
 
 #### Baidu: ERNIE 4.5 VL 28B A3B
 - **ID:** `baidu/ernie-4.5-vl-28b-a3b`
-- **Context:** 30,000 tokens
+- **Context:** 131,072 tokens
 - **Pricing:** $0.00000014/1M prompt, $N/A/1M completion
 - **Description:** A powerful multimodal Mixture-of-Experts chat model featuring 28B total parameters with 3B activated per token, delivering exceptional text and vision understanding through its innovative heterogeneou...
 
 #### Baidu: ERNIE 4.5 VL 424B A47B 
 - **ID:** `baidu/ernie-4.5-vl-424b-a47b`
-- **Context:** 123,000 tokens
+- **Context:** 131,072 tokens
 - **Pricing:** $0.00000042/1M prompt, $N/A/1M completion
 - **Description:** ERNIE-4.5-VL-424B-A47B is a multimodal Mixture-of-Experts (MoE) model from Baidu’s ERNIE 4.5 series, featuring 424B total parameters with 47B active per token. It is trained jointly on text and image ...
 
-#### Baidu: Qianfan-OCR-Fast (free)
-- **ID:** `baidu/qianfan-ocr-fast:free`
+#### Baidu: Qianfan-OCR-Fast
+- **ID:** `baidu/qianfan-ocr-fast`
 - **Context:** 65,536 tokens
-- **Pricing:** $0/1M prompt, $N/A/1M completion
+- **Pricing:** $0.00000068/1M prompt, $N/A/1M completion
 - **Description:** Qianfan-OCR-Fast is a domain-specific multimodal large model purpose-built for OCR. By leveraging specialized OCR training data while preserving versatile multimodal intelligence, it provides a powerf...
 
 ### BYTEDANCE
@@ -388,13 +370,13 @@ Learn more in Anthropic's docs: https://platform.claude.com/docs/e...
 
 #### DeepSeek: DeepSeek V3.1
 - **ID:** `deepseek/deepseek-chat-v3.1`
-- **Context:** 32,768 tokens
-- **Pricing:** $0.00000015/1M prompt, $N/A/1M completion
+- **Context:** 163,840 tokens
+- **Pricing:** $0.00000021/1M prompt, $N/A/1M completion
 - **Description:** DeepSeek-V3.1 is a large hybrid reasoning model (671B parameters, 37B active) that supports both thinking and non-thinking modes via prompt templates. It extends the DeepSeek-V3 base with a two-phase ...
 
 #### DeepSeek: R1
 - **ID:** `deepseek/deepseek-r1`
-- **Context:** 64,000 tokens
+- **Context:** 163,840 tokens
 - **Pricing:** $0.0000007/1M prompt, $N/A/1M completion
 - **Description:** DeepSeek R1 is here: Performance on par with [OpenAI o1](/openai/o1), but open-sourced and with fully open reasoning tokens. It's 671B parameters in size, with 37B active in an inference pass.......
 
@@ -412,7 +394,7 @@ Learn more in Anthropic's docs: https://platform.claude.com/docs/e...
 
 #### DeepSeek: R1 Distill Qwen 32B
 - **ID:** `deepseek/deepseek-r1-distill-qwen-32b`
-- **Context:** 32,768 tokens
+- **Context:** 128,000 tokens
 - **Pricing:** $0.00000029/1M prompt, $N/A/1M completion
 - **Description:** DeepSeek R1 Distill Qwen 32B is a distilled large language model based on [Qwen 2.5 32B](https://huggingface.co/Qwen/Qwen2.5-32B), using outputs from [DeepSeek R1](/deepseek/deepseek-r1). It outperfor...
 
@@ -437,13 +419,19 @@ Learn more in Anthropic's docs: https://platform.claude.com/docs/e...
 #### DeepSeek: DeepSeek V3.2 Speciale
 - **ID:** `deepseek/deepseek-v3.2-speciale`
 - **Context:** 163,840 tokens
-- **Pricing:** $0.0000004/1M prompt, $N/A/1M completion
+- **Pricing:** $0.000000287/1M prompt, $N/A/1M completion
 - **Description:** DeepSeek-V3.2-Speciale is a high-compute variant of DeepSeek-V3.2 optimized for maximum reasoning and agentic performance. It builds on DeepSeek Sparse Attention (DSA) for efficient long-context proce...
 
 #### DeepSeek: DeepSeek V4 Flash
 - **ID:** `deepseek/deepseek-v4-flash`
 - **Context:** 1,048,576 tokens
-- **Pricing:** $0.00000014/1M prompt, $N/A/1M completion
+- **Pricing:** $0.000000112/1M prompt, $N/A/1M completion
+- **Description:** DeepSeek V4 Flash is an efficiency-optimized Mixture-of-Experts model from DeepSeek with 284B total parameters and 13B activated parameters, supporting a 1M-token context window. It is designed for fa...
+
+#### DeepSeek: DeepSeek V4 Flash (free)
+- **ID:** `deepseek/deepseek-v4-flash:free`
+- **Context:** 1,048,576 tokens
+- **Pricing:** $0/1M prompt, $N/A/1M completion
 - **Description:** DeepSeek V4 Flash is an efficiency-optimized Mixture-of-Experts model from DeepSeek with 284B total parameters and 13B activated parameters, supporting a 1M-token context window. It is designed for fa...
 
 #### DeepSeek: DeepSeek V4 Pro
@@ -464,7 +452,7 @@ Learn more in Anthropic's docs: https://platform.claude.com/docs/e...
 
 #### Google: Gemini 2.0 Flash
 - **ID:** `google/gemini-2.0-flash-001`
-- **Context:** 1,048,576 tokens
+- **Context:** 1,000,000 tokens
 - **Pricing:** $0.0000001/1M prompt, $N/A/1M completion
 - **Description:** Gemini Flash 2.0 offers a significantly faster time to first token (TTFT) compared to [Gemini Flash 1.5](/google/gemini-flash-1.5), while maintaining quality on par with larger models like [Gemini Pro...
 
@@ -530,9 +518,15 @@ Learn more in Anthropic's docs: https://platform.claude.com/docs/e...
 
 #### Google: Nano Banana 2 (Gemini 3.1 Flash Image Preview)
 - **ID:** `google/gemini-3.1-flash-image-preview`
-- **Context:** 65,536 tokens
+- **Context:** 131,072 tokens
 - **Pricing:** $0.0000005/1M prompt, $N/A/1M completion
 - **Description:** Gemini 3.1 Flash Image Preview, a.k.a. "Nano Banana 2," is Google’s latest state of the art image generation and editing model, delivering Pro-level visual quality at Flash speed. It combines......
+
+#### Google: Gemini 3.1 Flash Lite
+- **ID:** `google/gemini-3.1-flash-lite`
+- **Context:** 1,048,576 tokens
+- **Pricing:** $0.00000025/1M prompt, $N/A/1M completion
+- **Description:** Gemini 3.1 Flash Lite is Google’s GA high-efficiency multimodal model optimized for low-latency, high-volume workloads. It supports text, image, video, audio, and PDF inputs, and is designed for light...
 
 #### Google: Gemini 3.1 Flash Lite Preview
 - **ID:** `google/gemini-3.1-flash-lite-preview`
@@ -548,9 +542,15 @@ Learn more in Anthropic's docs: https://platform.claude.com/docs/e...
 
 #### Google: Gemini 3.1 Pro Preview Custom Tools
 - **ID:** `google/gemini-3.1-pro-preview-customtools`
-- **Context:** 1,048,576 tokens
+- **Context:** 1,048,756 tokens
 - **Pricing:** $0.000002/1M prompt, $N/A/1M completion
 - **Description:** Gemini 3.1 Pro Preview Custom Tools is a variant of Gemini 3.1 Pro that improves tool selection behavior by preventing overuse of a general bash tool when more efficient third-party......
+
+#### Google: Gemini 3.5 Flash
+- **ID:** `google/gemini-3.5-flash`
+- **Context:** 1,048,576 tokens
+- **Pricing:** $0.0000015/1M prompt, $N/A/1M completion
+- **Description:** Gemini 3.5 Flash is Google's high-efficiency multimodal model, bringing near-Pro level coding and reasoning at Flash-tier cost and speed. It is highly optimized for coding proficiency and parallel age...
 
 #### Google: Gemma 2 27B
 - **ID:** `google/gemma-2-27b-it`
@@ -597,7 +597,7 @@ Learn more in Anthropic's docs: https://platform.claude.com/docs/e...
 #### Google: Gemma 4 31B
 - **ID:** `google/gemma-4-31b-it`
 - **Context:** 262,144 tokens
-- **Pricing:** $0.00000013/1M prompt, $N/A/1M completion
+- **Pricing:** $0.00000012/1M prompt, $N/A/1M completion
 - **Description:** Gemma 4 31B Instruct is Google DeepMind's 30.7B dense multimodal model supporting text and image input with text output. Features a 256K token context window, configurable thinking/reasoning mode, nat...
 
 #### Google: Gemma 4 31B (free)
@@ -650,17 +650,23 @@ Learn more in Anthropic's docs: https://platform.claude.com/docs/e...
 
 ### INCLUSIONAI
 
-#### inclusionAI: Ling-2.6-1T (free)
-- **ID:** `inclusionai/ling-2.6-1t:free`
+#### inclusionAI: Ling-2.6-1T
+- **ID:** `inclusionai/ling-2.6-1t`
 - **Context:** 262,144 tokens
-- **Pricing:** $0/1M prompt, $N/A/1M completion
+- **Pricing:** $0.000000075/1M prompt, $N/A/1M completion
 - **Description:** Ling-2.6-1T is an instant (instruct) model from inclusionAI and the company’s trillion-parameter flagship, designed for real-world agents that require fast execution and high efficiency at scale. It u...
 
 #### inclusionAI: Ling-2.6-flash
 - **ID:** `inclusionai/ling-2.6-flash`
 - **Context:** 262,144 tokens
-- **Pricing:** $0.00000008/1M prompt, $N/A/1M completion
+- **Pricing:** $0.00000001/1M prompt, $N/A/1M completion
 - **Description:** Ling-2.6-flash is an instant (instruct) model from inclusionAI with 104B total parameters and 7.4B active parameters, designed for real-world agents that require fast responses, strong execution, and ...
+
+#### inclusionAI: Ring-2.6-1T
+- **ID:** `inclusionai/ring-2.6-1t`
+- **Context:** 262,144 tokens
+- **Pricing:** $0.000000075/1M prompt, $N/A/1M completion
+- **Description:** Ring-2.6-1T is a 1T-parameter-scale thinking model with 63B active parameters, built for real-world agent workflows that require both strong capability and operational efficiency. It is optimized for ...
 
 ### INFLECTION
 
@@ -688,7 +694,7 @@ Learn more in Anthropic's docs: https://platform.claude.com/docs/e...
 
 #### LiquidAI: LFM2-24B-A2B
 - **ID:** `liquid/lfm-2-24b-a2b`
-- **Context:** 32,768 tokens
+- **Context:** 128,000 tokens
 - **Pricing:** $0.00000003/1M prompt, $N/A/1M completion
 - **Description:** LFM2-24B-A2B is the largest model in the LFM2 family of hybrid architectures designed for efficient on-device deployment. Built as a 24B parameter Mixture-of-Experts model with only 2B active paramete...
 
@@ -723,7 +729,7 @@ Learn more in Anthropic's docs: https://platform.claude.com/docs/e...
 #### Meta: Llama 3 8B Instruct
 - **ID:** `meta-llama/llama-3-8b-instruct`
 - **Context:** 8,192 tokens
-- **Pricing:** $0.00000003/1M prompt, $N/A/1M completion
+- **Pricing:** $0.00000004/1M prompt, $N/A/1M completion
 - **Description:** Meta's latest class of model (Llama 3) launched with a variety of sizes & flavors. This 8B instruct-tuned version was optimized for high quality dialogue usecases. It has demonstrated strong......
 
 #### Meta: Llama 3.1 70B Instruct
@@ -734,7 +740,7 @@ Learn more in Anthropic's docs: https://platform.claude.com/docs/e...
 
 #### Meta: Llama 3.1 8B Instruct
 - **ID:** `meta-llama/llama-3.1-8b-instruct`
-- **Context:** 16,384 tokens
+- **Context:** 131,072 tokens
 - **Pricing:** $0.00000002/1M prompt, $N/A/1M completion
 - **Description:** Meta's latest class of model (Llama 3.1) launched with a variety of sizes & flavors. This 8B instruct-tuned version is fast and efficient. It has demonstrated strong performance compared to......
 
@@ -746,14 +752,14 @@ Learn more in Anthropic's docs: https://platform.claude.com/docs/e...
 
 #### Meta: Llama 3.2 1B Instruct
 - **ID:** `meta-llama/llama-3.2-1b-instruct`
-- **Context:** 60,000 tokens
+- **Context:** 131,072 tokens
 - **Pricing:** $0.000000027/1M prompt, $N/A/1M completion
 - **Description:** Llama 3.2 1B is a 1-billion-parameter language model focused on efficiently performing natural language tasks, such as summarization, dialogue, and multilingual text analysis. Its smaller size allows ...
 
 #### Meta: Llama 3.2 3B Instruct
 - **ID:** `meta-llama/llama-3.2-3b-instruct`
-- **Context:** 80,000 tokens
-- **Pricing:** $0.000000051/1M prompt, $N/A/1M completion
+- **Context:** 131,072 tokens
+- **Pricing:** $0.0000000509/1M prompt, $N/A/1M completion
 - **Description:** Llama 3.2 3B is a 3-billion-parameter multilingual large language model, optimized for advanced natural language processing tasks like dialogue generation, reasoning, and summarization. Designed with ...
 
 #### Meta: Llama 3.2 3B Instruct (free)
@@ -770,7 +776,7 @@ Learn more in Anthropic's docs: https://platform.claude.com/docs/e...
 
 #### Meta: Llama 3.3 70B Instruct (free)
 - **ID:** `meta-llama/llama-3.3-70b-instruct:free`
-- **Context:** 65,536 tokens
+- **Context:** 131,072 tokens
 - **Pricing:** $0/1M prompt, $N/A/1M completion
 - **Description:** The Meta Llama 3.3 multilingual large language model (LLM) is a pretrained and instruction tuned generative model in 70B (text in/text out). The Llama 3.3 instruction tuned text only model......
 
@@ -782,14 +788,14 @@ Learn more in Anthropic's docs: https://platform.claude.com/docs/e...
 
 #### Meta: Llama 4 Scout
 - **ID:** `meta-llama/llama-4-scout`
-- **Context:** 327,680 tokens
+- **Context:** 10,000,000 tokens
 - **Pricing:** $0.00000008/1M prompt, $N/A/1M completion
 - **Description:** Llama 4 Scout 17B Instruct (16E) is a mixture-of-experts (MoE) language model developed by Meta, activating 17 billion parameters out of a total of 109B. It supports native multimodal input......
 
 #### Llama Guard 3 8B
 - **ID:** `meta-llama/llama-guard-3-8b`
 - **Context:** 131,072 tokens
-- **Pricing:** $0.00000048/1M prompt, $N/A/1M completion
+- **Pricing:** $0.000000484/1M prompt, $N/A/1M completion
 - **Description:** Llama Guard 3 is a Llama-3.1-8B pretrained model, fine-tuned for content safety classification. Similar to previous versions, it can be used to classify content in both LLM inputs (prompt classificati...
 
 #### Meta: Llama Guard 4 12B
@@ -808,13 +814,13 @@ Learn more in Anthropic's docs: https://platform.claude.com/docs/e...
 
 #### Microsoft: Phi 4 Mini Instruct
 - **ID:** `microsoft/phi-4-mini-instruct`
-- **Context:** 128,000 tokens
+- **Context:** 131,072 tokens
 - **Pricing:** $0.00000008/1M prompt, $N/A/1M completion
 - **Description:** Phi-4-mini-instruct is a lightweight open model built upon synthetic data and filtered publicly available websites - with a focus on high-quality, reasoning dense data. The model belongs to the Phi-4....
 
 #### WizardLM-2 8x22B
 - **ID:** `microsoft/wizardlm-2-8x22b`
-- **Context:** 65,535 tokens
+- **Context:** 65,536 tokens
 - **Pricing:** $0.00000062/1M prompt, $N/A/1M completion
 - **Description:** WizardLM-2 8x22B is Microsoft AI's most advanced Wizard model. It demonstrates highly competitive performance compared to leading proprietary models, and it consistently outperforms all existing state...
 
@@ -834,7 +840,7 @@ Learn more in Anthropic's docs: https://platform.claude.com/docs/e...
 
 #### MiniMax: MiniMax M2
 - **ID:** `minimax/minimax-m2`
-- **Context:** 196,608 tokens
+- **Context:** 204,800 tokens
 - **Pricing:** $0.000000255/1M prompt, $N/A/1M completion
 - **Description:** MiniMax-M2 is a compact, high-efficiency large language model optimized for end-to-end coding and agentic workflows. With 10 billion activated parameters (230 billion total), it delivers near-frontier...
 
@@ -846,26 +852,26 @@ Learn more in Anthropic's docs: https://platform.claude.com/docs/e...
 
 #### MiniMax: MiniMax M2.1
 - **ID:** `minimax/minimax-m2.1`
-- **Context:** 196,608 tokens
+- **Context:** 204,800 tokens
 - **Pricing:** $0.00000029/1M prompt, $N/A/1M completion
 - **Description:** MiniMax-M2.1 is a lightweight, state-of-the-art large language model optimized for coding, agentic workflows, and modern application development. With only 10 billion activated parameters, it delivers...
 
 #### MiniMax: MiniMax M2.5
 - **ID:** `minimax/minimax-m2.5`
-- **Context:** 196,608 tokens
+- **Context:** 204,800 tokens
 - **Pricing:** $0.00000015/1M prompt, $N/A/1M completion
 - **Description:** MiniMax-M2.5 is a SOTA large language model designed for real-world productivity. Trained in a diverse range of complex real-world digital working environments, M2.5 builds upon the coding expertise o...
 
 #### MiniMax: MiniMax M2.5 (free)
 - **ID:** `minimax/minimax-m2.5:free`
-- **Context:** 196,608 tokens
+- **Context:** 204,800 tokens
 - **Pricing:** $0/1M prompt, $N/A/1M completion
 - **Description:** MiniMax-M2.5 is a SOTA large language model designed for real-world productivity. Trained in a diverse range of complex real-world digital working environments, M2.5 builds upon the coding expertise o...
 
 #### MiniMax: MiniMax M2.7
 - **ID:** `minimax/minimax-m2.7`
-- **Context:** 196,608 tokens
-- **Pricing:** $0.0000003/1M prompt, $N/A/1M completion
+- **Context:** 204,800 tokens
+- **Pricing:** $0.000000279/1M prompt, $N/A/1M completion
 - **Description:** MiniMax-M2.7 is a next-generation large language model designed for autonomous, real-world productivity and continuous improvement. Built to actively participate in its own evolution, M2.7 integrates ...
 
 ### MISTRALAI
@@ -914,7 +920,7 @@ Learn more in Anthropic's docs: https://platform.claude.com/docs/e...
 
 #### Mistral: Mistral 7B Instruct v0.1
 - **ID:** `mistralai/mistral-7b-instruct-v0.1`
-- **Context:** 2,824 tokens
+- **Context:** 4,096 tokens
 - **Pricing:** $0.00000011/1M prompt, $N/A/1M completion
 - **Description:** A 7.3B parameter model that outperforms Llama 2 13B on all benchmarks, with optimizations for speed and context length....
 
@@ -987,7 +993,7 @@ Learn more in Anthropic's docs: https://platform.claude.com/docs/e...
 #### Mistral: Mistral Small 3.1 24B
 - **ID:** `mistralai/mistral-small-3.1-24b-instruct`
 - **Context:** 128,000 tokens
-- **Pricing:** $0.00000035/1M prompt, $N/A/1M completion
+- **Pricing:** $0.000000351/1M prompt, $N/A/1M completion
 - **Description:** Mistral Small 3.1 24B Instruct is an upgraded variant of Mistral Small 3 (2501), featuring 24 billion parameters with advanced multimodal capabilities. It provides state-of-the-art performance in text...
 
 #### Mistral: Mistral Small 3.2 24B
@@ -1001,12 +1007,6 @@ Learn more in Anthropic's docs: https://platform.claude.com/docs/e...
 - **Context:** 65,536 tokens
 - **Pricing:** $0.000002/1M prompt, $N/A/1M completion
 - **Description:** Mistral's official instruct fine-tuned version of [Mixtral 8x22B](/models/mistralai/mixtral-8x22b). It uses 39B active parameters out of 141B, offering unparalleled cost efficiency for its size. Its s...
-
-#### Mistral: Mixtral 8x7B Instruct
-- **ID:** `mistralai/mixtral-8x7b-instruct`
-- **Context:** 32,768 tokens
-- **Pricing:** $0.00000054/1M prompt, $N/A/1M completion
-- **Description:** Mixtral 8x7B Instruct is a pretrained generative Sparse Mixture of Experts, by Mistral AI, for chat and instruction use. Incorporates 8 experts (feed-forward networks) for a total of 47 billion......
 
 #### Mistral: Pixtral Large 2411
 - **ID:** `mistralai/pixtral-large-2411`
@@ -1031,7 +1031,7 @@ Learn more in Anthropic's docs: https://platform.claude.com/docs/e...
 #### MoonshotAI: Kimi K2 0905
 - **ID:** `moonshotai/kimi-k2-0905`
 - **Context:** 262,144 tokens
-- **Pricing:** $0.0000004/1M prompt, $N/A/1M completion
+- **Pricing:** $0.0000006/1M prompt, $N/A/1M completion
 - **Description:** Kimi K2 0905 is the September update of [Kimi K2 0711](moonshotai/kimi-k2). It is a large-scale Mixture-of-Experts (MoE) language model developed by Moonshot AI, featuring 1 trillion total parameters ...
 
 #### MoonshotAI: Kimi K2 Thinking
@@ -1043,13 +1043,13 @@ Learn more in Anthropic's docs: https://platform.claude.com/docs/e...
 #### MoonshotAI: Kimi K2.5
 - **ID:** `moonshotai/kimi-k2.5`
 - **Context:** 262,144 tokens
-- **Pricing:** $0.00000044/1M prompt, $N/A/1M completion
+- **Pricing:** $0.0000004/1M prompt, $N/A/1M completion
 - **Description:** Kimi K2.5 is Moonshot AI's native multimodal model, delivering state-of-the-art visual coding capability and a self-directed agent swarm paradigm. Built on Kimi K2 with continued pretraining over appr...
 
 #### MoonshotAI: Kimi K2.6
 - **ID:** `moonshotai/kimi-k2.6`
 - **Context:** 262,144 tokens
-- **Pricing:** $0.00000075/1M prompt, $N/A/1M completion
+- **Pricing:** $0.00000073/1M prompt, $N/A/1M completion
 - **Description:** Kimi K2.6 is Moonshot AI's next-generation multimodal model, designed for long-horizon coding, coding-driven UI/UX generation, and multi-agent orchestration. It handles complex end-to-end coding tasks...
 
 ### MORPH
@@ -1114,12 +1114,6 @@ Learn more in Anthropic's docs: https://platform.claude.com/docs/e...
 
 ### NVIDIA
 
-#### NVIDIA: Llama 3.1 Nemotron 70B Instruct
-- **ID:** `nvidia/llama-3.1-nemotron-70b-instruct`
-- **Context:** 131,072 tokens
-- **Pricing:** $0.0000012/1M prompt, $N/A/1M completion
-- **Description:** NVIDIA's Llama 3.1 Nemotron 70B is a language model designed for generating precise and useful responses. Leveraging [Llama 3.1 70B](/models/meta-llama/llama-3.1-70b-instruct) architecture and Reinfor...
-
 #### NVIDIA: Llama 3.3 Nemotron Super 49B V1.5
 - **ID:** `nvidia/llama-3.3-nemotron-super-49b-v1.5`
 - **Context:** 131,072 tokens
@@ -1146,21 +1140,15 @@ Learn more in Anthropic's docs: https://platform.claude.com/docs/e...
 
 #### NVIDIA: Nemotron 3 Super
 - **ID:** `nvidia/nemotron-3-super-120b-a12b`
-- **Context:** 262,144 tokens
+- **Context:** 1,000,000 tokens
 - **Pricing:** $0.00000009/1M prompt, $N/A/1M completion
 - **Description:** NVIDIA Nemotron 3 Super is a 120B-parameter open hybrid MoE model, activating just 12B parameters for maximum compute efficiency and accuracy in complex multi-agent applications. Built on a hybrid Mam...
 
 #### NVIDIA: Nemotron 3 Super (free)
 - **ID:** `nvidia/nemotron-3-super-120b-a12b:free`
-- **Context:** 262,144 tokens
+- **Context:** 1,000,000 tokens
 - **Pricing:** $0/1M prompt, $N/A/1M completion
 - **Description:** NVIDIA Nemotron 3 Super is a 120B-parameter open hybrid MoE model, activating just 12B parameters for maximum compute efficiency and accuracy in complex multi-agent applications. Built on a hybrid Mam...
-
-#### NVIDIA: Nemotron Nano 12B 2 VL
-- **ID:** `nvidia/nemotron-nano-12b-v2-vl`
-- **Context:** 131,072 tokens
-- **Pricing:** $0.0000002/1M prompt, $N/A/1M completion
-- **Description:** NVIDIA Nemotron Nano 2 VL is a 12-billion-parameter open multimodal reasoning model designed for video understanding and document intelligence. It introduces a hybrid Transformer-Mamba architecture, c...
 
 #### NVIDIA: Nemotron Nano 12B 2 VL (free)
 - **ID:** `nvidia/nemotron-nano-12b-v2-vl:free`
@@ -1590,7 +1578,7 @@ Note: This model always uses the 'web_search' tool which adds addi...
 - **ID:** `openrouter/auto`
 - **Context:** 2,000,000 tokens
 - **Pricing:** $-1/1M prompt, $N/A/1M completion
-- **Description:** "Your prompt will be processed by a meta-model and routed to one of dozens of models (see below), optimizing for the best possible output. To see which model was used,......
+- **Description:** Your prompt will be processed by a meta-model and routed to one of dozens of models (see below), optimizing for the best possible output. To see which model was used,......
 
 #### Body Builder (beta)
 - **ID:** `openrouter/bodybuilder`
@@ -1612,9 +1600,17 @@ Note: This model always uses the 'web_search' tool which adds addi...
 
 #### Pareto Code Router
 - **ID:** `openrouter/pareto-code`
-- **Context:** 200,000 tokens
+- **Context:** 2,000,000 tokens
 - **Pricing:** $-1/1M prompt, $N/A/1M completion
-- **Description:** The Pareto Router is a way to have OpenRouter always pick a strong coding model for your needs without committing to a specific one. You express a single `min_coding_score` preference......
+- **Description:** The Pareto Router maintains a tiered shortlist of strong coding models, ranked by [Artificial Analysis](https://artificialanalysis.ai/) coding percentiles. Set min_coding_score between 0 and 1 on the ...
+
+### PERCEPTRON
+
+#### Perceptron: Perceptron Mk1
+- **ID:** `perceptron/perceptron-mk1`
+- **Context:** 32,768 tokens
+- **Pricing:** $0.00000015/1M prompt, $N/A/1M completion
+- **Description:** Perceptron Mk1 (Mark One) is Perceptron's highest-quality vision-language model for video and embodied reasoning.** It accepts image and video inputs paired with natural language queries, and produces...
 
 ### PERPLEXITY
 
@@ -1674,27 +1670,21 @@ Note: This model always uses the 'web_search' tool which adds addi...
 
 #### Qwen2.5 72B Instruct
 - **ID:** `qwen/qwen-2.5-72b-instruct`
-- **Context:** 32,768 tokens
+- **Context:** 131,072 tokens
 - **Pricing:** $0.00000036/1M prompt, $N/A/1M completion
 - **Description:** Qwen2.5 72B is the latest series of Qwen large language models. Qwen2.5 brings the following improvements upon Qwen2: - Significantly more knowledge and has greatly improved capabilities in coding and...
 
 #### Qwen: Qwen2.5 7B Instruct
 - **ID:** `qwen/qwen-2.5-7b-instruct`
-- **Context:** 32,768 tokens
+- **Context:** 131,072 tokens
 - **Pricing:** $0.00000004/1M prompt, $N/A/1M completion
 - **Description:** Qwen2.5 7B is the latest series of Qwen large language models. Qwen2.5 brings the following improvements upon Qwen2: - Significantly more knowledge and has greatly improved capabilities in coding and....
 
 #### Qwen2.5 Coder 32B Instruct
 - **ID:** `qwen/qwen-2.5-coder-32b-instruct`
-- **Context:** 32,768 tokens
+- **Context:** 128,000 tokens
 - **Pricing:** $0.00000066/1M prompt, $N/A/1M completion
 - **Description:** Qwen2.5-Coder is the latest series of Code-Specific Qwen large language models (formerly known as CodeQwen). Qwen2.5-Coder brings the following improvements upon CodeQwen1.5: - Significantly improveme...
-
-#### Qwen: Qwen-Max 
-- **ID:** `qwen/qwen-max`
-- **Context:** 32,768 tokens
-- **Pricing:** $0.00000104/1M prompt, $N/A/1M completion
-- **Description:** Qwen-Max, based on Qwen2.5, provides the best inference performance among [Qwen models](/qwen), especially for complex multi-step tasks. It's a large-scale MoE model that has been pretrained on over 2...
 
 #### Qwen: Qwen-Plus
 - **ID:** `qwen/qwen-plus`
@@ -1714,35 +1704,16 @@ Note: This model always uses the 'web_search' tool which adds addi...
 - **Pricing:** $0.00000026/1M prompt, $N/A/1M completion
 - **Description:** Qwen Plus 0728, based on the Qwen3 foundation model, is a 1 million context hybrid reasoning model with a balanced performance, speed, and cost combination....
 
-#### Qwen: Qwen-Turbo
-- **ID:** `qwen/qwen-turbo`
-- **Context:** 131,072 tokens
-- **Pricing:** $0.0000000325/1M prompt, $N/A/1M completion
-- **Description:** Qwen-Turbo, based on Qwen2.5, is a 1M context model that provides fast speed and low cost, suitable for simple tasks....
-
-#### Qwen: Qwen VL Max
-- **ID:** `qwen/qwen-vl-max`
-- **Context:** 131,072 tokens
-- **Pricing:** $0.00000052/1M prompt, $N/A/1M completion
-- **Description:** Qwen VL Max is a visual understanding model with 7500 tokens context length. It excels in delivering optimal performance for a broader spectrum of complex tasks.
-...
-
-#### Qwen: Qwen VL Plus
-- **ID:** `qwen/qwen-vl-plus`
-- **Context:** 131,072 tokens
-- **Pricing:** $0.0000001365/1M prompt, $N/A/1M completion
-- **Description:** Qwen's Enhanced Large Visual Language Model. Significantly upgraded for detailed recognition capabilities and text recognition abilities, supporting ultra-high pixel resolutions up to millions of pixe...
-
 #### Qwen: Qwen2.5 VL 72B Instruct
 - **ID:** `qwen/qwen2.5-vl-72b-instruct`
-- **Context:** 32,000 tokens
+- **Context:** 131,072 tokens
 - **Pricing:** $0.00000025/1M prompt, $N/A/1M completion
 - **Description:** Qwen2.5-VL is proficient in recognizing common objects such as flowers, birds, fish, and insects. It is also highly capable of analyzing texts, charts, icons, graphics, and layouts within images....
 
 #### Qwen: Qwen3 14B
 - **ID:** `qwen/qwen3-14b`
-- **Context:** 40,960 tokens
-- **Pricing:** $0.00000006/1M prompt, $N/A/1M completion
+- **Context:** 131,702 tokens
+- **Pricing:** $0.0000001/1M prompt, $N/A/1M completion
 - **Description:** Qwen3-14B is a dense 14.8B parameter causal language model from the Qwen3 series, designed for both complex reasoning and efficient dialogue. It supports seamless switching between a "thinking" mode f...
 
 #### Qwen: Qwen3 235B A22B
@@ -1759,13 +1730,13 @@ Note: This model always uses the 'web_search' tool which adds addi...
 
 #### Qwen: Qwen3 235B A22B Thinking 2507
 - **ID:** `qwen/qwen3-235b-a22b-thinking-2507`
-- **Context:** 131,072 tokens
+- **Context:** 262,144 tokens
 - **Pricing:** $0.0000001495/1M prompt, $N/A/1M completion
 - **Description:** Qwen3-235B-A22B-Thinking-2507 is a high-performance, open-weight Mixture-of-Experts (MoE) language model optimized for complex reasoning tasks. It activates 22B of its 235B parameters per forward pass...
 
 #### Qwen: Qwen3 30B A3B
 - **ID:** `qwen/qwen3-30b-a3b`
-- **Context:** 40,960 tokens
+- **Context:** 131,072 tokens
 - **Pricing:** $0.00000009/1M prompt, $N/A/1M completion
 - **Description:** Qwen3, the latest generation in the Qwen large language model series, features both dense and mixture-of-experts (MoE) architectures to excel in reasoning, multilingual support, and advanced agent tas...
 
@@ -1783,19 +1754,19 @@ Note: This model always uses the 'web_search' tool which adds addi...
 
 #### Qwen: Qwen3 32B
 - **ID:** `qwen/qwen3-32b`
-- **Context:** 40,960 tokens
+- **Context:** 131,072 tokens
 - **Pricing:** $0.00000008/1M prompt, $N/A/1M completion
 - **Description:** Qwen3-32B is a dense 32.8B parameter causal language model from the Qwen3 series, optimized for both complex reasoning and efficient dialogue. It supports seamless switching between a "thinking" mode ...
 
 #### Qwen: Qwen3 8B
 - **ID:** `qwen/qwen3-8b`
-- **Context:** 40,960 tokens
+- **Context:** 131,072 tokens
 - **Pricing:** $0.00000005/1M prompt, $N/A/1M completion
 - **Description:** Qwen3-8B is a dense 8.2B parameter causal language model from the Qwen3 series, designed for both reasoning-heavy tasks and efficient dialogue. It supports seamless switching between "thinking" mode f...
 
 #### Qwen: Qwen3 Coder 480B A35B
 - **ID:** `qwen/qwen3-coder`
-- **Context:** 262,144 tokens
+- **Context:** 1,048,576 tokens
 - **Pricing:** $0.00000022/1M prompt, $N/A/1M completion
 - **Description:** Qwen3-Coder-480B-A35B-Instruct is a Mixture-of-Experts (MoE) code generation model developed by the Qwen team. It is optimized for agentic coding tasks such as function calling, tool use, and long-con...
 
@@ -1825,7 +1796,7 @@ Note: This model always uses the 'web_search' tool which adds addi...
 
 #### Qwen: Qwen3 Coder 480B A35B (free)
 - **ID:** `qwen/qwen3-coder:free`
-- **Context:** 262,000 tokens
+- **Context:** 1,048,576 tokens
 - **Pricing:** $0/1M prompt, $N/A/1M completion
 - **Description:** Qwen3-Coder-480B-A35B-Instruct is a Mixture-of-Experts (MoE) code generation model developed by the Qwen team. It is optimized for agentic coding tasks such as function calling, tool use, and long-con...
 
@@ -1855,7 +1826,7 @@ Note: This model always uses the 'web_search' tool which adds addi...
 
 #### Qwen: Qwen3 Next 80B A3B Thinking
 - **ID:** `qwen/qwen3-next-80b-a3b-thinking`
-- **Context:** 131,072 tokens
+- **Context:** 262,144 tokens
 - **Pricing:** $0.0000000975/1M prompt, $N/A/1M completion
 - **Description:** Qwen3-Next-80B-A3B-Thinking is a reasoning-first chat model in the Qwen3-Next line that outputs structured “thinking” traces by default. It’s designed for hard multi-step problems; math proofs, code s...
 
@@ -1873,7 +1844,7 @@ Note: This model always uses the 'web_search' tool which adds addi...
 
 #### Qwen: Qwen3 VL 30B A3B Instruct
 - **ID:** `qwen/qwen3-vl-30b-a3b-instruct`
-- **Context:** 131,072 tokens
+- **Context:** 262,144 tokens
 - **Pricing:** $0.00000013/1M prompt, $N/A/1M completion
 - **Description:** Qwen3-VL-30B-A3B-Instruct is a multimodal model that unifies strong text generation with visual understanding for images and videos. Its Instruct variant optimizes instruction-following for general mu...
 
@@ -1885,19 +1856,19 @@ Note: This model always uses the 'web_search' tool which adds addi...
 
 #### Qwen: Qwen3 VL 32B Instruct
 - **ID:** `qwen/qwen3-vl-32b-instruct`
-- **Context:** 131,072 tokens
+- **Context:** 262,144 tokens
 - **Pricing:** $0.000000104/1M prompt, $N/A/1M completion
 - **Description:** Qwen3-VL-32B-Instruct is a large-scale multimodal vision-language model designed for high-precision understanding and reasoning across text, images, and video. With 32 billion parameters, it combines ...
 
 #### Qwen: Qwen3 VL 8B Instruct
 - **ID:** `qwen/qwen3-vl-8b-instruct`
-- **Context:** 131,072 tokens
+- **Context:** 256,000 tokens
 - **Pricing:** $0.00000008/1M prompt, $N/A/1M completion
 - **Description:** Qwen3-VL-8B-Instruct is a multimodal vision-language model from the Qwen3-VL series, built for high-fidelity understanding and reasoning across text, images, and video. It features improved multimodal...
 
 #### Qwen: Qwen3 VL 8B Thinking
 - **ID:** `qwen/qwen3-vl-8b-thinking`
-- **Context:** 131,072 tokens
+- **Context:** 256,000 tokens
 - **Pricing:** $0.000000117/1M prompt, $N/A/1M completion
 - **Description:** Qwen3-VL-8B-Thinking is the reasoning-optimized variant of the Qwen3-VL-8B multimodal model, designed for advanced visual and textual reasoning across complex scenes, documents, and temporal sequences...
 
@@ -1916,7 +1887,7 @@ Note: This model always uses the 'web_search' tool which adds addi...
 #### Qwen: Qwen3.5-35B-A3B
 - **ID:** `qwen/qwen3.5-35b-a3b`
 - **Context:** 262,144 tokens
-- **Pricing:** $0.00000015/1M prompt, $N/A/1M completion
+- **Pricing:** $0.000000139/1M prompt, $N/A/1M completion
 - **Description:** The Qwen3.5 Series 35B-A3B is a native vision-language model designed with a hybrid architecture that integrates linear attention mechanisms and a sparse mixture-of-experts model, achieving higher inf...
 
 #### Qwen: Qwen3.5 397B A17B
@@ -1928,7 +1899,7 @@ Note: This model always uses the 'web_search' tool which adds addi...
 #### Qwen: Qwen3.5-9B
 - **ID:** `qwen/qwen3.5-9b`
 - **Context:** 262,144 tokens
-- **Pricing:** $0.0000001/1M prompt, $N/A/1M completion
+- **Pricing:** $0.00000004/1M prompt, $N/A/1M completion
 - **Description:** Qwen3.5-9B is a multimodal foundation model from the Qwen3.5 family, designed to deliver strong reasoning, coding, and visual understanding in an efficient 9B-parameter architecture. It uses a unified...
 
 #### Qwen: Qwen3.5-Flash
@@ -1946,13 +1917,13 @@ Note: This model always uses the 'web_search' tool which adds addi...
 #### Qwen: Qwen3.5 Plus 2026-04-20
 - **ID:** `qwen/qwen3.5-plus-20260420`
 - **Context:** 1,000,000 tokens
-- **Pricing:** $0.0000004/1M prompt, $N/A/1M completion
+- **Pricing:** $0.0000003/1M prompt, $N/A/1M completion
 - **Description:** Qwen3.5 Plus (April 2026) is a large-scale multimodal language model from Alibaba. It accepts text, image, and video input and produces text output, with a 1M token context window. This......
 
 #### Qwen: Qwen3.6 27B
 - **ID:** `qwen/qwen3.6-27b`
 - **Context:** 262,144 tokens
-- **Pricing:** $0.00000032/1M prompt, $N/A/1M completion
+- **Pricing:** $0.000000317/1M prompt, $N/A/1M completion
 - **Description:** Qwen3.6 27B is a dense 27-billion-parameter language model from the Qwen Team at Alibaba, released in April 2026. It features hybrid multimodal capabilities — accepting text, image, and video inputs.....
 
 #### Qwen: Qwen3.6 35B A3B
@@ -1964,7 +1935,7 @@ Note: This model always uses the 'web_search' tool which adds addi...
 #### Qwen: Qwen3.6 Flash
 - **ID:** `qwen/qwen3.6-flash`
 - **Context:** 1,000,000 tokens
-- **Pricing:** $0.00000025/1M prompt, $N/A/1M completion
+- **Pricing:** $0.0000001875/1M prompt, $N/A/1M completion
 - **Description:** Qwen3.6 Flash is a fast, efficient language model from Alibaba's Qwen 3.6 series. It supports text, image, and video input with a 1M token context window. Tiered pricing kicks in......
 
 #### Qwen: Qwen3.6 Max Preview
@@ -1978,6 +1949,12 @@ Note: This model always uses the 'web_search' tool which adds addi...
 - **Context:** 1,000,000 tokens
 - **Pricing:** $0.000000325/1M prompt, $N/A/1M completion
 - **Description:** Qwen 3.6 Plus builds on a hybrid architecture that combines efficient linear attention with sparse mixture-of-experts routing, enabling strong scalability and high-performance inference. Compared to t...
+
+#### Qwen: Qwen3.7 Max
+- **ID:** `qwen/qwen3.7-max`
+- **Context:** 1,000,000 tokens
+- **Pricing:** $0.0000025/1M prompt, $N/A/1M completion
+- **Description:** Qwen3.7-Max is the flagship model in Alibaba's Qwen3.7 series. It supports text input and output and is designed for agent-centric workloads, with particular strengths in coding, office and productivi...
 
 ### REKAAI
 
@@ -2044,7 +2021,7 @@ Note: This model always uses the 'web_search' tool which adds addi...
 #### StepFun: Step 3.5 Flash
 - **ID:** `stepfun/step-3.5-flash`
 - **Context:** 262,144 tokens
-- **Pricing:** $0.0000001/1M prompt, $N/A/1M completion
+- **Pricing:** $0.00000009/1M prompt, $N/A/1M completion
 - **Description:** Step 3.5 Flash is StepFun's most capable open-source foundation model. Built on a sparse Mixture of Experts (MoE) architecture, it selectively activates only 11B of its 196B parameters per token.......
 
 ### SWITCHPOINT
@@ -2063,10 +2040,10 @@ Note: This model always uses the 'web_search' tool which adds addi...
 - **Pricing:** $0.00000014/1M prompt, $N/A/1M completion
 - **Description:** Hunyuan-A13B is a 13B active parameter Mixture-of-Experts (MoE) language model developed by Tencent, with a total parameter count of 80B and support for reasoning via Chain-of-Thought. It offers compe...
 
-#### Tencent: Hy3 preview (free)
-- **ID:** `tencent/hy3-preview:free`
+#### Tencent: Hy3 preview
+- **ID:** `tencent/hy3-preview`
 - **Context:** 262,144 tokens
-- **Pricing:** $0/1M prompt, $N/A/1M completion
+- **Pricing:** $0.000000066/1M prompt, $N/A/1M completion
 - **Description:** Hy3 preview is a high-efficiency Mixture-of-Experts model from Tencent designed for agentic workflows and production use. It supports configurable reasoning levels across disabled, low, and high modes...
 
 ### THEDRUMMER
@@ -2095,14 +2072,6 @@ Note: This model always uses the 'web_search' tool which adds addi...
 - **Pricing:** $0.0000004/1M prompt, $N/A/1M completion
 - **Description:** UnslopNemo v4.1 is the latest addition from the creator of Rocinante, designed for adventure writing and role-play scenarios....
 
-### TNGTECH
-
-#### TNG: DeepSeek R1T2 Chimera
-- **ID:** `tngtech/deepseek-r1t2-chimera`
-- **Context:** 163,840 tokens
-- **Pricing:** $0.0000003/1M prompt, $N/A/1M completion
-- **Description:** DeepSeek-TNG-R1T2-Chimera is the second-generation Chimera model from TNG Tech. It is a 671 B-parameter mixture-of-experts text-generation model assembled from DeepSeek-AI’s R1-0528, R1, and V3-0324 c...
-
 ### UNDI95
 
 #### ReMM SLERP 13B
@@ -2129,53 +2098,11 @@ Note: This model always uses the 'web_search' tool which adds addi...
 
 ### X-AI
 
-#### xAI: Grok 3
-- **ID:** `x-ai/grok-3`
-- **Context:** 131,072 tokens
-- **Pricing:** $0.000003/1M prompt, $N/A/1M completion
-- **Description:** Grok 3 is the latest model from xAI. It's their flagship model that excels at enterprise use cases like data extraction, coding, and text summarization. Possesses deep domain knowledge in......
-
-#### xAI: Grok 3 Beta
-- **ID:** `x-ai/grok-3-beta`
-- **Context:** 131,072 tokens
-- **Pricing:** $0.000003/1M prompt, $N/A/1M completion
-- **Description:** Grok 3 is the latest model from xAI. It's their flagship model that excels at enterprise use cases like data extraction, coding, and text summarization. Possesses deep domain knowledge in......
-
-#### xAI: Grok 3 Mini
-- **ID:** `x-ai/grok-3-mini`
-- **Context:** 131,072 tokens
-- **Pricing:** $0.0000003/1M prompt, $N/A/1M completion
-- **Description:** A lightweight model that thinks before responding. Fast, smart, and great for logic-based tasks that do not require deep domain knowledge. The raw thinking traces are accessible....
-
-#### xAI: Grok 3 Mini Beta
-- **ID:** `x-ai/grok-3-mini-beta`
-- **Context:** 131,072 tokens
-- **Pricing:** $0.0000003/1M prompt, $N/A/1M completion
-- **Description:** Grok 3 Mini is a lightweight, smaller thinking model. Unlike traditional models that generate answers immediately, Grok 3 Mini thinks before responding. It’s ideal for reasoning-heavy tasks that don’t...
-
-#### xAI: Grok 4
-- **ID:** `x-ai/grok-4`
-- **Context:** 256,000 tokens
-- **Pricing:** $0.000003/1M prompt, $N/A/1M completion
-- **Description:** Grok 4 is xAI's latest reasoning model with a 256k context window. It supports parallel tool calling, structured outputs, and both image and text inputs. Note that reasoning is not......
-
-#### xAI: Grok 4 Fast
-- **ID:** `x-ai/grok-4-fast`
-- **Context:** 2,000,000 tokens
-- **Pricing:** $0.0000002/1M prompt, $N/A/1M completion
-- **Description:** Grok 4 Fast is xAI's latest multimodal model with SOTA cost-efficiency and a 2M token context window. It comes in two flavors: non-reasoning and reasoning. Read more about the model......
-
-#### xAI: Grok 4.1 Fast
-- **ID:** `x-ai/grok-4.1-fast`
-- **Context:** 2,000,000 tokens
-- **Pricing:** $0.0000002/1M prompt, $N/A/1M completion
-- **Description:** Grok 4.1 Fast is xAI's best agentic tool calling model that shines in real-world use cases like customer support and deep research. 2M context window. Reasoning can be enabled/disabled using......
-
 #### xAI: Grok 4.20
 - **ID:** `x-ai/grok-4.20`
 - **Context:** 2,000,000 tokens
 - **Pricing:** $0.00000125/1M prompt, $N/A/1M completion
-- **Description:** Grok 4.20 is xAI's newest flagship model with industry-leading speed and agentic tool calling capabilities. It combines the lowest hallucination rate on the market with strict prompt adherance, delive...
+- **Description:** Grok 4.20 is a reasoning model from xAI with industry-leading speed and agentic tool calling capabilities. It combines the lowest hallucination rate on the market with strict prompt adherance, deliver...
 
 #### xAI: Grok 4.20 Multi-Agent
 - **ID:** `x-ai/grok-4.20-multi-agent`
@@ -2189,18 +2116,18 @@ Note: This model always uses the 'web_search' tool which adds addi...
 - **Pricing:** $0.00000125/1M prompt, $N/A/1M completion
 - **Description:** Grok 4.3 is a reasoning model from xAI. It accepts text and image inputs with text output, and is suited for agentic workflows, instruction-following tasks, and applications requiring high factual......
 
-#### xAI: Grok Code Fast 1
-- **ID:** `x-ai/grok-code-fast-1`
+#### xAI: Grok Build 0.1
+- **ID:** `x-ai/grok-build-0.1`
 - **Context:** 256,000 tokens
-- **Pricing:** $0.0000002/1M prompt, $N/A/1M completion
-- **Description:** Grok Code Fast 1 is a speedy and economical reasoning model that excels at agentic coding. With reasoning traces visible in the response, developers can steer Grok Code for high-quality......
+- **Pricing:** $0.000001/1M prompt, $N/A/1M completion
+- **Description:** Grok Build 0.1 is xAI’s fast coding model trained specifically for agentic software engineering workflows. It supports text and image inputs with text output, and is optimized for interactive coding.....
 
 ### XIAOMI
 
 #### Xiaomi: MiMo-V2-Flash
 - **ID:** `xiaomi/mimo-v2-flash`
 - **Context:** 262,144 tokens
-- **Pricing:** $0.00000009/1M prompt, $N/A/1M completion
+- **Pricing:** $0.0000001/1M prompt, $N/A/1M completion
 - **Description:** MiMo-V2-Flash is an open-source foundation language model developed by Xiaomi. It is a Mixture-of-Experts model with 309B total parameters and 15B active parameters, adopting hybrid attention architec...
 
 #### Xiaomi: MiMo-V2-Omni
@@ -2261,8 +2188,8 @@ Note: This model always uses the 'web_search' tool which adds addi...
 
 #### Z.ai: GLM 4.6
 - **ID:** `z-ai/glm-4.6`
-- **Context:** 204,800 tokens
-- **Pricing:** $0.00000039/1M prompt, $N/A/1M completion
+- **Context:** 202,752 tokens
+- **Pricing:** $0.00000043/1M prompt, $N/A/1M completion
 - **Description:** Compared with GLM-4.5, this generation brings several key improvements: Longer context window: The context window has been expanded from 128K to 200K tokens, enabling the model to handle more complex....
 
 #### Z.ai: GLM 4.6V
@@ -2274,7 +2201,7 @@ Note: This model always uses the 'web_search' tool which adds addi...
 #### Z.ai: GLM 4.7
 - **ID:** `z-ai/glm-4.7`
 - **Context:** 202,752 tokens
-- **Pricing:** $0.00000038/1M prompt, $N/A/1M completion
+- **Pricing:** $0.0000004/1M prompt, $N/A/1M completion
 - **Description:** GLM-4.7 is Z.ai’s latest flagship model, featuring upgrades in two key areas: enhanced programming capabilities and more stable multi-step reasoning/execution. It demonstrates significant improvements...
 
 #### Z.ai: GLM 4.7 Flash
@@ -2298,7 +2225,7 @@ Note: This model always uses the 'web_search' tool which adds addi...
 #### Z.ai: GLM 5.1
 - **ID:** `z-ai/glm-5.1`
 - **Context:** 202,752 tokens
-- **Pricing:** $0.00000105/1M prompt, $N/A/1M completion
+- **Pricing:** $0.00000098/1M prompt, $N/A/1M completion
 - **Description:** GLM-5.1 delivers a major leap in coding capability, with particularly significant gains in handling long-horizon tasks. Unlike previous models built around minute-level interactions, GLM-5.1 can work ...
 
 #### Z.ai: GLM 5V Turbo
@@ -2332,7 +2259,7 @@ Note: This model always uses the 'web_search' tool which adds addi...
 #### Google Gemini Flash Latest
 - **ID:** `~google/gemini-flash-latest`
 - **Context:** 1,048,576 tokens
-- **Pricing:** $0.0000005/1M prompt, $N/A/1M completion
+- **Pricing:** $0.0000015/1M prompt, $N/A/1M completion
 - **Description:** This model always redirects to the latest model in the Google Gemini Flash family....
 
 #### Google Gemini Pro Latest
@@ -2346,7 +2273,7 @@ Note: This model always uses the 'web_search' tool which adds addi...
 #### MoonshotAI Kimi Latest
 - **ID:** `~moonshotai/kimi-latest`
 - **Context:** 262,144 tokens
-- **Pricing:** $0.00000075/1M prompt, $N/A/1M completion
+- **Pricing:** $0.00000073/1M prompt, $N/A/1M completion
 - **Description:** This model always redirects to the latest model in the MoonshotAI Kimi family....
 
 ### ~OPENAI

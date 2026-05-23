@@ -77,6 +77,10 @@ Use grep on `cli-full-docs.txt` for full content.
 **Path:** `/amazon-bedrock.md`
 **Summary:** Learn about configuring Claude Code through Amazon Bedrock, including setup, IAM configuration, and troubleshooting.
 
+### Claude Code on Claude Platform on AWS
+**Path:** `/claude-platform-on-aws.md`
+**Summary:** Configure Claude Code to use the Anthropic-operated Claude API with AWS authentication, IAM access control, and AWS Marketplace billing.
+
 ### Claude Code on Google Vertex AI
 **Path:** `/google-vertex-ai.md`
 **Summary:** Learn about configuring Claude Code through Google Vertex AI, including setup, IAM configuration, and troubleshooting.
@@ -84,10 +88,6 @@ Use grep on `cli-full-docs.txt` for full content.
 ### Claude Code on Microsoft Foundry
 **Path:** `/microsoft-foundry.md`
 **Summary:** Learn about configuring Claude Code through Microsoft Foundry, including setup, configuration, and troubleshooting.
-
-### Claude Code overview
-**Path:** `/overview.md`
-**Summary:** Claude Code is an agentic coding tool that reads your codebase, edits files, runs commands, and integrates with your development tools. Available in your terminal, IDE, desktop app, and browser.
 
 ### Claude Code settings
 **Path:** `/settings.md`
@@ -181,6 +181,14 @@ Use grep on `cli-full-docs.txt` for full content.
 **Path:** `/debug-your-config.md`
 **Summary:** Diagnose why CLAUDE.md, settings, hooks, MCP servers, or skills aren't taking effect. Use /context, /doctor, /hooks, and /mcp to see what actually loaded.
 
+### Desktop application
+**Path:** `/desktop.md`
+**Summary:** Get more out of Claude Code Desktop: parallel sessions with Git isolation, drag-and-drop pane layout, integrated terminal and file editor, side chats, computer use, Dispatch sessions from your phone, visual diff review, app previews, PR monitoring, connectors, and enterprise configuration.
+
+### Desktop changelog
+**Path:** `/desktop-changelog.md`
+**Summary:** Release notes for Claude Code on Desktop, covering new features, improvements, and bug fixes by Desktop app version.
+
 ### Development containers
 **Path:** `/devcontainer.md`
 **Summary:** Run Claude Code inside a dev container for consistent, isolated environments across your team.
@@ -199,7 +207,7 @@ Use grep on `cli-full-docs.txt` for full content.
 
 ### Environment variables
 **Path:** `/env-vars.md`
-**Summary:** Complete reference for environment variables that control Claude Code behavior.
+**Summary:** Reference for environment variables that control Claude Code behavior.
 
 ### Error reference
 **Path:** `/errors.md`
@@ -261,6 +269,10 @@ Use grep on `cli-full-docs.txt` for full content.
 **Path:** `/agent-sdk/hosting.md`
 **Summary:** Deploy and host Claude Agent SDK in production environments
 
+### How Claude Code uses prompt caching
+**Path:** `/prompt-caching.md`
+**Summary:** Claude Code manages prompt caching automatically. See why a model switch triggers a slow uncached turn, what `/compact` costs, why CLAUDE.md edits don't apply mid-session, and how to check your cache hit rate.
+
 ### How Claude Code works
 **Path:** `/how-claude-code-works.md`
 **Summary:** Understand the agentic loop, built-in tools, and how Claude Code interacts with your project.
@@ -285,6 +297,10 @@ Use grep on `cli-full-docs.txt` for full content.
 **Path:** `/jetbrains.md`
 **Summary:** Use Claude Code with JetBrains IDEs including IntelliJ, PyCharm, WebStorm, and more
 
+### Keep Claude working toward a goal
+**Path:** `/goal.md`
+**Summary:** Set a completion condition with /goal and Claude keeps working across turns until the condition is met.
+
 ### Launch sessions from links
 **Path:** `/deep-links.md`
 **Summary:** Open a Claude Code terminal session from a URL. Embed `claude-cli://` links in runbooks, alerts, and dashboards so a click opens Claude Code in the right repo with the right prompt.
@@ -305,6 +321,14 @@ Use grep on `cli-full-docs.txt` for full content.
 **Path:** `/costs.md`
 **Summary:** Track token usage, set team spend limits, and reduce Claude Code costs with context management, model selection, extended thinking settings, and preprocessing hooks.
 
+### Manage multiple agents with agent view
+**Path:** `/agent-view.md`
+**Summary:** Dispatch and manage many Claude Code sessions from one screen. Agent view shows what every session is doing and which ones need your input.
+
+### Manage sessions
+**Path:** `/sessions.md`
+**Summary:** Name, resume, branch, and switch between Claude Code conversations. Covers `--continue`, `--resume`, `--from-pr`, the `/resume` picker, session naming, and where transcripts are stored.
+
 ### Migrate to Claude Agent SDK
 **Path:** `/agent-sdk/migration-guide.md`
 **Summary:** Guide for migrating the Claude Code TypeScript and Python SDKs to the Claude Agent SDK
@@ -315,7 +339,7 @@ Use grep on `cli-full-docs.txt` for full content.
 
 ### Modifying system prompts
 **Path:** `/agent-sdk/modifying-system-prompts.md`
-**Summary:** Learn how to customize Claude's behavior by modifying system prompts using three approaches - output styles, systemPrompt with append, and custom system prompts.
+**Summary:** Choose between the `claude_code` preset and a custom system prompt, and customize behavior with CLAUDE.md, output styles, append, or a fully custom prompt.
 
 ### Monitoring
 **Path:** `/monitoring-usage.md`
@@ -333,6 +357,14 @@ Use grep on `cli-full-docs.txt` for full content.
 **Path:** `/output-styles.md`
 **Summary:** Adapt Claude Code for uses beyond software engineering
 
+### Overview
+**Path:** `/overview.md`
+**Summary:** Claude Code is an agentic coding tool that reads your codebase, edits files, runs commands, and integrates with your development tools. Available in your terminal, IDE, desktop app, and browser.
+
+### Persist sessions to external storage
+**Path:** `/agent-sdk/session-storage.md`
+**Summary:** Mirror session transcripts to S3, Redis, or your own backend so any host can resume them.
+
 ### Plan in the cloud with ultraplan
 **Path:** `/ultraplan.md`
 **Summary:** Start a plan from your CLI, draft it on Claude Code on the web, then execute it remotely or back in your terminal
@@ -349,6 +381,10 @@ Use grep on `cli-full-docs.txt` for full content.
 **Path:** `/plugins-reference.md`
 **Summary:** Complete technical reference for Claude Code plugin system, including schemas, CLI commands, and component specifications.
 
+### Prompt library
+**Path:** `/prompt-library.md`
+**Summary:** Copy-paste prompts for Claude Code, tagged by task and role.
+
 ### Push events into a running session with channels
 **Path:** `/channels.md`
 **Summary:** Use channels to push messages, alerts, and webhooks into your Claude Code session from an MCP server. Forward CI results, chat messages, and monitoring events so Claude can react while you're away.
@@ -361,13 +397,25 @@ Use grep on `cli-full-docs.txt` for full content.
 **Path:** `/quickstart.md`
 **Summary:** Welcome to Claude Code!
 
+### Recommend your plugin from your CLI
+**Path:** `/plugin-hints.md`
+**Summary:** Emit a one-line marker from your CLI so Claude Code prompts users to install your official plugin.
+
 ### Rewind file changes with checkpointing
 **Path:** `/agent-sdk/file-checkpointing.md`
 **Summary:** Track file changes during agent sessions and restore files to any previous state
 
+### Run agents in parallel
+**Path:** `/agents.md`
+**Summary:** Compare the ways Claude Code can take on multiple tasks at once: subagents, agent view, agent teams, and isolated worktree sessions.
+
 ### Run Claude Code programmatically
 **Path:** `/headless.md`
 **Summary:** Use the Agent SDK to run Claude Code programmatically from the CLI, Python, or TypeScript.
+
+### Run parallel sessions with worktrees
+**Path:** `/worktrees.md`
+**Summary:** Isolate parallel Claude Code sessions in separate git worktrees so changes don't collide. Covers the `--worktree` flag, subagent isolation, `.worktreeinclude`, cleanup, and non-git VCS hooks.
 
 ### Run prompts on a schedule
 **Path:** `/scheduled-tasks.md`
@@ -403,7 +451,7 @@ Use grep on `cli-full-docs.txt` for full content.
 
 ### Speed up responses with fast mode
 **Path:** `/fast-mode.md`
-**Summary:** Get faster Opus 4.6 responses in Claude Code by toggling fast mode.
+**Summary:** Get faster Opus responses in Claude Code by toggling fast mode.
 
 ### Stream responses in real-time
 **Path:** `/agent-sdk/streaming-output.md`
@@ -423,7 +471,7 @@ Use grep on `cli-full-docs.txt` for full content.
 
 ### Tools reference
 **Path:** `/tools-reference.md`
-**Summary:** Complete reference for the tools Claude Code can use, including permission requirements.
+**Summary:** Complete reference for the tools Claude Code can use, including permission requirements and per-tool behavior.
 
 ### Track cost and usage
 **Path:** `/agent-sdk/cost-tracking.md`
@@ -441,13 +489,9 @@ Use grep on `cli-full-docs.txt` for full content.
 **Path:** `/troubleshooting.md`
 **Summary:** Fix high CPU or memory usage, hangs, auto-compact thrashing, and search problems in Claude Code, and find the right page for other issues.
 
-### TypeScript SDK V2 interface (preview)
+### TypeScript SDK V2 session API (removed)
 **Path:** `/agent-sdk/typescript-v2-preview.md`
-**Summary:** Preview of the simplified V2 TypeScript Agent SDK, with session-based send/stream patterns for multi-turn conversations.
-
-### Use Claude Code Desktop
-**Path:** `/desktop.md`
-**Summary:** Get more out of Claude Code Desktop: parallel sessions with Git isolation, drag-and-drop pane layout, integrated terminal and file editor, side chats, computer use, Dispatch sessions from your phone, visual diff review, app previews, PR monitoring, connectors, and enterprise configuration.
+**Summary:** Reference for the removed V2 TypeScript Agent SDK session API, with session-based send/stream patterns for multi-turn conversations.
 
 ### Use Claude Code features in the SDK
 **Path:** `/agent-sdk/claude-code-features.md`
@@ -483,11 +527,23 @@ Use grep on `cli-full-docs.txt` for full content.
 
 ### Week 16 · April 13–17, 2026
 **Path:** `/whats-new/2026-w16.md`
-**Summary:** Claude Opus 4.7 with the new xhigh effort level, Routines on Claude Code on the web, /ultrareview cloud code review, a /usage breakdown that shows what's driving your limits, and native binaries replacing the bundled JavaScript.
+**Summary:** Claude Opus 4.7 with the new xhigh effort level, Routines on Claude Code on the web, mobile push notifications that ping your phone when Claude needs you, a /usage breakdown that shows what's driving your limits, and native binaries replacing the bundled JavaScript.
 
 ### Week 17 · April 20–24, 2026
 **Path:** `/whats-new/2026-w17.md`
 **Summary:** /ultrareview opens as a research preview, automatic session recaps when you return to a terminal, custom color themes you can build and ship in plugins, and a redesigned Claude Code on the web.
+
+### Week 18 · April 27 – May 1, 2026
+**Path:** `/whats-new/2026-w18.md`
+**Summary:** Claude Code on Windows runs without Git Bash, claude auth login accepts a pasted OAuth code when the browser callback can't reach localhost, claude project purge cleans up local state per project, and pasting a PR URL into /resume finds the session that created it.
+
+### Week 19 · May 4–8, 2026
+**Path:** `/whats-new/2026-w19.md`
+**Summary:** Load plugins from .zip archives and URLs, search command history across every project with Ctrl+R, branch new worktrees from local HEAD or the remote default, and block actions unconditionally with auto mode hard deny rules.
+
+### Week 20 · May 11–15, 2026
+**Path:** `/whats-new/2026-w20.md`
+**Summary:** Manage every Claude Code session from one screen with agent view, keep Claude working toward a goal until a condition holds, and run fast mode on Opus 4.7 by default.
 
 ### What's new
 **Path:** `/whats-new/index.md`
