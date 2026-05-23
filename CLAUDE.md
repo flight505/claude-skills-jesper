@@ -11,8 +11,32 @@ Personal Claude Code skills marketplace. Vendors [alirezarezvani/claude-skills](
 ## Adding a first-party skill
 
 1. Create `skills/<name>/SKILL.md` with required frontmatter (name, description, version, etc.)
-2. `python3 scripts/regenerate-marketplace.py`
-3. `forge list --type skill | grep <name>` — verify it appears
+2. Add an optional `pairs_with:` list (see below) to help the in-TUI chat suggest pairings
+3. `python3 scripts/regenerate-marketplace.py`
+4. `forge list --type skill | grep <name>` — verify it appears
+
+### `pairs_with:` — pairing hints for the chat
+
+When a catalog item has natural collaborators (a frontend-design skill that pairs with a design-system skill; a docs-skill that pairs with another docs-skill in a related domain), declare them in the frontmatter:
+
+```yaml
+---
+name: frontend-learning
+description: Builds interactive HTML explainers.
+version: 0.1.0
+pairs_with: frontend-design, design-md
+---
+```
+
+Or, equivalently, as a YAML list:
+
+```yaml
+pairs_with:
+  - frontend-design
+  - design-md
+```
+
+Both shapes are parsed by `scripts/regenerate-marketplace.py` and surface as a `pairs_with: [...]` array on the entry in `marketplace.json`. The forge TUI's chat pane and the web `ItemChat` panel read this list and prepend the named items to their peer-suggestion set (replacing the same-type-first-10 heuristic when explicit pairs exist). Names must match other entries' `name:` exactly — a wrong name silently drops the hint, no error.
 
 ## Pulling upstream updates
 

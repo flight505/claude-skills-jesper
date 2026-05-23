@@ -8,7 +8,7 @@
   "homepage": "https://github.com/flight505/claude-skills-jesper",
   "metadata": {
     "version": "0.1.0",
-    "generated": "2026-05-23T20:22:57Z",
+    "generated": "2026-05-23T21:57:42Z",
     "upstream": {
       "repo": "alirezarezvani/claude-skills",
       "subtree_prefix": "upstream"
@@ -2123,7 +2123,12 @@
         "source": "./skills/claude-docs-skill",
         "type": "directory"
       },
-      "description": "USE THIS SKILL for any question about Claude API, Claude Code CLI, hooks, plugins, skills, subagents, MCP servers, SDKs, extended thinking, tool use, streaming, or deployment. This skill has complete local documentation — do not use web search, WebFetch, or claude-code-guide instead."
+      "description": "USE THIS SKILL for any question about Claude API, Claude Code CLI, hooks, plugins, skills, subagents, MCP servers, SDKs, extended thinking, tool use, streaming, or deployment. This skill has complete local documentation — do not use web search, WebFetch, or claude-code-guide instead.",
+      "pairs_with": [
+        "openrouter-docs-skill",
+        "gemini-docs-skill",
+        "perplexity-search"
+      ]
     },
     {
       "name": "design-md",
@@ -2131,7 +2136,10 @@
         "source": "./skills/design-md",
         "type": "directory"
       },
-      "description": "Drop-in DESIGN.md design-system files for 71 popular brands (Claude, Linear, Stripe, Vercel, Apple, Figma, Tesla…). Use when the user wants to match a brand's look and feel, asks to \"apply a design system\", says \"make it look like <brand>\", mentions DESIGN.md, or needs design tokens (colors, typography, components) extracted from a known site."
+      "description": "Drop-in DESIGN.md design-system files for 71 popular brands (Claude, Linear, Stripe, Vercel, Apple, Figma, Tesla…). Use when the user wants to match a brand's look and feel, asks to \"apply a design system\", says \"make it look like <brand>\", mentions DESIGN.md, or needs design tokens (colors, typography, components) extracted from a known site.",
+      "pairs_with": [
+        "frontend-learning"
+      ]
     },
     {
       "name": "frontend-learning",
@@ -2139,7 +2147,11 @@
         "source": "./skills/frontend-learning",
         "type": "directory"
       },
-      "description": "Create interactive HTML learning material that teaches a topic INTUITIVELY (not just informationally) — single-file, animation-rich explainers in the spirit of 3Blue1Brown, Distill.pub, Bartosz Ciechanowski, and Quantum Country. Use when the user wants to LEARN a topic deeply, asks to \"teach me X\", points at a paper/URL/PDF they want to understand, or wants a self-paced interactive explainer instead of slides. Builds the page, opens it, then tutors the user in conversation about it."
+      "description": "Create interactive HTML learning material that teaches a topic INTUITIVELY (not just informationally) — single-file, animation-rich explainers in the spirit of 3Blue1Brown, Distill.pub, Bartosz Ciechanowski, and Quantum Country. Use when the user wants to LEARN a topic deeply, asks to \"teach me X\", points at a paper/URL/PDF they want to understand, or wants a self-paced interactive explainer instead of slides. Builds the page, opens it, then tutors the user in conversation about it.",
+      "pairs_with": [
+        "design-md",
+        "lesson-reviewer"
+      ]
     },
     {
       "name": "gemini-docs-skill",
@@ -2147,7 +2159,11 @@
         "source": "./skills/gemini-docs-skill",
         "type": "directory"
       },
-      "description": "USE THIS SKILL for any question about Google Gemini API — models, function calling, structured output, Live API, embeddings, pricing, or SDKs. This skill has complete local documentation — do not use web search or WebFetch instead."
+      "description": "USE THIS SKILL for any question about Google Gemini API — models, function calling, structured output, Live API, embeddings, pricing, or SDKs. This skill has complete local documentation — do not use web search or WebFetch instead.",
+      "pairs_with": [
+        "claude-docs-skill",
+        "openrouter-docs-skill"
+      ]
     },
     {
       "name": "nvidia-dgx-research",
@@ -2155,7 +2171,10 @@
         "source": "./skills/nvidia-dgx-research",
         "type": "directory"
       },
-      "description": "USE THIS SKILL for NVIDIA topics not covered by the local spark-docs-skill snapshot — community discussion on the NVIDIA developer forum, NVIDIA developer blog posts, and adjacent NVIDIA product docs (CUDA, NeMo, Jetson, Brev, Dynamo, and others listed in the docs.nvidia.com llms.txt catalog). This is a dispatcher skill that routes queries to WebSearch and WebFetch; it does NOT bundle bulk documentation."
+      "description": "USE THIS SKILL for NVIDIA topics not covered by the local spark-docs-skill snapshot — community discussion on the NVIDIA developer forum, NVIDIA developer blog posts, and adjacent NVIDIA product docs (CUDA, NeMo, Jetson, Brev, Dynamo, and others listed in the docs.nvidia.com llms.txt catalog). This is a dispatcher skill that routes queries to WebSearch and WebFetch; it does NOT bundle bulk documentation.",
+      "pairs_with": [
+        "spark-docs-skill"
+      ]
     },
     {
       "name": "openrouter-docs-skill",
@@ -2163,7 +2182,11 @@
         "source": "./skills/openrouter-docs-skill",
         "type": "directory"
       },
-      "description": "USE THIS SKILL for any question about OpenRouter API, model routing, pricing, available AI models, API keys, or provider configuration. This skill has complete local documentation — do not use web search or WebFetch instead."
+      "description": "USE THIS SKILL for any question about OpenRouter API, model routing, pricing, available AI models, API keys, or provider configuration. This skill has complete local documentation — do not use web search or WebFetch instead.",
+      "pairs_with": [
+        "claude-docs-skill",
+        "gemini-docs-skill"
+      ]
     },
     {
       "name": "perplexity-search",
@@ -2171,7 +2194,10 @@
         "source": "./skills/perplexity-search",
         "type": "directory"
       },
-      "description": "Strategy guide for Perplexity MCP tools (perplexity_search, perplexity_ask, perplexity_reason, perplexity_research). Helps pick the right tool, craft queries, and use recency/domain filters. Reference when planning complex searches, literature reviews, or multi-step research — not needed for simple one-shot queries."
+      "description": "Strategy guide for Perplexity MCP tools (perplexity_search, perplexity_ask, perplexity_reason, perplexity_research). Helps pick the right tool, craft queries, and use recency/domain filters. Reference when planning complex searches, literature reviews, or multi-step research — not needed for simple one-shot queries.",
+      "pairs_with": [
+        "claude-docs-skill"
+      ]
     },
     {
       "name": "spark-docs-skill",
@@ -2179,7 +2205,10 @@
         "source": "./skills/spark-docs-skill",
         "type": "directory"
       },
-      "description": "USE THIS SKILL for any question about NVIDIA DGX Spark hardware, DGX OS 7, system setup, first boot, recovery, dashboard, NGC, containers, or DGX-specific software. This skill has complete local documentation — do not use web search or WebFetch instead."
+      "description": "USE THIS SKILL for any question about NVIDIA DGX Spark hardware, DGX OS 7, system setup, first boot, recovery, dashboard, NGC, containers, or DGX-specific software. This skill has complete local documentation — do not use web search or WebFetch instead.",
+      "pairs_with": [
+        "nvidia-dgx-research"
+      ]
     },
     {
       "name": "warp-docs-skill",
@@ -2389,7 +2418,10 @@
         "source": "./agents/lesson-reviewer.md",
         "type": "file"
       },
-      "description": "Visual review of a generated frontend-learning lesson .html file. Takes EXACTLY ONE full-page screenshot at each of 4 viewport sizes (1920×1080, 1280×800, 768×1024, 375×667), applies a checklist, returns a structured PASS/FAIL report. Hard-budgeted to ≤10 tool calls / ≤5 min wall-clock so it cannot loop. NEVER edits the lesson — only reports. Use AFTER scripts/lesson-lint.py has passed, and ONLY when the user explicitly asks for visual review or reports a visible problem."
+      "description": "Visual review of a generated frontend-learning lesson .html file. Takes EXACTLY ONE full-page screenshot at each of 4 viewport sizes (1920×1080, 1280×800, 768×1024, 375×667), applies a checklist, returns a structured PASS/FAIL report. Hard-budgeted to ≤10 tool calls / ≤5 min wall-clock so it cannot loop. NEVER edits the lesson — only reports. Use AFTER scripts/lesson-lint.py has passed, and ONLY when the user explicitly asks for visual review or reports a visible problem.",
+      "pairs_with": [
+        "frontend-learning"
+      ]
     }
   ],
   "personas": [
