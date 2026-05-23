@@ -35,61 +35,33 @@ Catalog delta: 44→61 plugins, 20→24 agents, 33→38 commands. Zero removals.
 
 ## Track 1b — Stop tracking auto-generated doc refs ✅ DONE
 
-Spun out as `chore/stop-tracking-generated-docs` while working through Track 1's secret-scan friction. Two commits, branch pushed (not yet merged):
+Merged as PR #2. Three commits total (gitignore + untrack, daemon installer, extended gitignore to 4 more doc-skills).
 
-- [x] Gitignore the 12 auto-regenerated reference files (claude/openrouter/warp doc-skills); cookbook/ stays tracked
-- [x] `skills/_shared/install-refresh-daemons.sh` — clone-and-install launchd daemons for all 7 doc-refresh-shaped skills; idempotent; matches existing label convention
+- [x] Gitignore all auto-regenerated reference files across 7 doc-skills; cookbook/ stays tracked
+- [x] `skills/_shared/install-refresh-daemons.sh` — clone-and-install launchd daemons; idempotent; matches existing label convention
 - [x] CLAUDE.md documents the entry point
-- [x] Smoke-tested locally: 2 new daemons (design-md, gemini-docs) loaded + fired immediately, 5 existing skipped no-op
-
-Followup: open PR + merge https://github.com/flight505/claude-skills-jesper/pull/new/chore/stop-tracking-generated-docs
+- [x] PR opened + merged
 
 ---
 
-## Track 2 — Item-context chat in `forge tui`
+## Track 2 — Item-context chat in `forge tui` ✅ DONE
 
-**Goal:** while a catalog item is selected, the user can press a key (proposed: `c`
-or `?`) to open a chat pane scoped to that item. Claude answers using the item's
-SKILL.md / agent.md / persona.md as context, and can suggest related items from the
-catalog. No new dependencies; reuse `aisuggester`'s HTTP + auth layer.
+Merged in `flight505/forge`. Three commits: llm extraction, aichat backend + tests, TUI wiring + tests. 17 new tests, all 38 pass. `c` on a catalog row opens a chat pane scoped to that item; Ctrl+S sends, Esc closes; statusbar shows a running token tally with rough USD estimate.
 
-### 2.1 Backend — extend `internal/aisuggester` into a tiny `internal/aichat` package
-- [ ] **2.1.1 Carve auth/transport into a shared helper** (`internal/llm/client.go`):
-  `resolveAuth()`, `postMessages()`, `readKeychainOAuth()` — currently private in
-  `aisuggester`. No behaviour change; aisuggester re-uses it.
-- [ ] **2.1.2 New package `internal/aichat`** with `ChatAboutItem(ctx, item, history, userMsg) (reply, tokensUsed, error)`.
-  - System prompt template includes: item name, type, description, full body (truncated
-    to ~6KB), and a compact list of catalog peers (name + one-liner) so the model can
-    suggest pairings.
-  - Use `claude-haiku-4-5-20251001` by default (cheap, fast); env override
-    `FORGE_CHAT_MODEL`.
-  - Cache the system block (`cache_control: ephemeral`) so multi-turn chat in the
-    same item pays ~10% of the first turn's input tokens.
-- [ ] **2.1.3 Token accounting**: surface input/output tokens per turn so the
-  status bar can show a running tally (matches the global "Claude Alerts" rule —
-  warn before usage spikes).
-- [ ] **2.1.4 Unit tests** with a fake `http.RoundTripper` covering: happy path,
-  401 (re-prompt auth), 429 (single retry + backoff), oversized item body (truncate).
+### 2.1 Backend
+- [x] **2.1.1** Carved auth + transport into `internal/llm` (zero-behavior refactor)
+- [x] **2.1.2** New `internal/aichat.ChatAboutItem` with cache-controlled system block, Haiku 4.5 default, `FORGE_CHAT_MODEL` override, 6KB rune-safe body truncation
+- [x] **2.1.3** Token accounting (4-field Usage struct returned per turn)
+- [x] **2.1.4** Unit tests with fake `http.RoundTripper`: env precedence, OAuth vs api-key headers, 401/429 surfacing, body forwarding, system prompt shape, FORGE_CHAT_MODEL override, ephemeral cache_control, usage parsing
 
-### 2.2 TUI — chat pane wired into the catalog screen
-- [ ] **2.2.1 New view `ui/views/itemchat.go`** rendered as a right-side or bottom
-  pane (decide after mocking — see 2.2.2). Bubble Tea model holds `[]message`,
-  `textarea.Model` for input, `viewport.Model` for transcript.
-- [ ] **2.2.2 Layout decision**: pick between (a) replacing the preview pane in
-  catalog when chat is open, or (b) a full-screen modal. Recommendation: **(a)**
-  — keeps the sidebar + list visible so the user can switch items mid-chat and the
-  context auto-rebinds.
-- [ ] **2.2.3 Key handler in `ui/app.go`**: `c` opens chat for the currently
-  selected item; `Esc` closes; switching items in the list resets the transcript
-  with a one-line "now chatting about <new item>" notice.
-- [ ] **2.2.4 Streaming**: aichat helper returns full response (not streaming) in
-  v1 — the spinner already exists. Streaming is a v2 if needed.
-- [ ] **2.2.5 Status-bar token counter**: `chat · 1.2k in / 340 out · $0.001` (using
-  Haiku 4.5 published rates). Reset on item switch.
-- [ ] **2.2.6 No-auth fallback**: if `aisuggester.ErrNoAuth`, show a callout
-  pointing at `claude /login` (Claude Max OAuth path) instead of failing.
-- [ ] **2.2.7 Tests** in `ui/app_chat_test.go` mirroring the focus-cycle tests:
-  open/close, item-switch resets transcript, Enter submits, Esc cancels.
+### 2.2 TUI
+- [x] **2.2.1** `ui/views/itemchat.go` — Bubble Tea textarea + viewport + transcript
+- [x] **2.2.2** Picked option (a): replaces preview pane when chat is active
+- [x] **2.2.3** `c` opens, `Esc` closes (item-switch-while-chat deferred — Esc → navigate → c re-opens; works fine for v1)
+- [x] **2.2.4** No streaming (deferred to v2; spinner suffices)
+- [x] **2.2.5** Statusbar token tally with USD estimate
+- [x] **2.2.6** `ErrNoAuth` → "[chat needs auth]" callout in transcript
+- [x] **2.2.7** Tests: opening notice, reply/error handling, ErrNoAuth → noAuth flag, Esc/Ctrl+C pass-through, SwitchItem reset semantics, TokenSummary states, SelectPeers same-type/limit
 
 ---
 
@@ -176,17 +148,76 @@ Goal: land it under `skills/frontend-learning/` so `regenerate-marketplace.py` p
 
 ---
 
+## Track 6 — Sources taxonomy + unified update check
+
+Today the `skills/` directory mixes four different provenance kinds, all visually equal:
+
+| Kind | Examples | Refresh mechanism today |
+|---|---|---|
+| **Original** (mine, hand-edited) | `apple`, `frontend-learning`, `perplexity-search`, `nvidia-dgx-research` | None — manual edits |
+| **Docs** (mine, scraped from upstream sites) | `claude-docs-skill`, `openrouter-docs-skill`, `warp-docs-skill`, `gemini-docs-skill`, `spark-docs-skill` | Launchd weekly via `install-refresh-daemons.sh` (Track 1b) |
+| **Repo-mirror** (third-party origin, vendored snapshot) | `design-md` (from `getdesign` npm) | Launchd weekly via the same daemon — but conceptually distinct |
+| **Subtree** (third-party marketplace, vendored) | `upstream/` (alirezarezvani/claude-skills) | Manual: `./scripts/sync-upstream.sh` |
+
+Three problems this causes:
+- No single command answers "what updates are available across all my sources?"
+- Adding a new repo-mirror skill (e.g. some github-hosted set of agents) has no documented pattern
+- A reader of the repo can't tell from `skills/<name>/` whether a directory is mine-original, mine-docs, or mirrored
+
+**Recommendation: metadata over restructure.** Keep the current directory layout (avoids breaking forge paths, launchd plists, ~/.claude/ symlinks, and ~14 entries in marketplace.json) and add a per-item `_source.yaml` declaring provenance + refresh method. Then build one aggregator script that reads every manifest, runs the right "check for updates" probe per kind, and prints a punch list.
+
+### 6.1 Define the manifest schema
+- [ ] **6.1.1** Decide schema. Strawman:
+  ```yaml
+  # skills/<name>/_source.yaml
+  kind: original | docs | repo-mirror | subtree
+  origin: ""                # empty for original; URL/npm-pkg/etc for others
+  refresh:
+    method: none | launchd | manual | subtree
+    script: scripts/update-*.sh   # optional, when relevant
+    schedule: weekly-sunday-0400  # for launchd kind
+  notes: ""                 # one-liner explaining why this skill is here
+  ```
+- [ ] **6.1.2** Document the schema in `CLAUDE.md` (one paragraph + the example).
+- [ ] **6.1.3** Add a top-level `agents/_source.yaml` too — first-party agents are conceptually originals.
+
+### 6.2 Backfill manifests for the current catalog
+- [ ] **6.2.1** `original`: apple, frontend-learning, perplexity-search, nvidia-dgx-research
+- [ ] **6.2.2** `docs`: claude-docs-skill, openrouter-docs-skill, warp-docs-skill, gemini-docs-skill, spark-docs-skill (origin = the live docs URL the update script scrapes)
+- [ ] **6.2.3** `repo-mirror`: design-md (origin = `npm:getdesign`)
+- [ ] **6.2.4** `subtree`: skip — `upstream/` itself stays manifest-less because its metadata lives in `.git/refs/upstream-skills` + the squash commit subject.
+
+### 6.3 Build `scripts/check-sources.py` (stdlib only)
+- [ ] **6.3.1** Walk every `skills/*/_source.yaml` and `agents/_source.yaml`. Group by kind.
+- [ ] **6.3.2** For each kind, probe "what's newer than what we have?":
+  - `original`: no-op (skip)
+  - `docs`: check the last-modified timestamp of `references/` files vs `.last-fetch` sentinel; "stale if older than N days"
+  - `repo-mirror`: query the origin (npm registry for `getdesign`, etc.) and compare against a `version:` field in the manifest
+  - `subtree`: shell out to `git fetch upstream-skills main` + `git log <last-squash>..upstream-skills/main` count
+- [ ] **6.3.3** Output as a punch list:
+  ```
+  [docs]
+    claude-docs-skill        last fetched 3 days ago — fresh
+    openrouter-docs-skill    last fetched 8 days ago — STALE (run scripts/update-*.sh or wait for Sunday)
+  [repo-mirror]
+    design-md                local 0.6.20 → npm latest 0.6.21 — UPDATE AVAILABLE
+  [subtree]
+    upstream                 12 new commits since last sync — review with scripts/upstream-changelog.py
+  ```
+- [ ] **6.3.4** Add `--fix` mode that runs the appropriate refresh action per item (`launchctl kickstart` for docs, `update-templates.sh` for design-md, `sync-upstream.sh` for subtree). Default is read-only.
+
+### 6.4 Optional follow-ups (defer unless useful)
+- [ ] **6.4.1** Forge UI: expose the check-sources output in a new Doctor section or as a TUI overlay.
+- [ ] **6.4.2** Directory restructure (`docs/`, `mirrors/`, `originals/`). Only if 6.1-6.3 prove insufficient. Cost is high: rebake 7 launchd plists, re-point ~5 symlinks under `~/.claude/skills/`, update `regenerate-marketplace.py`, every marketplace.json path, every doc-skill `.gitignore` rule, every existing forge install anywhere. Benefit is mostly cosmetic given the manifest already exposes provenance.
+
+### Why this order
+6.1-6.3 are non-breaking — the existing layout keeps working. Once those land, you have the unified-update-check you wanted AND each item self-declares its provenance, so the directory restructure (6.4.2) becomes a pure cosmetic call rather than a mixed cosmetic + functional one.
+
+---
+
 ## Notes & open questions
 
-- **Cost guardrail.** Each chat turn at Haiku 4.5 rates is ~$0.0005–$0.002. A
-  hard ceiling (e.g. `FORGE_CHAT_DAILY_BUDGET_USD`) + warning toast when 80% used
-  would respect the "Claude Alerts" global rule. Decide before shipping.
-- **Catalog peer list size.** Sending all ~150 items as "peers" in the system
-  prompt is ~30KB per first turn. Filtering to same-type + 10 nearest neighbours
-  by name keyword keeps it under 5KB. Worth A/B-ing answer quality once the
-  pipeline is in place.
-- **Streaming on the TUI.** Bubble Tea + SSE is awkward (channels through
-  `tea.Cmd`). Skip for v1 unless user feedback says otherwise.
-- **Privacy.** All chat traffic goes to api.anthropic.com under the user's own
-  credential — same trust boundary as `aisuggester` today. No new disclosure
-  needed in README, but mention it in the chat pane's first-launch hint.
+- **Cost guardrail.** Track 2 shipped without a hard daily budget — running tally is visible in the statusbar but nothing stops a runaway loop. Worth revisiting if usage gets noisy: `FORGE_CHAT_DAILY_BUDGET_USD` env + a warning toast at 80% would respect the global "Claude Alerts" rule.
+- **Catalog peer list size.** Currently uses `SelectPeers` (same-type, take first 10 — no relevance ranking). Each first turn sends ~2–3KB of peer summaries. Worth A/B-ing ranking strategies once chat sees real use (semantic via aisuggester? frecency? `pairs_with:` from Track 4.2?).
+- **Streaming on the TUI.** Bubble Tea + SSE is awkward (channels through `tea.Cmd`). Skipped for v1. Reconsider if multi-paragraph replies feel sluggish.
+- **Privacy.** All chat traffic goes to api.anthropic.com under the user's own credential — same trust boundary as `aisuggester` today. Mention in chat pane's first-launch hint when we add one.
