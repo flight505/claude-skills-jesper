@@ -1,13 +1,13 @@
 ---
 title: "AI Coding Agents — Agent-Native Orchestrators & Codex Skills"
-description: "58 agent-native orchestrators for Claude Code, Codex CLI, and Gemini CLI — multi-skill AI agents across engineering, product, marketing, and more."
+description: "78 agent-native orchestrators for Claude Code, Codex CLI, and Gemini CLI — multi-skill AI agents across engineering, product, marketing, and more."
 ---
 
 <div class="domain-header" markdown>
 
 # :material-robot: Agents
 
-<p class="domain-count">58 agents that orchestrate skills across domains</p>
+<p class="domain-count">78 agents that orchestrate skills across domains</p>
 
 </div>
 
@@ -30,6 +30,24 @@ description: "58 agent-native orchestrators for Claude Code, Codex CLI, and Gemi
     ---
 
     C-Level Advisory
+
+-   :material-rocket-launch:{ .lg .middle } **[cs-backend-engineer — Backend Orchestrator](cs-backend-engineer.md)**
+
+    ---
+
+    Engineering - POWERFUL
+
+-   :material-rocket-launch:{ .lg .middle } **[cs-frontend-engineer — Frontend Orchestrator](cs-frontend-engineer.md)**
+
+    ---
+
+    Engineering - POWERFUL
+
+-   :material-rocket-launch:{ .lg .middle } **[cs-fullstack-engineer — Fullstack Orchestrator](cs-fullstack-engineer.md)**
+
+    ---
+
+    Engineering - POWERFUL
 
 -   :material-rocket-launch:{ .lg .middle } **[karpathy-reviewer](cs-karpathy-reviewer.md)**
 
@@ -78,6 +96,12 @@ description: "58 agent-native orchestrators for Claude Code, Codex CLI, and Gemi
     ---
 
     Finance
+
+-   :material-bullhorn-outline:{ .lg .middle } **[AEO Agent — Answer Engine Optimization Specialist](cs-aeo.md)**
+
+    ---
+
+    Marketing
 
 -   :material-bullhorn-outline:{ .lg .middle } **[Content Creator Agent](cs-content-creator.md)**
 
@@ -241,6 +265,12 @@ description: "58 agent-native orchestrators for Claude Code, Codex CLI, and Gemi
 
     Engineering - POWERFUL
 
+-   :material-rocket-launch:{ .lg .middle } **[Grill With Docs Agent](cs-grill-with-docs.md)**
+
+    ---
+
+    Engineering - POWERFUL
+
 -   :material-rocket-launch:{ .lg .middle } **[Handoff Author Agent](cs-handoff-author.md)**
 
     ---
@@ -360,5 +390,95 @@ description: "58 agent-native orchestrators for Claude Code, Codex CLI, and Gemi
     ---
 
     C-Level Advisory
+
+-   :material-account:{ .lg .middle } **[Capture Agent](cs-capture.md)**
+
+    ---
+
+    Productivity
+
+-   :material-account:{ .lg .middle } **[Inbox-Setup Agent](cs-inbox-setup.md)**
+
+    ---
+
+    Productivity
+
+-   :material-account:{ .lg .middle } **[Inbox-Triage Agent](cs-inbox-triage.md)**
+
+    ---
+
+    Productivity
+
+-   :material-account:{ .lg .middle } **[Reflect Agent](cs-reflect.md)**
+
+    ---
+
+    Productivity
+
+-   :material-bullhorn-outline:{ .lg .middle } **[Landing Agent](cs-landing.md)**
+
+    ---
+
+    Marketing
+
+-   :material-account:{ .lg .middle } **[Dossier Agent](cs-dossier.md)**
+
+    ---
+
+    Research
+
+-   :material-account:{ .lg .middle } **[Grants Agent](cs-grants.md)**
+
+    ---
+
+    Research
+
+-   :material-account:{ .lg .middle } **[Litreview Agent](cs-litreview.md)**
+
+    ---
+
+    Research
+
+-   :material-account:{ .lg .middle } **[NotebookLM Agent](cs-notebooklm.md)**
+
+    ---
+
+    Research
+
+-   :material-account:{ .lg .middle } **[Patent Agent](cs-patent.md)**
+
+    ---
+
+    Research
+
+-   :material-account:{ .lg .middle } **[Pulse Agent](cs-pulse.md)**
+
+    ---
+
+    Research
+
+-   :material-account:{ .lg .middle } **[Research Agent](cs-research.md)**
+
+    ---
+
+    Research
+
+-   :material-account:{ .lg .middle } **[Syllabus Agent](cs-syllabus.md)**
+
+    ---
+
+    Research
+
+-   :material-account:{ .lg .middle } **[cs-bizops-orchestrator — Process-obsessed BizOps lead](cs-bizops-orchestrator.md)**
+
+    ---
+
+    Business Operations
+
+-   :material-account:{ .lg .middle } **[cs-commercial-orchestrator — Margin-protective Commercial lead](cs-commercial-orchestrator.md)**
+
+    ---
+
+    Commercial
 
 </div>

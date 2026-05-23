@@ -6,9 +6,22 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a **comprehensive skills library** for Claude AI and Claude Code - reusable, production-ready skill packages that bundle domain expertise, best practices, analysis tools, and strategic frameworks. The repository provides modular skills that teams can download and use directly in their workflows.
 
-**Current Scope:** 272 production-ready skills across 9 domains with 385 Python automation tools, 519 reference guides, 44 agents (37 `cs-*` + 7 personas), and 58 slash commands. v2.6.0 adds 4 Matt Pocock-derived productivity skills (write-a-skill, caveman, grill-me, handoff) under MIT.
+**Current Scope:** 329 production-ready skills across 14 domains with ~448 Python automation tools, ~586 reference guides, 49+ agents (cs-* + 7 personas), and 79+ slash commands. **v2.8.0 (complete)** added 2 new top-level domains — **business-operations/** (7 internal-ops skills: orchestrator + process-mapper + vendor-management + capacity-planner + internal-comms + knowledge-ops + procurement-optimizer) and **commercial/** (8 per-deal-economics skills: orchestrator + pricing-strategist + deal-desk + partnerships-architect + channel-economics + commercial-policy + rfp-responder + commercial-forecaster) — with orchestrator skills using `context: fork` for chaining, Matt Pocock docs-anchored "Forcing-question library" in every SKILL.md, plus `/cs:grill-bizops` and `/cs:grill-commercial`. **v2.8.2** adds a productivity-shaped `handoff` skill (sibling to engineering/handoff) inspired by Matt Pocock — first-run setup with configurable save location, redaction linter, SessionStart + SessionEnd hooks, fidelity self-check, `--refresh` flag. **v2.8.1** upgraded the engineering role-skills (senior-fullstack / senior-frontend / senior-backend) with karpathy-coder + Matt Pocock decision engines + per-role forcing questions. v2.7.3 ports `alirezarezvani/aeo-box` — AEO (Answer Engine Optimization) skill into marketing-skill/ + security-guidance PreToolUse hook into engineering/. v2.7.0 added 13 Path-B skills across 3 top-level domains (productivity, marketing, research). v2.6.0 added 4 Matt Pocock-derived productivity skills.
 
 **Key Distinction**: This is NOT a traditional application. It's a library of skill packages meant to be extracted and deployed by users into their own Claude workflows.
+
+## Maintainer-Local Folders (gitignored)
+
+The following exist on the maintainer's disk but are excluded from the public GitHub tree so cloners only see production skill packages:
+
+- `documentation/` — sprint plans, strategy, implementation roadmaps
+- `eval-workspace/` — Tessl evaluation outputs
+- `megaprompts/` — pre-skill draft specs (Path-B source material)
+- `tests/` — pytest suite (run locally; not in CI)
+- `.autoresearch/` — autoresearch agent workspace
+- `AUDIT_REPORT.md` — internal audit snapshots
+
+In-repo references to paths under these folders (e.g. `documentation/implementation/...`) resolve locally for the maintainer but appear as dead links on GitHub. This is intentional.
 
 ## Navigation Map
 
@@ -124,7 +137,90 @@ See [standards/git/git-workflow-standards.md](standards/git/git-workflow-standar
 
 ## Current Version
 
-**Version:** v2.6.1 (latest)
+**Version:** v2.8.2 (released — productivity/handoff v1.1)
+
+**v2.8.2 highlights — productivity/handoff skill, Matt Pocock-inspired:**
+
+Single-skill point release after v2.8.1. New `productivity/handoff/` skill is a sibling to the existing `engineering/handoff/`. Both preserve Matt Pocock's seven-sentence body verbatim; the productivity variant adds the wrappers the engineering port deliberately skipped:
+
+- **First-run setup** (`scripts/setup.py`) — 5-question Q&A. No pre-selected default for save location: user explicitly picks OS temp / home folder / per-project `.handoff/` / custom path on first run. Prompt-once-then-default model: declining setup drops a sentinel so the prompt never re-appears.
+- **Redaction linter** (`scripts/redaction_linter.py`) — 17 stdlib regex patterns (AWS / GitHub / OpenAI / Anthropic / Slack / Stripe / JWT / private-key blocks / env-style secret assignments / DB connection strings / bearer tokens / URL token params / email / phone). Strict-by-default with inline `<!-- handoff:allow secret -->` whitelist marker. Operationalizes Matt's redaction sentence.
+- **SessionStart auto-load + SessionEnd reminder hooks** — paired routine-integration. SessionStart surfaces latest handoff as `<handoff_from_previous_session>` data; SessionEnd reminds if no handoff in the last 30 minutes. Disable per-session via `HANDOFF_SESSIONSTART=0` / `HANDOFF_SESSIONEND=0`.
+- **Mandatory checklist** (`references/handoff_prompt.md`) + **self-check script** (`scripts/handoff_self_check.py`) — 7-step checklist enforced by 6-check script (all 5 sections present, Goal non-empty, State references artifacts, Decisions present when git is dirty, 3-5 Skills with `— why`, Artifacts are paths only). Strict mode exits 1 on high-severity findings.
+- **mtime-guarded cleanup** — auto-cleanup never deletes a handoff the user edited as a working surface.
+- **`--refresh` flag** — reuses the most recent handoff in the configured location instead of creating a new file; keeps save location uncluttered.
+
+Ships 7 stdlib-only Python tools, 5 reference docs (each citing 5-6 sources), `cs-handoff-author` agent, `/cs:handoff` + `/cs:handoff-setup` commands. Plugin audit (8 phases): structure 86.0/100, quality 63.0/100, security PASS (0 critical, 0 high). 2 PRs merged: #724 (v1.0) + #728 (v1.1).
+
+**v2.8.2 master plan:** in-conversation design + 8-phase audit applied twice (after each PR).
+
+---
+
+**v2.8.0 highlights — two new top-level domains: business-operations + commercial:**
+
+Designed and shipped under the `/goal` directive to expand BizOps + Commercial surface area. Both domains follow the Path-B 11-file contract per skill, are top-level domain folders (not subfolders inside an existing domain), and ship with orchestrator skills that use `context: fork` to chain sub-skills.
+
+- **`business-operations/`** (new top-level domain) — internal-ops skills for BizOps leads, COO direct reports, vendor management, IT ops. Sprint 1 ships:
+  - `business-operations-skills/` (orchestrator, `context: fork`) — routes inquiries via Matt Pocock grill discipline (one question per turn, recommended answer, canon citation)
+  - `process-mapper` — BPMN-style swim-lane mapping + bottleneck detection + cycle-time/VA% analysis. 3 stdlib tools, 4 industry profiles, Lean / TOC canon (Womack & Jones, Goldratt, Rother & Shook, Reinertsen, Anderson, Pyzdek, Ohno, Liker).
+  - `vendor-management` (`context: fork`) — vendor scoring (5 weighted dimensions, 4 industry profiles), SLA compliance tracker (lower-is-better aware), third-party risk classifier (4 risk vectors, Shared Assessments SIG-Lite). Canon: NIST SP 800-161, ISO/IEC 27036, Gartner TPRM.
+  - `cs-bizops-orchestrator` agent + `/cs:bizops` router + `/cs:grill-bizops` (Matt docs-anchored grilling) + per-skill commands.
+
+- **`commercial/`** (new top-level domain) — per-deal-and-packaging skills for deal desk, pricing teams, partner managers, RFP responders. Sprint 1 ships:
+  - `commercial-skills/` (orchestrator, `context: fork`) — routes inquiries via Matt grill discipline
+  - `pricing-strategist` — 5-model pricing picker, full Van Westendorp PSM (OPP/IDP/PMC/PME + RAP, monotonicity screening), packaging designer with 7 anti-pattern detectors. Canon: Ramanujam (Monetizing Innovation), Skok, Tunguz, Campbell/ProfitWell, Bessemer, Poyar, Sawtooth methodology.
+  - `deal-desk` — 5-dimension deal scorer with named approver chain, discount approval router (5-band policy + 4 industry variants), terms redliner detecting 10 patterns (uncapped indemnity, MFN, missing DPA, etc.). **Never auto-approves**; every verdict names the human(s). Canon: SaaStr, Winning by Design, OpenView, Forrester, KeyBanc, IACCM/WorldCC.
+  - `cs-commercial-orchestrator` agent + `/cs:commercial` router + `/cs:grill-commercial` (Matt docs-anchored grilling) + per-skill commands.
+
+- **Matt Pocock grill-with-docs pattern adopted** at the SKILL-level — each Sprint 1 SKILL.md ships a "Forcing-question library" section: 5-7 questions, walked one at a time, with a recommended answer and a canon citation per question. The discipline prevents skills from running on fuzzy inputs.
+
+- **Hard rules per domain (enforced by agent personas):**
+  - BizOps: every output is a recommendation, never an auto-decision. Vendor scoring routes to a human reviewer.
+  - Commercial: pricing outputs model + range (never a single number); deal outputs route to a named human approver (never auto-approve); forecast outputs surface the conversion assumption explicitly.
+
+- **Marketplace + Codex registry:** 57 → 59 plugins. Sprint 2 will add 4 BizOps sub-skills (capacity-planner, internal-comms, knowledge-ops, procurement-optimizer) and 5 Commercial sub-skills (partnerships-architect, channel-economics, commercial-policy, rfp-responder, commercial-forecaster), bringing the new domains to 13 sub-skills total + 2 orchestrators.
+
+- **Verification:** all 12 new Python tools (4 skills × 3 tools each) pass `--help` and `--sample` smoke tests, exit 0. Stdlib-only across the board. Industry profiles verified on the 8 profile-aware tools.
+
+- **PR:** opened against `claude/skills-plugins-framework-XjTjh` (this branch) as draft.
+
+**v2.8.0 master plan:** `documentation/implementation/bizops-commercial-expansion-plan.md`
+
+---
+
+
+
+**v2.7.3 Highlights — aeo-box port: AEO skill + security-guidance PreToolUse hook + master prompt preserved:**
+
+Ported `alirezarezvani/aeo-box` after a full component audit. Distilled the valuable parts into our conventions; skipped repo-specific infra (generic agents, GH workflows, TS scripts).
+
+- **`marketing-skill/skills/aeo/`** (new, 8 files, ~3,200 LOC) — Answer Engine Optimization skill, a discipline distinct from SEO. 3 stdlib Python tools: `aeo_audit.py` (E-E-A-T + structure scoring, 0-100 composite, 8 industries with calibrated thresholds where YMYL industries hit 85+, SaaS/b2b/media 70, ecommerce 65), `aeo_optimizer.py` (conservative/balanced/aggressive rewrites + schema.org JSON-LD injection), `citation_tracker.py` (local-first citation ledger at `~/.aeo-data/citations.json` with verdict EARLY/EMERGING/STRONG). 3 references each citing 8 sources: E-E-A-T canon, per-LLM citation patterns (Perplexity / ChatGPT / Claude / Gemini / Mistral with 73% cross-LLM correlation analysis), AEO vs. SEO strategic choice. New `cs-aeo` agent + `/cs:aeo` slash command. New 8th pod ("AEO") added to marketing-skill.
+- **`engineering/security-guidance/`** (new, 5 files) — PreToolUse security reminder hook ported from David Dworken @ Anthropic (MIT). Preserves 9 upstream patterns verbatim (eval, pickle, dangerouslySetInnerHTML, innerHTML, document.write, new Function, child_process.exec, os.system, GH Actions workflow injection) + adds 3 new patterns (subprocess shell=True, SQL f-string injection, yaml.unsafe_load). Session-state caching prevents nagging (warn once per file+rule combo), 30-day auto-cleanup, disable via `ENABLE_SECURITY_REMINDER=0`. `attribution` block in plugin.json credits upstream. Reference doc `pretooluse_hook_canon.md` cites 8 sources on hook design discipline.
+- **`megaprompts/14-aeo-agentic-megaprompt.md`** — 1,579-line multi-agent AEO application spec preserved verbatim. Keeps Path-B option open for future "build the full agentic AEO app" work.
+- **Marketplace + Codex registry:** 55 → 57 plugins; 303 → 305 indexed skills; `marketing-skill/.claude-plugin/plugin.json` description updated from 7 → 8 pods.
+- **Verification:** all 4 new Python tools pass `--help` and `--sample`; security hook smoke-tested (exits 2 on detection, 0 on cached/clean); all 3 cross-platform syncs (.codex / .gemini / .hermes) re-ran clean.
+- **PRs:** #678 (Hermes first-class integration, merged) → #679 (aeo-box port + Hermes install guide, merged).
+
+**Total scope after v2.7.3:** 313 skills across 12 domain folders, ~402 Python automation tools, ~542 reference guides, 46+ agents, 60+ slash commands.
+
+**Version:** v2.7.0
+
+**v2.7.0 Highlights — v2 megaprompt-to-skill conversion sweep: 13 new skills across productivity + marketing + research:**
+
+This release ships the complete v2 megaprompt collection (`megaprompts/01-13`) as production-ready skills using the **Path-B direct-conversion pattern**. Three new top-level domain folders created (`productivity/`, `marketing/`, `research/`) hosting 13 skills, 142 files, 23,698 lines of code + documentation.
+
+- **`productivity/`** (3 skills) — `capture` (brain-dump-to-action workspace, megaprompt 05), `email` (paired inbox-setup + inbox-triage with 7-file KB contract, megaprompts 06+07), `reflect` (light-prompt sibling, megaprompt 08).
+- **`marketing/`** (1 skill) — `landing` (single-file HTML generator with 4 design styles, brand palette validator, GSAP patterns, megaprompt 04).
+- **`research/`** (8 skills) — 7 specialists (`pulse`, `litreview`, `grants`, `dossier`, `patent`, `syllabus`, `notebooklm`) + 1 hybrid router (`research/research/` orchestrator). Megaprompts 01-03, 09-13.
+- **Research orchestrator** — deterministic SIGNALS classification routes to 6 specialists at ≥2-signal confidence, else runs own 8-step plan-decompose-search-synthesize-cite fallback. Routing transparency mandatory. Distinct from `engineering/autoresearch-agent` (Karpathy's file-optimization loop) — disambiguation surfaced in 5 places.
+- **Marketplace + Codex registry:** 43 → 55 plugins; 290 → 303 indexed skills; new categories `productivity` + `research`; `scripts/sync-codex-skills.py` extended to recognize the 3 new top-level domains.
+- **Path-B convention formalized** — megaprompt body → SKILL.md verbatim, 11-file plugin layout, 3 stdlib Python scripts per skill, 3 reference docs each citing 7+ authoritative sources, `cs-*` agent + `/cs:*` command, `source` field documents spec + build_pattern + distinct_from.
+- **Verification:** 39/39 scripts pass `--help`; 8-phase plugin audit on orchestrator → PASS WITH WARNINGS (structure 84.1/GOOD, scripts 3/3, 0 critical/high security findings); bulk audit on 12 siblings → all 79.5-86.4 structure, 0 critical/high findings.
+- **PRs:** #659 (capture) → #660 (pulse) → #661 (email pair) → #662 (landing) → #663 (litreview) → #664 (grants+dossier) → #666 (patent+syllabus) → #667 (domain-folder cleanup) → #668 (reflect) → #669 (notebooklm) → #671 (research orchestrator) → #672 (v2.7.0 release prep).
+
+**Total scope after v2.7.0:** 311 skills across 12 domain folders, ~398 Python automation tools, ~538 reference guides, 45+ agents, 59+ slash commands. (Superseded by v2.7.3 totals above.)
+
+**Version:** v2.6.1
 
 **v2.6.1 Highlights — Meta-skill maturity: validator expansion + 21 placeholder description fixes + audit tool:**
 - **`scripts/audit_skills.py`** (new) — repo-wide write-a-skill validator runner. Stdlib-only orchestration: walks every SKILL.md, runs `skill_review_checklist_runner.py`, aggregates PASS/WARN/FAIL counts + failure-by-rule + top-10 worst offenders. ~30s on 298 real skills.
@@ -263,11 +359,23 @@ This repository publishes skills to **ClawHub** (clawhub.com) as the distributio
 2. **Never rename repo folders or local skill names** to match ClawHub slugs. The repo is the source of truth.
 3. **No paid/commercial service dependencies.** Skills must not require paid third-party API keys or commercial services unless provided by the project itself. Free-tier APIs and BYOK (bring-your-own-key) patterns are acceptable.
 4. **Rate limit: 5 new skills per hour** on ClawHub. Batch publishes must respect this. Use the drip timer (`clawhub-drip.timer`) for bulk operations.
-5. **plugin.json schema** — ONLY these fields: `name`, `description`, `version`, `author`, `homepage`, `repository`, `license`, `skills`. No extra fields. The `skills` value depends on the plugin layout (Claude Code v2.1.107+ rejects bare `"./"`):
+5. **plugin.json schema** — Required fields: `name`, `description`, `version`, `author`, `homepage`, `repository`, `license`, `skills`. Two **approved extension fields** are permitted in the repo (stripped at ClawHub-publish time, if/when a stripping pipeline lands):
+   - `source` (object) — provenance metadata for skills built via Path-B megaprompt conversion. Recommended shape: `{spec: "megaprompts/NN-name.md", build_pattern: "...", distinct_from: "..."}`. Used by all 13 v2 megaprompt-derived skills (productivity/, marketing/, research/).
+   - `attribution` (object) — credit metadata for skills derived from external MIT-licensed work. Used by `engineering/caveman`, `engineering/grill-me`, `engineering/grill-with-docs` (Matt Pocock derivatives).
+
+   No other extras. The `skills` value depends on the plugin layout. Per the live Claude Code plugin spec ([plugins-reference](https://code.claude.com/docs/en/plugins-reference)), **all paths must be relative to the plugin root and start with `./`**. CC 2.1.144+ returns `Validation errors: skills: Invalid input` on a bare string without the prefix.
+
+   **Canonical forms (CC 2.1.144+):**
    - Single-skill plugin (SKILL.md at root): `"skills": ["./"]` (array form required).
-   - Plugin with `./skills/` subdir: `"skills": "./skills"`.
-   - Multi-skill domain plugin (skills are subfolders at root): `"skills": ["./sub1", "./sub2", ...]` (explicit list, omit `"./"` to avoid namespace collision with the index SKILL.md).
-6. **Version follows repo versioning.** ClawHub package versions must match the repo release version (currently v2.2.0+).
+   - Plugin with `skills/` subdir: `"skills": "./skills"` or `"skills": ["./skills"]`.
+   - Multi-skill domain plugin (skills are subfolders at root): `"skills": ["./sub1", "./sub2", ...]` (explicit list).
+
+   **Legacy form (still tolerated by the validator):** `"skills": "skills"` (bare subdir name, no `./`). Older versions of CC accepted this; current CC rejects it. The repo has been fully migrated to the canonical form — the validator keeps WARN-level tolerance for the legacy literal as a safety net against accidental regressions in copied templates. Do **not** use this form in new manifests.
+
+   **Historical regressions (now reversed upstream):** The `./` prefix was briefly forbidden between CC v2.1.107 and v2.1.144 (issues #539, #686). That window is closed; the `./` prefix is required again. Do **not** reintroduce the bare-string form for new manifests.
+
+   **Enforcement:** `scripts/check_plugin_json.py --all` runs in `ci-quality-gate.yml` on every PR. It hard-fails on any non-`./`-prefixed string that isn't the legacy `"skills"` literal, on empty strings/arrays, and on non-string array entries. When CC tightens its path validator again in the future, update both the validator (`_check_skills_string` / `_check_skills_array`) and this section together — they must move in lockstep.
+6. **Version follows repo versioning.** ClawHub package versions must match the repo release version (currently v2.7.0+).
 
 ## Anti-Patterns to Avoid
 
@@ -295,6 +403,6 @@ This repository publishes skills to **ClawHub** (clawhub.com) as the distributio
 
 ---
 
-**Last Updated:** May 11, 2026
-**Version:** v2.4.5
-**Status:** 246 skills deployed across 9 domains, 33 marketplace plugins, docs site live
+**Last Updated:** May 23, 2026
+**Version:** v2.8.2
+**Status:** 329 skills deployed across 14 domains, 60 marketplace plugins, docs site live
