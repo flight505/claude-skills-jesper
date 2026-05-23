@@ -1,6 +1,6 @@
 # TODO — claude-skills-jesper
 
-> **Status (2026-05-24)**: all 6 originally planned tracks shipped. The catalog has an item-context chat in both `forge tui` (press `c` on a row) and `forge serve` (collapsible panel on the Item detail page), pulling explicit `pairs_with:` hints from frontmatter when present. Provenance + update-check tooling is in place. Open follow-ups live at the bottom of this file.
+> **Status (2026-05-24)**: all 7 tracks shipped. The catalog has an item-context chat in both `forge tui` (press `c` on a row) and `forge serve` (collapsible panel on the Item detail page). `forge suggest --project` (or `p` in the TUI's Suggest view) auto-derives a task from the bound cwd's CLAUDE.md/README/manifests/git log + already-installed list, so you can ask "what's helpful here?" without typing one. Provenance + update-check tooling is in place. Open follow-ups live at the bottom of this file.
 
 ## Background
 
@@ -119,71 +119,21 @@ Two items remain after the 2026-05-24 culling pass. Other deferred items (cost g
 
 ---
 
-## Track 7 — Project-aware `suggest` (planning only)
+## Track 7 — Project-aware `suggest` ✅ DONE
 
-**Goal:** from a `! forge` invocation inside a Claude Code session (or `forge tui` opened in a project), surface the question *"what skills/plugins/agents would help with this project right now?"* without making the user type a task description.
+Merged in `flight505/forge` (PR #5, commit `1361d29`). From a `! forge` invocation inside a Claude Code session — or just `forge suggest --project` from anywhere with a CLAUDE.md/README — forge now reads project context and ranks catalog items against it. No task description needed.
 
-Today's `forge agent suggest "<task>"` already calls `aisuggester` with a hand-typed task string. The missing piece is auto-deriving that task from the project's own context. The semantic-ranking backend stays unchanged; this is a context-collection layer + a UI affordance on top of it.
+- [x] **7.1** `internal/project/profile.go` — reads CLAUDE.md, README, package.json/pyproject/Cargo/go.mod, `git log -20`, already-installed list. 10 KB cap with per-source budget. Stdlib only.
+- [x] **7.2** `forge suggest --project` + `forge agent suggest --project` — task arg optional when `--project` set; implies `--smart`; JSON envelope gains `project_signals: [...]`
+- [x] **7.3** TUI Suggest view: `p` auto-fills textarea + enters edit mode (no auto-submit, user previews/tweaks)
+- [x] **7.4** `(installed)` annotation on CLI output, `installed: bool` per suggestion in JSON
+- [x] **7.5** 8 tests in `internal/project/profile_test.go` cover empty dir, file collection, candidate priority, mid-source truncation, already-installed signal, git-log gating, whitespace skip, Cwd defaulting
+- [x] **7.6** Smoke-tested from two project roots — `claude-skills-jesper` produced suggestions citing `regenerate-marketplace.py` + `sync-upstream.sh`; `forge` produced HTTP-server + Go-state-machine suggestions. Same command, different cwd, contextually distinct results.
 
-### 7.1 Signal collection
+### Decisions made during implementation
 
-Read whatever the bound cwd offers and assemble into a "project profile" string. All sources are optional — missing ones just narrow the picture.
-
-| Source | What it contributes | Cost |
-|---|---|---|
-| `CLAUDE.md` (project) | The project's own intent + conventions, in the user's voice | free, 5-30 KB |
-| `README.md` (root) | Elevator pitch, install/usage docs | free, 3-15 KB |
-| `package.json` / `pyproject.toml` / `Cargo.toml` / `go.mod` | Stack + dependencies | free, 1-5 KB |
-| `.claude/settings.json` + already-installed `~/.claude/skills/` for this surface | **Negative signal** — don't re-suggest things already there | free, 1-2 KB |
-| `git log --oneline -20` | Recent activity — what we've been working on | free, ~1 KB |
-
-Cap the total context at ~10 KB to keep the API call cheap. Truncate the longest source first.
-
-### 7.2 Task assembly
-
-Format the collected signals as a single task string sent to `aisuggester.Suggest`. Two competing shapes:
-
-**A. Factual concatenation** (cheap, no extra API call):
-```
-Project at /Users/.../forge.
-README: <pitch>
-Stack: <deps>
-Recent commits: <log>
-Already installed: <names>
-Suggest skills/plugins/agents that would help develop, test, or extend this project.
-```
-
-**B. Pre-summarised** (extra Haiku call, ~$0.0005, cleaner intent signal):
-First ask Claude to summarise the project from the raw signals; feed that summary to `aisuggester`. Better semantic ranking, double the cost.
-
-Recommendation: **A for v1.** The aisuggester catalog is already cached in the system block, so the marginal cost of a long task string is just the task tokens (~2-3 KB). If results feel noisy, upgrade to B.
-
-### 7.3 Surfaces
-
-- **CLI**: `forge agent suggest --project` (no task arg). Reads cwd, prints ranked list. Output shape matches the existing `suggest` envelope so downstream parsers don't break.
-- **TUI**: a key on the Suggest view (proposed: `p` for "project") that auto-fills the textarea with the assembled task string + runs immediately. Lets users see and edit the auto-derived task before submission — keeps the existing manual flow intact.
-- **Web (`forge serve`)**: skip for v1. The web UI is already project-bound via `health().cwd`; we can add the button later if the CLI/TUI versions earn their keep.
-
-### 7.4 De-dup against installed
-
-Items already installed on the current target surface get a `(installed)` annotation in the output. Don't filter them out — sometimes the user wants to know "yes, I have the right tools, here are the ones that fit."
-
-### 7.5 Open design questions to check before coding
-
-- **Should the auto-fill be visible?** If the TUI shows the assembled task string before running, the user can fix obviously-wrong signals (e.g. a stale README). Tradeoff: extra keystroke before each run. Recommendation: show by default; offer a `--auto-submit` flag for the CLI / a shortcut in the TUI for "trust me, just run it."
-- **Should we honour `.gitignore` when reading project files?** Yes — never read files the user explicitly excluded from version control. Use `git ls-files` for the candidate file set.
-- **How aggressive should the cwd walk be?** v1: only the explicitly-named files above, at the project root. v2 could add `find -maxdepth 2 -name '*.md'` to pick up `docs/` README content, but that risks pulling irrelevant noise.
-- **Filter language? E.g. skip Python projects suggesting Apple Swift skills?** The `aisuggester` model is good enough at semantic filtering — explicit category filtering would be premature.
-
-### 7.6 Cost shape
-
-One `aisuggester` call per `--project` invocation. Same pricing as today's `suggest`: ~$0.002 at Haiku 4.5 (or $0 within Max). No background activity, no polling. The launchd daemons (Track 1b) stay unrelated — they refresh local doc snapshots, not API calls.
-
-### Tasks (when we start)
-
-- [ ] **7.1** Write `internal/project/profile.go`: collect-and-assemble signals; return the task string + a list of already-installed item names
-- [ ] **7.2** Add `--project` flag to `forge agent suggest` (CLI); wire profile → existing aisuggester path
-- [ ] **7.3** TUI Suggest view: `p` key auto-fills textarea via the profile collector
-- [ ] **7.4** De-dup annotation in output (CLI + TUI)
-- [ ] **7.5** Unit tests for profile assembly (signal absence, oversized truncation, gitignore respect)
-- [ ] **7.6** Smoke test: run `! forge agent suggest --project` from inside this repo and from inside the forge repo; check the suggestions look sensible
+- **Task assembly**: shipped option A (factual concatenation). No Haiku pre-summarisation step. Quality felt good in smoke tests; upgrade later if needed.
+- **`.gitignore` handling**: skipped. v1 only reads explicitly-named root files which aren't typically gitignored. Add `git ls-files` later if we ever do a recursive walk.
+- **Recursive walk**: not implemented. Root-level files only. v2 could pick up `docs/*.md` if it proves useful.
+- **Auto-submit**: not added. TUI `p` always enters edit mode so the user sees what's being asked. The CLI runs immediately because the user typed a flag; that's its own form of consent.
+- **Web parity**: deferred. Earn it after CLI/TUI versions see use.
