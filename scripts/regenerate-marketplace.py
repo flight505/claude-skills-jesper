@@ -253,11 +253,17 @@ def load_upstream_marketplace() -> tuple[list[dict[str, Any]], set[Path]]:
         bundle_dirs.append((dict(b), bdir))
         declared_source_dirs.add(bdir)
 
-    # Pass 2: rewrite source ref + attach contains.
+    # Pass 2: rewrite source ref + attach contains. Plugin sources must use
+    # the canonical Claude Code shape — a bare string for relative paths —
+    # not the {source, type} object forge previously emitted. The object
+    # form was forge-internal metadata that Claude Code's plugin loader
+    # rejects with "source type your Claude Code version does not support",
+    # which silently broke `claude plugin install` for everything in this
+    # marketplace.
     rewritten: list[dict[str, Any]] = []
     for b, bdir in bundle_dirs:
         rel = bdir.relative_to(UPSTREAM_DIR).as_posix()
-        b["source"] = {"source": "./upstream/" + rel, "type": "directory"}
+        b["source"] = "./upstream/" + rel
         contents = enumerate_bundle_contents(bdir, declared_source_dirs)
         if contents:
             b["contains"] = contents
@@ -393,7 +399,7 @@ def find_orphan_bundles(declared_source_dirs: set[Path]) -> list[dict[str, Any]]
         name = data.get("name") or child.name
         entry: dict[str, Any] = {
             "name": name,
-            "source": {"source": "./upstream/" + child.name, "type": "directory"},
+            "source": "./upstream/" + child.name,
         }
         for key in ("description", "version", "author", "homepage", "repository", "license", "category", "keywords"):
             val = data.get(key)
