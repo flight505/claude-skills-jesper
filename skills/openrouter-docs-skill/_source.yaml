@@ -1,0 +1,9 @@
+kind: docs
+origin:
+  - https://openrouter.ai/openapi.yaml
+  - https://openrouter.ai/api/v1/models
+refresh:
+  method: launchd
+  script: scripts/update-openrouter-docs.sh
+  schedule: "Sunday 04:00 weekly (com.flight505.openrouter-docs-refresh)"
+notes: "OpenAPI spec + live model catalog from OpenRouter."

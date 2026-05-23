@@ -1,0 +1,10 @@
+kind: docs
+origin:
+  - https://platform.claude.com/docs/en/claude_api_primer.md
+  - https://platform.claude.com/llms-full.txt
+  - https://code.claude.com/docs/llms.txt
+refresh:
+  method: launchd
+  script: scripts/update-cli-docs.sh
+  schedule: "Sunday 04:00 weekly (com.flight505.claude-docs-refresh)"
+notes: "Tier-1/2/3 snapshots of the Claude API + CLI docs. cookbook/ stays hand-curated."

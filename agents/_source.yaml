@@ -1,0 +1,2 @@
+kind: original
+notes: "First-party agents (currently: lesson-reviewer, paired with the frontend-learning skill). Hand-edited; no external refresh. If we ever vendor agents from a third-party repo, give that subset its own subdir + manifest."

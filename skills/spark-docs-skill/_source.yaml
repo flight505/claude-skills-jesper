@@ -1,0 +1,7 @@
+kind: docs
+origin: https://docs.nvidia.com/dgx/
+refresh:
+  method: launchd
+  script: scripts/update-docs.sh
+  schedule: "Sunday 04:00 weekly (com.flight505.spark-docs-refresh)"
+notes: "NVIDIA DGX Spark docs (dgx-spark + dgx-os-7-user-guide, Sphinx-indexed)."
