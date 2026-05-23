@@ -8,7 +8,7 @@
   "homepage": "https://github.com/flight505/claude-skills-jesper",
   "metadata": {
     "version": "0.1.0",
-    "generated": "2026-05-23T18:04:07Z",
+    "generated": "2026-05-23T20:22:57Z",
     "upstream": {
       "repo": "alirezarezvani/claude-skills",
       "subtree_prefix": "upstream"
@@ -17,9 +17,9 @@
       "plugins": 61,
       "plugins_declared": 60,
       "plugins_orphan": 1,
-      "skills": 9,
-      "skills_first_party": 9,
-      "agents": 24,
+      "skills": 10,
+      "skills_first_party": 10,
+      "agents": 25,
       "personas": 7,
       "commands": 38
     }
@@ -2134,6 +2134,14 @@
       "description": "Drop-in DESIGN.md design-system files for 71 popular brands (Claude, Linear, Stripe, Vercel, Apple, Figma, Tesla…). Use when the user wants to match a brand's look and feel, asks to \"apply a design system\", says \"make it look like <brand>\", mentions DESIGN.md, or needs design tokens (colors, typography, components) extracted from a known site."
     },
     {
+      "name": "frontend-learning",
+      "source": {
+        "source": "./skills/frontend-learning",
+        "type": "directory"
+      },
+      "description": "Create interactive HTML learning material that teaches a topic INTUITIVELY (not just informationally) — single-file, animation-rich explainers in the spirit of 3Blue1Brown, Distill.pub, Bartosz Ciechanowski, and Quantum Country. Use when the user wants to LEARN a topic deeply, asks to \"teach me X\", points at a paper/URL/PDF they want to understand, or wants a self-paced interactive explainer instead of slides. Builds the page, opens it, then tutors the user in conversation about it."
+    },
+    {
       "name": "gemini-docs-skill",
       "source": {
         "source": "./skills/gemini-docs-skill",
@@ -2374,6 +2382,14 @@
         "type": "file"
       },
       "description": "Google Workspace administration agent using the gws CLI. Orchestrates workspace setup, Gmail/Drive/Sheets/Calendar automation, security audits, and recipe execution. Spawn when users need Google Workspace automation, gws CLI help, or workspace administration."
+    },
+    {
+      "name": "lesson-reviewer",
+      "source": {
+        "source": "./agents/lesson-reviewer.md",
+        "type": "file"
+      },
+      "description": "Visual review of a generated frontend-learning lesson .html file. Takes EXACTLY ONE full-page screenshot at each of 4 viewport sizes (1920×1080, 1280×800, 768×1024, 375×667), applies a checklist, returns a structured PASS/FAIL report. Hard-budgeted to ≤10 tool calls / ≤5 min wall-clock so it cannot loop. NEVER edits the lesson — only reports. Use AFTER scripts/lesson-lint.py has passed, and ONLY when the user explicitly asks for visual review or reports a visible problem."
     }
   ],
   "personas": [

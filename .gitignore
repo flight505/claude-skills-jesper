@@ -28,6 +28,12 @@ skills/spark-docs-skill/references/*
 skills/nvidia-dgx-research/references/*
 !skills/nvidia-dgx-research/references/.gitkeep
 
+# user-generated frontend-learning lessons (one HTML per topic + meta)
+skills/frontend-learning/lessons/*.html
+skills/frontend-learning/lessons/*.meta.json
+skills/frontend-learning/lessons/source/
+!skills/frontend-learning/lessons/.gitkeep
+
 # forge-managed: project-scoped Claude Code installs (not for commit)
 .claude/skills/
 .claude/commands/
