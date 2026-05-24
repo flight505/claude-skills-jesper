@@ -8,7 +8,7 @@
   "homepage": "https://github.com/flight505/claude-skills-jesper",
   "metadata": {
     "version": "0.1.0",
-    "generated": "2026-05-23T21:57:42Z",
+    "generated": "2026-05-24T23:25:59Z",
     "upstream": {
       "repo": "alirezarezvani/claude-skills",
       "subtree_prefix": "upstream"
@@ -19,7 +19,7 @@
       "plugins_orphan": 1,
       "skills": 10,
       "skills_first_party": 10,
-      "agents": 25,
+      "agents": 27,
       "personas": 7,
       "commands": 38
     }
@@ -2421,6 +2421,28 @@
       "description": "Visual review of a generated frontend-learning lesson .html file. Takes EXACTLY ONE full-page screenshot at each of 4 viewport sizes (1920×1080, 1280×800, 768×1024, 375×667), applies a checklist, returns a structured PASS/FAIL report. Hard-budgeted to ≤10 tool calls / ≤5 min wall-clock so it cannot loop. NEVER edits the lesson — only reports. Use AFTER scripts/lesson-lint.py has passed, and ONLY when the user explicitly asks for visual review or reports a visible problem.",
       "pairs_with": [
         "frontend-learning"
+      ]
+    },
+    {
+      "name": "surgical-fix-builder",
+      "source": {
+        "source": "./agents/surgical-fix-builder.md",
+        "type": "file"
+      },
+      "description": "Implements ONE small, well-specified fix at a time from a structured issue spec. Use when a reviewer (cs-senior-engineer, human, lint output) has produced a list of concrete code issues and you want each implemented as an atomic, scope-disciplined change. Refuses to expand scope, refuses to touch unrelated code, runs the relevant tests after each fix and reports outcome. Pair with surgical-fix-validator for a builder/validator loop.",
+      "pairs_with": [
+        "surgical-fix-validator"
+      ]
+    },
+    {
+      "name": "surgical-fix-validator",
+      "source": {
+        "source": "./agents/surgical-fix-validator.md",
+        "type": "file"
+      },
+      "description": "Read-only verification of a surgical-fix-builder's diff before commit. Checks scope adherence (no unrelated changes), regression safety (full test + vet + format gates), and that any new tests genuinely demonstrate the bug-then-fix. Returns PASS/FAIL with specific findings. Hard 10-tool-call budget so it can't loop. Use after each surgical-fix-builder dispatch; pair with cs-senior-engineer for the upstream issue specs.",
+      "pairs_with": [
+        "surgical-fix-builder"
       ]
     }
   ],
