@@ -102,6 +102,23 @@ notes: "Tier-1/2/3 doc snapshot from platform.claude.com"
 
 Adding a new skill? Drop a `_source.yaml` next to its `SKILL.md` with at minimum `kind:`. `original` is the default if you skip the manifest entirely, but writing it explicitly future-proofs `scripts/check-sources.py`.
 
+## Integrating a third-party repo
+
+When a third-party skill/plugin/agent repo looks worth adopting, the informal workflow is:
+
+1. `cd` into this repo and start a Claude Code session
+2. Paste the git URL and ask Claude to review the repo and propose how to integrate it
+3. Decide the type (skill/plugin/agent/persona/command) and the provenance kind (`original`/`docs`/`repo-mirror`/`subtree` — see Source manifests above)
+4. Copy or subtree-pull the content into the right destination:
+   - Individual skill → `skills/<name>/` with a `SKILL.md`
+   - Agent → `agents/<name>.md`
+   - If tracking upstream updates matters → prefer `git subtree add` and document in `OVERLAP.md`
+5. Add a `_source.yaml` with `kind: repo-mirror` (or `subtree` if pulling via git subtree) and the `origin:` URI
+6. Run `python3 scripts/regenerate-marketplace.py` and verify it appears in the catalog
+7. `forge install <name>` smoke-test from a fresh session
+
+No dedicated skill is needed for this workflow — starting a Claude session with the URL and this CLAUDE.md loaded is sufficient.
+
 ## Overlap rules
 
 When upstream and first-party have the same skill name:
