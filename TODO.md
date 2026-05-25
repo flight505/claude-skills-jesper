@@ -108,9 +108,21 @@ The first dry-run flagged 5 doc-skills with empty `references/` on disk. `--fix`
 
 ---
 
+## Architecture-review cleanup (2026-05-25) ✅ DONE
+
+cs-senior-engineer architecture review of the forge codebase produced a punch list of 1 high-severity bug + 11 medium/low items. Authored two durable agents (`surgical-fix-builder` + `surgical-fix-validator`) for this kind of work, then worked the list across 4 PRs in forge:
+
+- **PR #6** — gofmt sweep, `Catalog.Load` error-swallow bug + 4 regression tests, server + UI context plumbing, `ItemType.Short()` callers, version-constant consolidation, CI `gofmt -l` gate
+- **PR #7** — sources view async refresh, aisuggester struct hoist, `suggest --project` dedup, sort.Slice
+- **PR #8** — `ui/app.go:Update` 254-line method split into 4 per-mode handlers (`updateConfirmInstallKeys`, `updateOverlayKeys`, `updateSidebarKeys`, `updateGlobalKeys`); 10 focus tests stay green
+- **PR #9** — table-driven tests for `internal/{installer,surfaces,sources}` (24 new tests; was zero)
+- **PR #10** — delete `pkg/api` stub (40 lines, zero callers, illusion-of-stable-API)
+
+Test count: 58 → 82. CI lint gate exercises gofmt + vet on every PR.
+
 ## Open follow-ups
 
-Two items remain after the 2026-05-24 culling pass. Other deferred items (cost guardrail, peer ranking on `pairs_with`, privacy disclosure, cross-marketplace pair targets, directory restructure) were retired — see commit `7687362` for rationale. `pairs_with:` itself stays in the codebase but isn't actively maintained; it's dormant metadata that the chat consumes when present, harmless when absent.
+Two items remain. Other deferred items (cost guardrail, peer ranking on `pairs_with`, privacy disclosure, cross-marketplace pair targets, directory restructure) were retired earlier — see commit `7687362` for rationale. `pairs_with:` itself stays in the codebase but isn't actively maintained; it's dormant metadata that the chat consumes when present, harmless when absent.
 
 - **Forge UI surface for `check-sources`** (was Track 6.4.1). A Doctor-tab section or TUI overlay that runs `scripts/check-sources.py --no-color` and parses the output, so "what's stale?" is one keypress away instead of a shell command.
 - **Streaming on the TUI.** Reconsider if multi-paragraph chat replies start feeling sluggish. The web side is JSON-only today and can flip to SSE later without a wire-protocol change.
