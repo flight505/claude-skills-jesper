@@ -120,14 +120,17 @@ cs-senior-engineer architecture review of the forge codebase produced a punch li
 
 Test count: 58 → 82. CI lint gate exercises gofmt + vet on every PR.
 
-## Open follow-ups
+## Open follow-ups (2026-05-25 pass — 3 of 4 closed)
 
-Two items remain. Other deferred items (cost guardrail, peer ranking on `pairs_with`, privacy disclosure, cross-marketplace pair targets, directory restructure) were retired earlier — see commit `7687362` for rationale. `pairs_with:` itself stays in the codebase but isn't actively maintained; it's dormant metadata that the chat consumes when present, harmless when absent.
+**Closed:**
 
-- **Forge UI surface for `check-sources`** (was Track 6.4.1). A Doctor-tab section or TUI overlay that runs `scripts/check-sources.py --no-color` and parses the output, so "what's stale?" is one keypress away instead of a shell command.
-- **Streaming on the TUI.** Reconsider if multi-paragraph chat replies start feeling sluggish. The web side is JSON-only today and can flip to SSE later without a wire-protocol change.
-- **Document the third-party integration workflow.** Today's flow is informal: `cd` into this repo, start a Claude session, paste a git URL, ask Claude to review and propose how to integrate the upstream skill/plugin/agent. Probably doesn't need its own skill — a 10-line "Integrating a third-party repo" section in CLAUDE.md (steps: read the repo, check the SKILL.md frontmatter, classify provenance kind, draft a `_source.yaml`, propose a target dir under `skills/`, regenerate, smoke-test) would carry the workflow without new tooling. Revisit only if the informal flow starts feeling lossy.
-- **DGX Spark / Linux portability review.** This marketplace is personal-first today; eventually likely to be cloned onto the NVIDIA DGX Spark machine so Claude can use it from there. Known macOS-only pieces that need a story for Linux: `skills/_shared/install-refresh-daemons.sh` already errors loudly on non-darwin (the `[[ "$(uname)" == "Darwin" ]]` guard) — needs a systemd/cron variant. The macOS Keychain probe in `forge/internal/llm/client.go` is already darwin-gated and falls back to env vars on Linux, so chat works as long as `CLAUDE_CODE_OAUTH_TOKEN` or `ANTHROPIC_API_KEY` is exported. Walk the rest of the codebase for `darwin`-only assumptions (paths like `~/Library/`, `osascript`, `pbcopy`, etc.) and write a Linux-install README before the first DGX deploy.
+- ✅ **Forge UI surface for `check-sources`** — `forge tui` → F6 (Doctor) → press `s`. Runs `scripts/check-sources.py --no-color` async, renders inline with amber STALE lines. forge PR #11.
+- ✅ **Document the third-party integration workflow** — 7-step "Integrating a third-party repo" section added to CLAUDE.md.
+- ✅ **DGX Spark / Linux portability review** — `docs/linux-install.md` added. Short answer: forge binary is already cross-platform; only the launchd daemon installer needs a cron/systemd equivalent. Guide covers build-from-source, env-var auth, cron + systemd timer setups, headless URL-open note. `platform/open.go` already handles `xdg-open`; `llm/client.go` already darwin-gates the Keychain probe.
+
+**Still open (conditional):**
+
+- **Streaming on the TUI.** Deliberate non-implementation: Haiku 4.5 responds in 2-5 seconds; "thinking…" indicator is visible; web is also non-streaming and feels fine. Implement only if multi-paragraph replies become a real UX complaint in practice. The Bubble Tea chain-cmd pattern (each chunk emits a new Cmd) is documented in the codebase as a comment; the Anthropic streaming API path in `internal/llm` would need a parallel `Stream()` function alongside `Post()`.
 
 ---
 
