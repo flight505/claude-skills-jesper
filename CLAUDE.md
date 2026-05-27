@@ -1,11 +1,24 @@
 # CLAUDE.md — claude-skills-jesper
 
-Personal Claude Code skills marketplace. Vendors [alirezarezvani/claude-skills](https://github.com/alirezarezvani/claude-skills) via `git subtree` under `upstream/` and adds first-party skills under `skills/`.
+Personal Claude Code skills marketplace. The bulk of the catalog (~130 of 143 items — all plugins, all commands, all personas, and most agents) is vendored from [alirezarezvani/claude-skills](https://github.com/alirezarezvani/claude-skills) under `upstream/` via `git subtree`. A small first-party layer under `skills/` and `agents/` (~13 items) sits on top.
+
+Current composition (regenerate-marketplace.py output):
+
+| Type     | first-party | upstream | total |
+|----------|------------:|---------:|------:|
+| skills   | 10          | 0        | 10    |
+| plugins  | 0           | 61       | 61    |
+| agents   | 3           | 24       | 27    |
+| commands | 0           | 38       | 38    |
+| personas | 0           | 7        | 7     |
+
+When asked to "pick something from the catalog" or "audit the marketplace," sample both layers — `upstream/` is the surface area, not just an external dependency.
 
 ## Critical paths
 
-- `upstream/` — never hand-edit. Pull updates with `./scripts/sync-upstream.sh`.
-- `skills/` — first-party only. Edit freely.
+- `upstream/` — vendored catalog; source of all plugins/commands/personas and most agents. Never hand-edit; pull updates with `./scripts/sync-upstream.sh`.
+- `skills/` — first-party skills. Edit freely.
+- `agents/` — first-party agents (3 today). Edit freely.
 - `.claude-plugin/marketplace.json` — **generated**. Never hand-edit; run `python3 scripts/regenerate-marketplace.py`.
 
 ## Adding a first-party skill
@@ -17,26 +30,17 @@ Personal Claude Code skills marketplace. Vendors [alirezarezvani/claude-skills](
 
 ### `pairs_with:` — pairing hints for the chat
 
-When a catalog item has natural collaborators (a frontend-design skill that pairs with a design-system skill; a docs-skill that pairs with another docs-skill in a related domain), declare them in the frontmatter:
+When a catalog item has natural collaborators, declare them in the frontmatter as either a comma-separated string or a YAML list:
 
 ```yaml
----
-name: frontend-learning
-description: Builds interactive HTML explainers.
-version: 0.1.0
 pairs_with: frontend-design, design-md
----
-```
-
-Or, equivalently, as a YAML list:
-
-```yaml
+# or
 pairs_with:
   - frontend-design
   - design-md
 ```
 
-Both shapes are parsed by `scripts/regenerate-marketplace.py` and surface as a `pairs_with: [...]` array on the entry in `marketplace.json`. The forge TUI's chat pane and the web `ItemChat` panel read this list and prepend the named items to their peer-suggestion set (replacing the same-type-first-10 heuristic when explicit pairs exist). Names must match other entries' `name:` exactly — a wrong name silently drops the hint, no error.
+`scripts/regenerate-marketplace.py` normalises both into a `pairs_with: [...]` array on the marketplace entry. The forge TUI's chat pane and the web `ItemChat` panel prepend these to their peer-suggestion set (replacing the same-type-first-10 heuristic when explicit pairs exist). Names must match other entries' `name:` exactly — a wrong name silently drops the hint.
 
 ## Pulling upstream updates
 
@@ -59,6 +63,8 @@ This runs `git subtree pull --squash` and regenerates `marketplace.json`. Previe
 ## Install layer
 
 Managed via [`forge`](https://github.com/flight505/forge). This repo is content + sync only — no CLI of its own.
+
+Catalog items install into the Claude Code CLI by default. To target Claude Cowork instead, pass `--surface cowork` (or pick the cowork surface in `forge tui` / `forge serve`). Cowork's loader only understands plugins, so non-plugin items are auto-wrapped at install time.
 
 ## Doc-skill refresh daemons
 
