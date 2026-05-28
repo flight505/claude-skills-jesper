@@ -19,7 +19,9 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 
-# Language-specific file extensions
+# Language-specific file extensions.
+# `c` is declared before `cpp` so plain `.h` resolves to C, matching the
+# dispatch table in SKILL.md. C++ headers use `.hpp` / `.hh` / `.hxx`.
 LANGUAGE_EXTENSIONS = {
     "python": [".py"],
     "typescript": [".ts", ".tsx"],
@@ -28,6 +30,13 @@ LANGUAGE_EXTENSIONS = {
     "swift": [".swift"],
     "kotlin": [".kt", ".kts"],
     "csharp": [".cs", ".csx", ".razor", ".cshtml"],
+    "java": [".java"],
+    "c": [".c", ".h"],
+    "cpp": [".cpp", ".cc", ".cxx", ".hpp", ".hh", ".hxx"],
+    "rust": [".rs"],
+    "ruby": [".rb", ".rake", ".gemspec", ".ru"],
+    "php": [".php", ".phtml"],
+    "dart": [".dart"],
 }
 
 # Code smell thresholds
@@ -135,6 +144,55 @@ def find_functions(content: str, language: str) -> List[Dict]:
             r"override|sealed|abstract|partial|new|readonly|extern)\s+)+"
             r"(?:[\w<>?,\s\[\]\.]+?\s+)?(\w+)\s*\(([^)]*)\)"
         ),
+        # Java: require at least one method modifier to distinguish
+        # declarations from invocations (mirrors the C# approach).
+        "java": (
+            r"(?:(?:public|private|protected|static|final|abstract|"
+            r"synchronized|native|default|strictfp)\s+)+"
+            r"(?:[\w<>?,\s\[\]\.]+?\s+)?(\w+)\s*\(([^)]*)\)"
+        ),
+        # C: require an opening brace after the parens so prototypes and
+        # call sites don't get matched. Return type / qualifiers come first.
+        # Skip C control-flow keywords that look like function calls.
+        "c": (
+            r"^(?:static\s+|inline\s+|extern\s+|const\s+|unsigned\s+|"
+            r"signed\s+|volatile\s+|register\s+)*"
+            r"(?:[\w\*]+\s+\**)+"
+            r"(?!(?:if|while|for|switch|return|sizeof)\b)"
+            r"(\w+)\s*\(([^)]*)\)\s*\{"
+        ),
+        # C++: like C but also catches `ClassName::method(...)` definitions
+        # and template return types like `std::vector<int>`.
+        "cpp": (
+            r"^(?:static\s+|inline\s+|extern\s+|const\s+|virtual\s+|"
+            r"explicit\s+|constexpr\s+|noexcept\s+)*"
+            r"(?:[\w:\*<>&,\s]+\s+\**)+"
+            r"(?!(?:if|while|for|switch|return|sizeof)\b)"
+            r"(\w+)(?:::\w+)?\s*\(([^)]*)\)\s*(?:const\s*)?"
+            r"(?:noexcept\s*)?(?:override\s*)?(?:final\s*)?\{"
+        ),
+        # Rust: `fn` keyword is always present and unambiguous.
+        "rust": (
+            r"(?:pub(?:\([^)]+\))?\s+)?(?:async\s+)?(?:unsafe\s+)?"
+            r"(?:extern\s+\"[^\"]+\"\s+)?fn\s+(\w+)\s*"
+            r"(?:<[^>]+>)?\s*\(([^)]*)\)"
+        ),
+        # Ruby: `def` keyword; params may be parenthesised or bare.
+        "ruby": (
+            r"def\s+(?:self\.)?(\w+[?!=]?)(?:\s*\(([^)]*)\)|\s*$|\s+\w)"
+        ),
+        # PHP: `function` keyword is always present.
+        "php": (
+            r"(?:(?:public|private|protected|static|abstract|final)\s+)*"
+            r"function\s+(\w+)\s*\(([^)]*)\)"
+        ),
+        # Dart: typed return followed by name and parens. Constructors
+        # (where name matches enclosing class) are not specially handled.
+        "dart": (
+            r"^\s*(?:static\s+|external\s+)*"
+            r"(?:Future<[^>]*>|Stream<[^>]*>|void|[\w<>?,\s]+?)\s+"
+            r"(\w+)\s*\(([^)]*)\)\s*(?:async\*?\s*|sync\*?\s*)?\{"
+        ),
     }
 
     pattern = patterns.get(language, patterns["python"])
@@ -183,6 +241,23 @@ def find_classes(content: str, language: str) -> List[Dict]:
         "swift": r"class\s+(\w+)",
         "kotlin": r"class\s+(\w+)",
         "csharp": r"(?:class|struct|record|interface)\s+(\w+)",
+        "java": r"(?:class|interface|enum|record)\s+(\w+)",
+        # C has no classes; `struct` and `typedef struct` are the closest.
+        "c": r"(?:typedef\s+)?struct\s+(\w+)",
+        "cpp": r"(?:class|struct)\s+(\w+)",
+        # Rust uses `struct`, `enum`, `trait`, `union` for type definitions.
+        # `impl` blocks attach methods but are not type defs themselves.
+        "rust": r"(?:pub(?:\([^)]+\))?\s+)?(?:struct|enum|trait|union)\s+(\w+)",
+        "ruby": r"(?:class|module)\s+(\w+)",
+        "php": (
+            r"(?:abstract\s+|final\s+)?"
+            r"(?:class|interface|trait|enum)\s+(\w+)"
+        ),
+        # Dart 3 class modifiers: final / interface / base / sealed / mixin.
+        "dart": (
+            r"(?:abstract\s+|sealed\s+|final\s+|base\s+|interface\s+)?"
+            r"(?:class|mixin|enum|extension)\s+(\w+)"
+        ),
     }
 
     pattern = patterns.get(language, patterns["python"])
@@ -212,6 +287,38 @@ def find_classes(content: str, language: str) -> List[Dict]:
                 r"(?:(?:public|private|protected|internal|static|async|virtual|"
                 r"override|sealed|abstract|partial)\s+)+"
                 r"(?:[\w<>?,\s\[\]\.]+?\s+)?\w+\s*\("
+            ),
+            "java": (
+                r"(?:(?:public|private|protected|static|final|abstract|"
+                r"synchronized|native|default|strictfp)\s+)+"
+                r"(?:[\w<>?,\s\[\]\.]+?\s+)?\w+\s*\("
+            ),
+            # C has no classes; struct members are typically function pointers
+            # rather than methods. Use the function definition pattern.
+            "c": (
+                r"^(?:static\s+|inline\s+)*(?:[\w\*]+\s+\**)+"
+                r"(?!(?:if|while|for|switch|return|sizeof)\b)"
+                r"\w+\s*\([^)]*\)\s*\{"
+            ),
+            "cpp": (
+                r"^(?:static\s+|inline\s+|virtual\s+|explicit\s+|"
+                r"constexpr\s+)*(?:[\w:\*<>&,\s]+\s+\**)+"
+                r"(?!(?:if|while|for|switch|return|sizeof)\b)"
+                r"\w+(?:::\w+)?\s*\([^)]*\)"
+            ),
+            "rust": (
+                r"(?:pub(?:\([^)]+\))?\s+)?(?:async\s+)?(?:unsafe\s+)?"
+                r"fn\s+\w+"
+            ),
+            "ruby": r"def\s+(?:self\.)?\w+[?!=]?",
+            "php": (
+                r"(?:(?:public|private|protected|static|abstract|final)\s+)*"
+                r"function\s+\w+\s*\("
+            ),
+            "dart": (
+                r"^\s*(?:static\s+|external\s+)*"
+                r"(?:Future<[^>]*>|Stream<[^>]*>|void|[\w<>?,\s]+?)\s+"
+                r"\w+\s*\([^)]*\)\s*(?:async\*?\s*|sync\*?\s*)?\{"
             ),
         }
         method_pattern = method_patterns.get(language, method_patterns["python"])
@@ -299,9 +406,18 @@ def check_code_smells(content: str, functions: List[Dict], classes: List[Dict]) 
     return smells
 
 
+def _strip_csharp_comments(content: str) -> str:
+    """Remove // line comments and /* */ block comments so regex detectors
+    don't match keywords inside prose."""
+    no_block = re.sub(r"/\*.*?\*/", "", content, flags=re.DOTALL)
+    no_line = re.sub(r"//[^\n]*", "", no_block)
+    return no_line
+
+
 def check_csharp_specific_smells(content: str) -> List[Dict]:
     """C# / .NET-specific code smells documented in SKILL.md."""
     smells: List[Dict] = []
+    content = _strip_csharp_comments(content)
 
     # async void (event handler exception only — caller must justify)
     for match in re.finditer(r"\basync\s+void\s+(\w+)\s*\(", content):
@@ -405,6 +521,88 @@ def check_csharp_specific_smells(content: str) -> List[Dict]:
                 "message": f"'using {ns};' appears unused",
                 "location": ns,
             })
+
+    return smells
+
+
+def check_java_specific_smells(content: str) -> List[Dict]:
+    """Java-specific code smells documented in languages/java.md."""
+    smells: List[Dict] = []
+    # Java comment syntax matches C#, so the same stripper applies.
+    content = _strip_csharp_comments(content)
+
+    # Empty catch block — swallows the exception silently.
+    for match in re.finditer(r"catch\s*\([^)]*\)\s*\{\s*\}", content):
+        smells.append({
+            "type": "java_empty_catch",
+            "severity": "high",
+            "message": "Empty catch block swallows exceptions silently",
+            "location": f"offset {match.start()}",
+        })
+
+    # printStackTrace() as error handling — use a logger instead.
+    for match in re.finditer(r"\.printStackTrace\s*\(\s*\)", content):
+        smells.append({
+            "type": "java_print_stack_trace",
+            "severity": "medium",
+            "message": (
+                "'printStackTrace()' is not real error handling — log via a "
+                "proper logger or rethrow with context"
+            ),
+            "location": f"offset {match.start()}",
+        })
+
+    # InterruptedException caught without restoring the interrupt flag.
+    for match in re.finditer(
+        r"catch\s*\(\s*InterruptedException\s+(\w+)\s*\)\s*\{(.*?)\}",
+        content,
+        re.DOTALL,
+    ):
+        if "interrupt()" not in match.group(2):
+            smells.append({
+                "type": "java_swallowed_interrupt",
+                "severity": "high",
+                "message": (
+                    "InterruptedException caught without "
+                    "'Thread.currentThread().interrupt()' — breaks cooperative "
+                    "cancellation"
+                ),
+                "location": f"offset {match.start()}",
+            })
+
+    # Closeable resource instantiated outside try-with-resources (leak heuristic).
+    resource_hint = re.compile(
+        r"^(?!\s*try\b)\s*(?:final\s+)?[\w<>\[\]]+\s+\w+\s*=\s*new\s+"
+        r"(\w*(?:InputStream|OutputStream|Reader|Writer|Stream|Connection))\s*\(",
+        re.MULTILINE,
+    )
+    for match in resource_hint.finditer(content):
+        smells.append({
+            "type": "java_unclosed_resource",
+            "severity": "medium",
+            "message": (
+                f"'{match.group(1)}' looks like an AutoCloseable but is not in a "
+                "try-with-resources statement"
+            ),
+            "location": f"offset {match.start()}",
+        })
+
+    # Heavy object built per use instead of shared as a singleton.
+    # A `static` field assignment is the recommended singleton form — skip it.
+    heavy_object = re.compile(
+        r"^(?!.*\bstatic\b).*\bnew\s+(ObjectMapper|Gson)\s*\(\s*\)",
+        re.MULTILINE,
+    )
+    for match in heavy_object.finditer(content):
+        smells.append({
+            "type": "java_per_use_heavy_object",
+            "severity": "medium",
+            "message": (
+                f"'new {match.group(1)}()' is expensive — share a singleton "
+                "instance instead of constructing per call"
+            ),
+            "location": f"offset {match.start()}",
+        })
 
     return smells
 
@@ -519,6 +717,8 @@ def analyze_file(filepath: Path) -> Dict:
     smells = check_code_smells(content, functions, classes)
     if language == "csharp":
         smells.extend(check_csharp_specific_smells(content))
+    if language == "java":
+        smells.extend(check_java_specific_smells(content))
     violations = check_solid_violations(content)
     score = calculate_quality_score(line_metrics, functions, classes, smells, violations)
 

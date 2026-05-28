@@ -5,6 +5,61 @@ All notable changes to the Claude Skills Library will be documented in this file
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] — code-reviewer: 6 new languages + analyzer wiring + doc sync
+
+### Added — language coverage 7 → 13 (PR #769)
+
+Six new language-rule files in `engineering-team/skills/code-reviewer/languages/`. Each follows the established 8-section contract (PR Analyzer Signals / Code Quality Checks / Security / Async / Resource Management / Exception Handling / Performance / Idioms). Contributor: @mitnick2012.
+
+- **`c.md`** — memory safety, banned functions (`gets`, `strcpy`, `sprintf` without bounds), pointer ownership, buffer-bounds discipline, undefined-behavior patterns.
+- **`cpp.md`** — smart-pointer ownership transfer, RAII discipline, `reinterpret_cast` audit, missing virtual destructors, C++17/20 idioms.
+- **`rust.md`** — `unsafe` block justification, `.unwrap()` in production paths, Tokio runtime pitfalls, `thiserror` vs `anyhow` separation, clippy compliance.
+- **`ruby.md`** — Rails-aware: N+1 with `includes`, `strong_parameters`, `YAML.safe_load` vs `YAML.load`, `Marshal.load`, Ruby 3.x idioms.
+- **`php.md`** — SQL injection, `unserialize`, `eval`, file inclusion, CSRF, XSS, PHP 8.x idioms (`match`, enums, `readonly`).
+- **`dart.md`** — Dart + Flutter unified: widget `dispose()` lifecycle, `BuildContext` across async gaps, `const` widget optimization, state-management patterns.
+
+`SKILL.md` dispatch table and `--language` valid-values comment updated accordingly. No existing language files were modified.
+
+### Fixed — deterministic analyzer wiring (PR #772)
+
+Post-merge audit of PR #769 surfaced a gap: `SKILL.md`'s dispatch table and the `--language` help text both advertised coverage for the 6 new languages, but `scripts/code_quality_checker.py` was never updated — files in those languages were silently skipped by the deterministic analyzer.
+
+Three structures in `code_quality_checker.py` extended (+94 / -1, stdlib-only):
+
+- **`LANGUAGE_EXTENSIONS`** — 6 new dict entries matching `SKILL.md` exactly. `c` declared before `cpp` so plain `.h` resolves to C per the dispatch-table contract.
+- **`find_functions` patterns** — language-aware function regexes. C/C++ require a trailing `{` (filters prototypes and call sites) plus negative-lookahead on control-flow keywords. Rust uses the unambiguous `fn` keyword. Ruby handles `def`, `def self.x`, predicate (`?`) / bang (`!`) suffixes, parenthesised-or-bare params. PHP requires the `function` keyword. Dart matches typed-return-then-name with optional `async` / `async*` / `sync*` markers.
+- **`find_classes` patterns + nested `method_patterns`** — type-def regexes: `struct` / `typedef struct` for C; `class` / `struct` for C++; `struct` / `enum` / `trait` / `union` for Rust; `class` / `module` for Ruby; `class` / `interface` / `trait` / `enum` for PHP; `class` / `mixin` / `enum` / `extension` with all 5 Dart 3 class modifiers (`abstract` / `sealed` / `final` / `base` / `interface`).
+
+Verification: `python3 scripts/code_quality_checker.py --help` now lists all 14 languages as `--language` choices. Smoke-tested with a minimal sample per new language; each correctly detects functions and classes. All 4 bundled regression fixtures (`csharp`/`java` × `smells`/`clean`) still match their committed `expected_outputs/*.json` byte-for-byte.
+
+**Not yet:** language-specific `check_<name>_specific_smells` detectors for the 6 new languages (only C# and Java have these today). Audit ranked C / C++ / Rust as the next-highest-leverage additions.
+
+### Changed — documentation sync (this PR)
+
+- **`engineering-team/skills/code-reviewer/README.md`** — language list (line 3) and the "Review rules" guide-per-language reference (line 90) updated 7 → 13 languages.
+- **`docs/skills/engineering-team/code-reviewer.md`** — MkDocs page synced: frontmatter description, file-tree, dispatch table (6 new rows), and `--language` valid-values comment.
+- **Cross-platform sync indexes** — `.gemini/skills-index.json` and `.vibe/skills/claude-skills/skills-index.json` regenerated via `scripts/sync-gemini-skills.py` / `scripts/sync-vibe-skills.py`; `.hermes/skills/claude-skills/skills-index.json` hand-patched (full regen would have bundled 33 unrelated new-skill entries — left for a separate mirror-refresh PR). `.codex/skills-index.json` was already current. All 3 updated mirrors now show the canonical 13-language description from `SKILL.md` frontmatter.
+
+---
+
+## [Unreleased] — Mistral Vibe cross-platform installation (closes #705)
+
+### Added
+
+- **`scripts/sync-vibe-skills.py`** — installs claude-code-skills into [Mistral Vibe](https://github.com/mistralai/mistral-vibe) (Apache-2.0 CLI coding agent). Fork of `sync-hermes-skills.py` with target `~/.vibe/skills/claude-skills/<domain>/<skill>/`, namespaced to avoid collisions with Vibe built-ins. Same flags: `--verbose`, `--domain`, `--dry-run`, `--copy`, `--json`, `--target`.
+- **`scripts/vibe-install.sh`** — bash one-liner wrapper for parity with `gemini-install.sh` and `codex-install.sh`. Surfaces Vibe-specific post-install usage tips (`/skills`, `/<slug>`).
+- **`.vibe/skills/claude-skills/`** — pre-generated tree committed to the repo: 306 skill symlinks across 14 domains plus a `skills-index.json` manifest. Lets users inspect the install surface without running the script. Mirrors the existing `.hermes/skills/claude-skills/` precedent.
+- **`INSTALLATION.md`** — new "Mistral Vibe Installation" section (setup, direct Python invocation, verify, uninstall, Python CLI tools), plus TOC entry and a row in the cross-tool compatibility table.
+- **`README.md`** — Mistral Vibe added to the "Works with" line, footnote describing the BYO-sync tier (mirrors the Hermes footnote), row in the Multi-Tool Support table, and FAQ updated from 12 → 13 supported tools.
+- **`docs/index.md`, `docs/getting-started.md`, `docs/integrations.md`** — Mistral Vibe install tab added to all three pages, full ~130-line integration section parallel to Hermes section in `integrations.md`, description meta tags updated 12 → 13 AI coding tools.
+- **`.claude-plugin/marketplace.json`, `mkdocs.yml`** — platform compatibility taglines updated; all 13 tools named explicitly in `mkdocs.yml`.
+
+### Why
+
+Mistral Vibe (released Jan 2026, v2.0) uses the [Agent Skills spec](https://docs.mistral.ai/mistral-vibe/agents-skills) — exactly the same `SKILL.md` + YAML frontmatter contract this repo already ships. Zero format conversion needed; the integration slots cleanly into the existing 5-target cross-platform sync pattern (`.claude` / `.codex` / `.gemini` / `.hermes` / `.vibe`). Issue [#705](https://github.com/alirezarezvani/claude-skills/issues/705) requested this from @saifjarboui.
+
+---
+
 ## [2.8.2] - 2026-05-23 — productivity/handoff skill, Matt Pocock-inspired
 
 Single-skill point release on top of v2.8.1. New `productivity/handoff/` skill is a sibling to the existing `engineering/handoff/` (shipped in v2.6.0). Both preserve Matt Pocock's seven-sentence body verbatim; the productivity variant adds the wrappers the engineering port deliberately skipped.
