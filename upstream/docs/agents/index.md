@@ -1,13 +1,13 @@
 ---
 title: "AI Coding Agents — Agent-Native Orchestrators & Codex Skills"
-description: "78 agent-native orchestrators for Claude Code, Codex CLI, and Gemini CLI — multi-skill AI agents across engineering, product, marketing, and more."
+description: "90 agent-native orchestrators for Claude Code, Codex CLI, and Gemini CLI — multi-skill AI agents across engineering, product, marketing, and more."
 ---
 
 <div class="domain-header" markdown>
 
 # :material-robot: Agents
 
-<p class="domain-count">78 agents that orchestrate skills across domains</p>
+<p class="domain-count">90 agents that orchestrate skills across domains</p>
 
 </div>
 
@@ -259,6 +259,12 @@ description: "78 agent-native orchestrators for Claude Code, Codex CLI, and Gemi
 
     Engineering - POWERFUL
 
+-   :material-rocket-launch:{ .lg .middle } **[cs-claude-coach — Power-User Coach Persona](cs-claude-coach.md)**
+
+    ---
+
+    Engineering - POWERFUL
+
 -   :material-rocket-launch:{ .lg .middle } **[Grill Master Agent](cs-grill-master.md)**
 
     ---
@@ -296,6 +302,12 @@ description: "78 agent-native orchestrators for Claude Code, Codex CLI, and Gemi
     Engineering - POWERFUL
 
 -   :material-rocket-launch:{ .lg .middle } **[wiki-linter](wiki-linter.md)**
+
+    ---
+
+    Engineering - POWERFUL
+
+-   :material-rocket-launch:{ .lg .middle } **[Workflow Architect Agent](cs-workflow-architect.md)**
 
     ---
 
@@ -391,6 +403,12 @@ description: "78 agent-native orchestrators for Claude Code, Codex CLI, and Gemi
 
     C-Level Advisory
 
+-   :material-account:{ .lg .middle } **[Andreessen Agent](cs-andreessen.md)**
+
+    ---
+
+    Productivity
+
 -   :material-account:{ .lg .middle } **[Capture Agent](cs-capture.md)**
 
     ---
@@ -480,5 +498,59 @@ description: "78 agent-native orchestrators for Claude Code, Codex CLI, and Gemi
     ---
 
     Commercial
+
+-   :material-account:{ .lg .middle } **[cs-research-ops-orchestrator — Evidence-first R&D operations lead](cs-research-ops-orchestrator.md)**
+
+    ---
+
+    Research Ops
+
+-   :material-account:{ .lg .middle } **[EU AI Act Compliance Agent](cs-ai-act-compliance.md)**
+
+    ---
+
+    Compliance Os
+
+-   :material-account:{ .lg .middle } **[AIMS ISO 42001 Specialist Agent](cs-aims-iso42001.md)**
+
+    ---
+
+    Compliance Os
+
+-   :material-account:{ .lg .middle } **[ISO 27001 ISMS Auditor Agent](cs-ciso-iso27001.md)**
+
+    ---
+
+    Compliance Os
+
+-   :material-account:{ .lg .middle } **[Compliance Officer Agent (Multi-Framework Orchestrator)](cs-compliance-officer.md)**
+
+    ---
+
+    Compliance Os
+
+-   :material-account:{ .lg .middle } **[ISO 13485 QMS Auditor Agent](cs-cqm-iso13485.md)**
+
+    ---
+
+    Compliance Os
+
+-   :material-account:{ .lg .middle } **[GDPR DPO Auditor Agent](cs-dpo-gdpr.md)**
+
+    ---
+
+    Compliance Os
+
+-   :material-account:{ .lg .middle } **[FDA QSR Auditor Agent](cs-fda-qsr-auditor.md)**
+
+    ---
+
+    Compliance Os
+
+-   :material-account:{ .lg .middle } **[SOC 2 Type II Auditor Agent](cs-soc2-auditor.md)**
+
+    ---
+
+    Compliance Os
 
 </div>

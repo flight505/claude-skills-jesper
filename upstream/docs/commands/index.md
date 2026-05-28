@@ -1,13 +1,13 @@
 ---
 title: "Slash Commands — AI Coding Agent Commands & Codex Shortcuts"
-description: "74 slash commands for Claude Code, Codex CLI, and Gemini CLI — sprint planning, tech debt analysis, PRDs, OKRs, and more."
+description: "84 slash commands for Claude Code, Codex CLI, and Gemini CLI — sprint planning, tech debt analysis, PRDs, OKRs, and more."
 ---
 
 <div class="domain-header" markdown>
 
 # :material-console: Slash Commands
 
-<p class="domain-count">74 commands for quick access to common operations</p>
+<p class="domain-count">84 commands for quick access to common operations</p>
 
 </div>
 
@@ -247,6 +247,12 @@ description: "74 slash commands for Claude Code, Codex CLI, and Gemini CLI — s
 
     Command: /cs:caveman
 
+-   :material-console:{ .lg .middle } **[`/cs-claude-coach`](cs-claude-coach.md)**
+
+    ---
+
+    Activates the claude-coach skill. From this point on, the conversation gains:
+
 -   :material-console:{ .lg .middle } **[`/cs-grill-me`](cs-grill-me.md)**
 
     ---
@@ -265,11 +271,29 @@ description: "74 slash commands for Claude Code, Codex CLI, and Gemini CLI — s
 
     Command: /cs:handoff <next-session-focus>
 
+-   :material-console:{ .lg .middle } **[`/cs-workflow-build`](cs-workflow-build.md)**
+
+    ---
+
+    Command: /cs:workflow-build <task-description>
+
 -   :material-console:{ .lg .middle } **[`/cs-write-a-skill`](cs-write-a-skill.md)**
 
     ---
 
     Command: /cs:write-a-skill <name-or-description>
+
+-   :material-console:{ .lg .middle } **[`/cs-andreessen`](cs-andreessen.md)**
+
+    ---
+
+    Command: /cs:andreessen
+
+-   :material-console:{ .lg .middle } **[`/cs-pmf-check`](cs-pmf-check.md)**
+
+    ---
+
+    Command: /cs:pmf-check
 
 -   :material-console:{ .lg .middle } **[`/cs-capture`](cs-capture.md)**
 
@@ -456,5 +480,41 @@ description: "74 slash commands for Claude Code, Codex CLI, and Gemini CLI — s
     ---
 
     Run the rfp-responder skill on this input:
+
+-   :material-console:{ .lg .middle } **[`/cs-clinical-research`](cs-clinical-research.md)**
+
+    ---
+
+    Run the clinical-research skill on this input:
+
+-   :material-console:{ .lg .middle } **[`/cs-grill-research-ops`](cs-grill-research-ops.md)**
+
+    ---
+
+    Apply Matt Pocock's grill-with-docs discipline to this plan / problem:
+
+-   :material-console:{ .lg .middle } **[`/cs-market-research`](cs-market-research.md)**
+
+    ---
+
+    Run the market-research skill on this input:
+
+-   :material-console:{ .lg .middle } **[`/cs-product-research`](cs-product-research.md)**
+
+    ---
+
+    Run the product-research skill on this input:
+
+-   :material-console:{ .lg .middle } **[`/cs-research-finance`](cs-research-finance.md)**
+
+    ---
+
+    Run the research-finance skill on this input:
+
+-   :material-console:{ .lg .middle } **[`/cs-research-ops`](cs-research-ops.md)**
+
+    ---
+
+    Route this inquiry through the research-ops-skills orchestrator:
 
 </div>
