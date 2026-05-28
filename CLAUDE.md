@@ -1,13 +1,13 @@
 # CLAUDE.md — claude-skills-jesper
 
-Personal Claude Code skills marketplace. The bulk of the catalog (~130 of 143 items — all plugins, all commands, all personas, and most agents) is vendored from [alirezarezvani/claude-skills](https://github.com/alirezarezvani/claude-skills) under `upstream/` via `git subtree`. A small first-party layer under `skills/` and `agents/` (~13 items) sits on top.
+Personal Claude Code skills marketplace. The bulk of the catalog (all plugins, all commands, all personas, and most agents) is vendored from [alirezarezvani/claude-skills](https://github.com/alirezarezvani/claude-skills) under `upstream/` via `git subtree`. A small first-party layer under `skills/` and `agents/` sits on top — roughly 13 first-party items versus ~130 from upstream.
 
-Current composition (regenerate-marketplace.py output):
+Composition as of 2026-05-28 (re-run `python3 scripts/regenerate-marketplace.py` to refresh):
 
 | Type     | first-party | upstream | total |
 |----------|------------:|---------:|------:|
 | skills   | 10          | 0        | 10    |
-| plugins  | 0           | 61       | 61    |
+| plugins  | 0           | 64       | 64    |
 | agents   | 3           | 24       | 27    |
 | commands | 0           | 38       | 38    |
 | personas | 0           | 7        | 7     |
