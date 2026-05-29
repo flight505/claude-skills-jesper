@@ -27,9 +27,12 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-if [[ -n "$(git status --porcelain)" ]]; then
-  echo "error: working tree is dirty; commit or stash before syncing." >&2
-  git status --short >&2
+# Only the upstream/ subtree must be clean for `git subtree pull` to apply.
+# Unrelated in-progress first-party edits (skills/, scripts/, docs) should not
+# block a sync — scope the dirty check to the subtree prefix.
+if [[ -n "$(git status --porcelain -- upstream/)" ]]; then
+  echo "error: upstream/ has uncommitted changes; commit or stash them before syncing." >&2
+  git status --short -- upstream/ >&2
   exit 1
 fi
 
