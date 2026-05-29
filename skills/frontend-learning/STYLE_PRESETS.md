@@ -122,15 +122,6 @@ h1, h2, h3 {
   letter-spacing: -0.02em;
   line-height: 1.05;
 }
-/* Subtle glow on interactive widgets — signature 3b1b feel */
-.widget:hover, .predict:hover {
-  border-color: rgba(255,184,108,0.35);
-  box-shadow: 0 0 18px rgba(255,184,108,0.08);
-  transition: border-color 0.25s, box-shadow 0.25s;
-}
-.ask-claude:hover {
-  box-shadow: 0 0 14px rgba(106,176,232,0.2);
-}
 ```
 
 ---
