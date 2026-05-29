@@ -12,9 +12,9 @@ Composition as of 2026-05-28 (re-run `python3 scripts/regenerate-marketplace.py`
 | commands | 0           | 38       | 38    |
 | personas | 0           | 7        | 7     |
 
-When asked to "pick something from the catalog" or "audit the marketplace," sample both layers — `upstream/` is the surface area, not just an external dependency.
+**Discovery vs. maintenance — read this first.** To *find or use* a catalog item (pick one, audit the marketplace, suggest, install), go through `forge` — run `forge guide` (or `forge agent guide` for JSON) to learn how. Forge presents upstream + first-party as one unified surface, so you never reason about folders; discover via `forge search`/`list`/`show`/`agent search`. **Do not grep `skills/` or `upstream/` to discover what exists** — `skills/` holds only ~10 items and you'll silently miss the ~130 in `upstream/`. The folder paths documented below are for *maintaining* this repo (editing, adding, syncing), not for finding catalog items.
 
-## Critical paths
+## Critical paths (maintenance only — see discovery note above)
 
 - `upstream/` — vendored catalog; source of all plugins/commands/personas and most agents. Never hand-edit; pull updates with `./scripts/sync-upstream.sh`.
 - `skills/` — first-party skills. Edit freely.
@@ -62,7 +62,7 @@ This runs `git subtree pull --squash` and regenerates `marketplace.json`. Previe
 
 ## Install layer
 
-Managed via [`forge`](https://github.com/flight505/forge). This repo is content + sync only — no CLI of its own.
+Managed via [`forge`](https://github.com/flight505/forge) — run `forge guide` for usage. This repo is content + sync only — no CLI of its own.
 
 Catalog items install into the Claude Code CLI by default. To target Claude Cowork instead, pass `--surface cowork` (or pick the cowork surface in `forge tui` / `forge serve`). Cowork's loader only understands plugins, so non-plugin items are auto-wrapped at install time.
 
