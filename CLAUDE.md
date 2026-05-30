@@ -118,7 +118,7 @@ When a third-party skill/plugin/agent repo looks worth adopting, the informal wo
 4. Copy or subtree-pull the content into the right destination:
    - Individual skill → `skills/<name>/` with a `SKILL.md`
    - Agent → `agents/<name>.md`
-   - If tracking upstream updates matters → prefer `git subtree add` and document in `OVERLAP.md`
+   - If tracking upstream updates matters → prefer `git subtree add` and record provenance in the skill's `_source.yaml`
 5. Add a `_source.yaml` with `kind: repo-mirror` (or `subtree` if pulling via git subtree) and the `origin:` URI
 6. Run `python3 scripts/regenerate-marketplace.py` and verify it appears in the catalog
 7. `forge install <name>` smoke-test from a fresh session
@@ -127,10 +127,7 @@ No dedicated skill is needed for this workflow — starting a Claude session wit
 
 ## Overlap rules
 
-When upstream and first-party have the same skill name:
-- **Default: ours wins** (skills/ takes precedence)
-- Exceptions tracked in `OVERLAP.md`
-- Confirmed exception: `deepwiki` — use upstream's
+When `upstream/` and a first-party `skills/` entry share a name, `scripts/regenerate-marketplace.py` defaults to **ours wins** (first-party takes precedence). No exceptions currently exist — `deepwiki` was dropped from `skills/` in favour of upstream's, so there's no live overlap to resolve.
 
 ## Conventions
 
