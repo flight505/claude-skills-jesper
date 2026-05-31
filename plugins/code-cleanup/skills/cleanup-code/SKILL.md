@@ -12,7 +12,7 @@ description: 'Comprehensive codebase cleanup across 11 quality dimensions: dead 
 
   after major feature work, before releases, or when code quality metrics are declining.
 
-  Trigger with "/cleanup-code-code", "clean up the codebase", "remove dead code",
+  Trigger with "/cleanup-code", "clean up the codebase", "remove dead code",
   "fix code quality".
 
   '

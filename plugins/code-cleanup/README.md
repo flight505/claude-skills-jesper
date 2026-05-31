@@ -11,16 +11,16 @@ Born from a real cleanup session — 25,000 lines removed, 4 bugs caught — pac
 claude /plugin marketplace add jeremylongshore/claude-code-plugins
 
 # Run full cleanup
-/cleanup
+/cleanup-code
 
 # Target specific dimensions
-/cleanup --dimensions dead,types,security
+/cleanup-code --dimensions dead,types,security
 
 # Scope to directory
-/cleanup src/api/
+/cleanup-code src/api/
 
 # Changed files only
-/cleanup --changed
+/cleanup-code --changed
 ```
 
 ## The 11 Dimensions
