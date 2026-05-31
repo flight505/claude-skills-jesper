@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Check every first-party item's source for available updates.
 
-Walks every `_source.yaml` under `skills/*/` and at the repo root (`agents/`),
-groups items by `kind`, and probes the appropriate origin per kind:
+Walks every `_source.yaml` under `skills/*/`, `plugins/*/`, and at the repo root
+(`agents/`), groups items by `kind`, and probes the appropriate origin per kind:
 
   - original      → no probe; report as static
   - docs          → check `references/` mtime, flag if older than --stale-days
@@ -38,6 +38,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SKILLS_DIR = ROOT / "skills"
 AGENTS_DIR = ROOT / "agents"
+PLUGINS_DIR = ROOT / "plugins"
 
 
 # ── minimal YAML reader ───────────────────────────────────────────────────────
@@ -100,15 +101,16 @@ def load_manifests() -> list[tuple[Path, dict]]:
     item dir is `agents/` itself.
     """
     out: list[tuple[Path, dict]] = []
-    for d in sorted(SKILLS_DIR.iterdir() if SKILLS_DIR.exists() else []):
-        if d.name.startswith("_"):
-            continue
-        mf = d / "_source.yaml"
-        if mf.exists():
-            try:
-                out.append((d, parse_yaml(mf.read_text(encoding="utf-8"))))
-            except Exception as e:
-                out.append((d, {"_parse_error": str(e)}))
+    for base in (SKILLS_DIR, PLUGINS_DIR):
+        for d in sorted(base.iterdir() if base.exists() else []):
+            if d.name.startswith("_"):
+                continue
+            mf = d / "_source.yaml"
+            if mf.exists():
+                try:
+                    out.append((d, parse_yaml(mf.read_text(encoding="utf-8"))))
+                except Exception as e:
+                    out.append((d, {"_parse_error": str(e)}))
     agents_mf = AGENTS_DIR / "_source.yaml"
     if agents_mf.exists():
         try:

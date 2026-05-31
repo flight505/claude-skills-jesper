@@ -8,15 +8,16 @@
   "homepage": "https://github.com/flight505/claude-skills-jesper",
   "metadata": {
     "version": "0.1.0",
-    "generated": "2026-05-28T19:15:11Z",
+    "generated": "2026-05-30T13:26:50Z",
     "upstream": {
       "repo": "alirezarezvani/claude-skills",
       "subtree_prefix": "upstream"
     },
     "counts": {
-      "plugins": 64,
+      "plugins": 65,
       "plugins_declared": 63,
       "plugins_orphan": 1,
+      "plugins_first_party": 1,
       "skills": 10,
       "skills_first_party": 10,
       "agents": 27,
@@ -2235,6 +2236,50 @@
           "cs-dpo-gdpr",
           "cs-fda-qsr-auditor",
           "cs-soc2-auditor"
+        ]
+      }
+    },
+    {
+      "name": "code-cleanup",
+      "source": "./plugins/code-cleanup",
+      "description": "Comprehensive codebase cleanup across 11 quality dimensions with confidence scoring and build verification gates",
+      "version": "1.0.0",
+      "author": {
+        "name": "Jeremy Longshore",
+        "email": "jeremy@intentsolutions.io"
+      },
+      "homepage": "https://tonsofskills.com/plugins/code-quality/code-cleanup",
+      "repository": "https://github.com/jeremylongshore/claude-code-plugins",
+      "license": "MIT",
+      "keywords": [
+        "code-quality",
+        "cleanup",
+        "refactoring",
+        "dead-code",
+        "deduplication",
+        "type-safety",
+        "security",
+        "performance",
+        "async",
+        "tech-debt",
+        "code-review"
+      ],
+      "contains": {
+        "skills": [
+          "cleanup-code"
+        ],
+        "agents": [
+          "async-pattern-fixer",
+          "circular-dep-untangler",
+          "dead-code-hunter",
+          "defensive-code-cleaner",
+          "dry-deduplicator",
+          "legacy-code-remover",
+          "performance-optimizer",
+          "security-scanner",
+          "slop-remover",
+          "type-consolidator",
+          "weak-type-eliminator"
         ]
       }
     }
