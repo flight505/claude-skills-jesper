@@ -1,0 +1,11 @@
+kind: repo-mirror
+origin: github:jeremylongshore/claude-code-plugins-plus-skills
+version: "1.0.3"
+refresh:
+  method: manual
+  schedule: "manual — re-copy plugins/testing/code-cleanup from origin on update"
+notes: >
+  Third-party Claude Code plugin by Jeremy Longshore (Intent Solutions).
+  Bundles 11 cleanup agents + the cleanup-code skill. The npm package
+  @intentsolutionsio/code-cleanup is a publish/tracking artifact, not the
+  install path; the plugin installs from this marketplace. Vendored 2026-05-30.

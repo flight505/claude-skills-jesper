@@ -1,13 +1,13 @@
 # CLAUDE.md — claude-skills-jesper
 
-Personal Claude Code skills marketplace. The bulk of the catalog (all plugins, all commands, all personas, and most agents) is vendored from [alirezarezvani/claude-skills](https://github.com/alirezarezvani/claude-skills) under `upstream/` via `git subtree`. A small first-party layer under `skills/` and `agents/` sits on top — roughly 13 first-party items versus ~130 from upstream.
+Personal Claude Code skills marketplace. The bulk of the catalog (most plugins, all commands, all personas, and most agents) is vendored from [alirezarezvani/claude-skills](https://github.com/alirezarezvani/claude-skills) under `upstream/` via `git subtree`. A small first-party layer under `skills/`, `agents/`, and `plugins/` sits on top — roughly 14 first-party items versus ~130 from upstream.
 
-Composition as of 2026-05-28 (re-run `python3 scripts/regenerate-marketplace.py` to refresh):
+Composition as of 2026-05-30 (re-run `python3 scripts/regenerate-marketplace.py` to refresh):
 
 | Type     | first-party | upstream | total |
 |----------|------------:|---------:|------:|
 | skills   | 10          | 0        | 10    |
-| plugins  | 0           | 64       | 64    |
+| plugins  | 1           | 64       | 65    |
 | agents   | 3           | 24       | 27    |
 | commands | 0           | 38       | 38    |
 | personas | 0           | 7        | 7     |
@@ -19,6 +19,7 @@ Composition as of 2026-05-28 (re-run `python3 scripts/regenerate-marketplace.py`
 - `upstream/` — vendored catalog; source of all plugins/commands/personas and most agents. Never hand-edit; pull updates with `./scripts/sync-upstream.sh`.
 - `skills/` — first-party skills. Edit freely.
 - `agents/` — first-party agents (3 today). Edit freely.
+- `plugins/` — first-party plugins (1 today). Edit freely; each needs `.claude-plugin/plugin.json`. The first-party analogue of `upstream/` bundles.
 - `.claude-plugin/marketplace.json` — **generated**. Never hand-edit; run `python3 scripts/regenerate-marketplace.py`.
 
 ## Adding a first-party skill
@@ -41,6 +42,15 @@ pairs_with:
 ```
 
 `scripts/regenerate-marketplace.py` normalises both into a `pairs_with: [...]` array on the marketplace entry. The forge TUI's chat pane and the web `ItemChat` panel prepend these to their peer-suggestion set (replacing the same-type-first-10 heuristic when explicit pairs exist). Names must match other entries' `name:` exactly — a wrong name silently drops the hint.
+
+## Adding a first-party plugin
+
+Plugins are multi-component bundles (a `.claude-plugin/plugin.json` plus any of `agents/`, `skills/`, `commands/`, `hooks/`). All but one come from `upstream/`; first-party plugins live at the repo root under `plugins/`, the analogue of `skills/` and `agents/`.
+
+1. Create `plugins/<name>/` with a `.claude-plugin/plugin.json` (required: `name`, `description`; optional `version`, `author`, `repository`, `license`, `keywords`). Drop bundled `agents/`, `skills/`, etc. alongside it.
+2. Add a `_source.yaml` (`kind: repo-mirror` for a vendored third-party plugin, `original` if you authored it).
+3. `python3 scripts/regenerate-marketplace.py` — the generator's `find_first_party_plugins()` emits it into `plugins[]` with a `./plugins/<name>` source and a `contains:` field listing its bundled skills/agents/commands. Bundled items ride along inside the plugin; they are **not** promoted to the top-level `skills[]`/`agents[]` arrays.
+4. `forge list --type plugin | grep <name>` — verify it appears. First-party wins on any name collision with an upstream plugin.
 
 ## Pulling upstream updates
 
@@ -132,5 +142,5 @@ When `upstream/` and a first-party `skills/` entry share a name, `scripts/regene
 ## Conventions
 
 - Python: stdlib only. No pip dependencies in `scripts/`.
-- Run `python3 scripts/regenerate-marketplace.py` after any change to `skills/` or `upstream/`.
+- Run `python3 scripts/regenerate-marketplace.py` after any change to `skills/`, `agents/`, `plugins/`, or `upstream/`.
 - Commit `marketplace.json` after regeneration.

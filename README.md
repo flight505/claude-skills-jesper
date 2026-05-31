@@ -4,9 +4,9 @@ Personal curated marketplace of Claude Code skills, plugins, agents, personas, a
 
 **Content sources:**
 - `upstream/` — vendored copy of [alirezarezvani/claude-skills](https://github.com/alirezarezvani/claude-skills) via `git subtree`. The bulk of the catalog: 64 plugins, 24 agents, 7 personas, 38 commands.
-- `skills/` + `agents/` — first-party items I author and maintain (10 skills, 3 agents).
+- `skills/`, `agents/`, `plugins/` — first-party items I author or vendor and maintain (10 skills, 3 agents, 1 plugin).
 
-Merged catalog total: **146 items** (10 skills · 64 plugins · 27 agents · 7 personas · 38 commands), generated into `.claude-plugin/marketplace.json`.
+Merged catalog total: **147 items** (10 skills · 65 plugins · 27 agents · 7 personas · 38 commands), generated into `.claude-plugin/marketplace.json`.
 
 **Install layer:** [`forge`](https://github.com/flight505/forge) — run `forge guide` to learn how to use it.
 
@@ -16,9 +16,10 @@ Merged catalog total: **146 items** (10 skills · 64 plugins · 27 agents · 7 p
 .claude-plugin/marketplace.json   ← single merged catalog (generated — never hand-edit)
 skills/                           ← first-party skills
 agents/                           ← first-party agents
+plugins/                          ← first-party plugins (multi-component bundles)
 upstream/                         ← git subtree of alirezarezvani/claude-skills (never hand-edit)
 scripts/
-  regenerate-marketplace.py       ← rebuilds marketplace.json from upstream/ + skills/ + agents/
+  regenerate-marketplace.py       ← rebuilds marketplace.json from upstream/ + skills/ + agents/ + plugins/
   sync-upstream.sh                ← git subtree pull --squash + regenerate
   upstream-changelog.py           ← list added/removed/changed since last sync
   check-sources.py                ← report first-party items with upstream updates available
@@ -30,7 +31,7 @@ scripts/
 # Pull latest upstream + regenerate the marketplace
 ./scripts/sync-upstream.sh
 
-# Regenerate without pulling (after editing skills/ or agents/)
+# Regenerate without pulling (after editing skills/, agents/, or plugins/)
 python3 scripts/regenerate-marketplace.py
 
 # Preview what a sync would change

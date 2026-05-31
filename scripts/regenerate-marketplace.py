@@ -51,6 +51,11 @@ COMMANDS_ROOT = UPSTREAM_DIR / "commands"
 # collision via merge_with_overlap).
 FIRST_PARTY_AGENTS_DIR = ROOT / "agents"
 
+# First-party plugins live at ./plugins/<name>/.claude-plugin/plugin.json,
+# the first-party analogue of skills/ and agents/. Emitted into plugins[]
+# alongside upstream bundles, with first-party winning on name collision.
+FIRST_PARTY_PLUGINS_DIR = ROOT / "plugins"
+
 # .md filenames we never treat as installable content.
 META_FILENAMES = {"README.md", "TEMPLATE.md", "CHANGELOG.md", "CLAUDE.md", "GEMINI.md", "AGENTS.md"}
 
@@ -443,6 +448,45 @@ def find_orphan_bundles(declared_source_dirs: set[Path]) -> list[dict[str, Any]]
     return orphans
 
 
+def find_first_party_plugins() -> list[dict[str, Any]]:
+    """Discover first-party plugins at plugins/<name>/.claude-plugin/plugin.json.
+
+    The first-party analogue of find_orphan_bundles: rooted at the repo's own
+    plugins/ dir rather than upstream/. Each plugin is emitted with a bare-string
+    ./plugins/<name> source (the canonical Claude Code shape, matching upstream
+    plugins) and a contains: field enumerating its bundled skills/agents/commands.
+    """
+    plugins: list[dict[str, Any]] = []
+    if not FIRST_PARTY_PLUGINS_DIR.exists():
+        return plugins
+    for child in sorted(FIRST_PARTY_PLUGINS_DIR.iterdir()):
+        if not child.is_dir() or child.name.startswith("."):
+            continue
+        plugin_json = child / ".claude-plugin" / "plugin.json"
+        if not plugin_json.is_file():
+            continue
+        try:
+            data = json.loads(plugin_json.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            print(f"[first-party] skipping {child.name}: unreadable plugin.json ({exc})", file=sys.stderr)
+            continue
+        name = data.get("name") or child.name
+        entry: dict[str, Any] = {
+            "name": name,
+            "source": "./plugins/" + child.name,
+        }
+        for key in ("description", "version", "author", "homepage", "repository", "license", "category", "keywords"):
+            val = data.get(key)
+            if val not in ("", None, [], {}):
+                entry[key] = val
+        contents = enumerate_bundle_contents(child, {child.resolve()})
+        if contents:
+            entry["contains"] = contents
+        print(f"[first-party] plugin: {name} (./plugins/{child.name})", file=sys.stderr)
+        plugins.append(entry)
+    return plugins
+
+
 def dedup_by_name(entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
     seen: dict[str, dict[str, Any]] = {}
     for e in entries:
@@ -491,7 +535,12 @@ def main(argv: list[str]) -> int:
 
     bundles, declared_source_dirs = load_upstream_marketplace()
     orphan_bundles = find_orphan_bundles(declared_source_dirs)
-    plugins = bundles + orphan_bundles
+    first_party_plugins = find_first_party_plugins()
+    # First-party plugins win on name collision (mirrors skills/agents), then
+    # append at the end to keep the upstream block's order — and thus the diff —
+    # stable when nothing collides.
+    fp_plugin_names = {p["name"] for p in first_party_plugins}
+    plugins = [p for p in bundles + orphan_bundles if p["name"] not in fp_plugin_names] + first_party_plugins
     # Bundle-internal SKILL.md files (under upstream/<bundle>/skills/...) are
     # NOT walked here — they install with their parent plugin and are listed
     # under that plugin's contains: field (added inside load_upstream_marketplace).
@@ -501,9 +550,9 @@ def main(argv: list[str]) -> int:
     first_party_agents = dedup_by_name(find_md_entries(FIRST_PARTY_AGENTS_DIR))
     commands = dedup_by_name(find_md_entries(COMMANDS_ROOT))
     if args.verbose:
-        print(f"[upstream] {len(bundles)} declared + {len(orphan_bundles)} orphan = {len(plugins)} plugins", file=sys.stderr)
+        print(f"[upstream] {len(bundles)} declared + {len(orphan_bundles)} orphan + {len(first_party_plugins)} first-party = {len(plugins)} plugins", file=sys.stderr)
         print(f"[upstream] {len(personas)} personas, {len(upstream_agents)} agents, {len(commands)} commands", file=sys.stderr)
-        print(f"[first-party] {len(first_party_skills)} SKILL.md, {len(first_party_agents)} agent(s)", file=sys.stderr)
+        print(f"[first-party] {len(first_party_skills)} SKILL.md, {len(first_party_agents)} agent(s), {len(first_party_plugins)} plugin(s)", file=sys.stderr)
 
     # OVERLAP.md merge path retained for forward-compat; with no upstream skill
     # candidates it is effectively a no-op for skills[] under the current scheme.
@@ -526,6 +575,7 @@ def main(argv: list[str]) -> int:
                 "plugins": len(plugins),
                 "plugins_declared": len(bundles),
                 "plugins_orphan": len(orphan_bundles),
+                "plugins_first_party": len(first_party_plugins),
                 "skills": len(skills),
                 "skills_first_party": len(first_party_skills),
                 "agents": len(agents),
