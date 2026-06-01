@@ -70,6 +70,25 @@ This runs `git subtree pull --squash` and regenerates `marketplace.json`. Previe
 | command   | Slash-command shortcut   | Imperative         |
 | bundle    | Group of the above       | n/a                |
 
+`type` is one axis; **`category`** (use-case domain) is the orthogonal second axis — see below.
+
+## Category axis (the use-case domain)
+
+Every marketplace item carries a `category`, one of **9 canonical values**: `engineering`,
+`product`, `marketing`, `leadership`, `research`, `finance`, `operations`, `compliance`,
+`productivity`. `forge list/search --category <x>` and the TUI `C` key filter on it. Taxonomy
+ratified in `docs/PLAN-forge-unification.md` (Appendix A).
+
+`scripts/regenerate-marketplace.py` assigns `category` in one pass (`apply_categories`):
+- **First-party** items declare `category:` in their own frontmatter (SKILL.md / agent `.md`) or
+  `plugin.json`. Add it when you add the item — a missing one warns and defaults to `productivity`.
+- **Upstream** non-plugin items (agents/personas/commands) carry none of their own, so they're
+  assigned by name in **`scripts/upstream-category-map.json`** (lives outside `upstream/`, so it
+  survives `sync-upstream.sh`). When a `sync-upstream.sh` pull adds new upstream items, add their
+  entries to that map or they fall back to `productivity` (the generator warns).
+- Raw upstream values are folded to canonical via a collapse map (e.g. `development→engineering`),
+  so old categories are normalized automatically.
+
 ## Install layer
 
 Managed via [`forge`](https://github.com/flight505/forge) — run `forge guide` for usage. This repo is content + sync only — no CLI of its own.

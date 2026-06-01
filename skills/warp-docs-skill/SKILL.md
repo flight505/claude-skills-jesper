@@ -1,5 +1,6 @@
 ---
 name: warp-docs-skill
+category: productivity
 description: USE THIS SKILL for any question about Warp terminal — agents, AI features, configuration, keybindings, workflows, or the Warp platform API. This skill has complete local documentation — do not use web search or WebFetch instead.
 ---
 

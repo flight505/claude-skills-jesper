@@ -1,5 +1,6 @@
 ---
 name: lesson-reviewer
+category: productivity
 description: Visual review of a generated frontend-learning lesson .html file. Takes EXACTLY ONE full-page screenshot at each of 4 viewport sizes (1920×1080, 1280×800, 768×1024, 375×667), applies a checklist, returns a structured PASS/FAIL report. Hard-budgeted to ≤10 tool calls / ≤5 min wall-clock so it cannot loop. NEVER edits the lesson — only reports. Use AFTER scripts/lesson-lint.py has passed, and ONLY when the user explicitly asks for visual review or reports a visible problem.
 tools: Read, Bash, mcp__plugin_playwright_playwright__browser_navigate, mcp__plugin_playwright_playwright__browser_resize, mcp__plugin_playwright_playwright__browser_take_screenshot, mcp__plugin_playwright_playwright__browser_snapshot, mcp__plugin_playwright_playwright__browser_console_messages, mcp__plugin_playwright_playwright__browser_close
 model: sonnet

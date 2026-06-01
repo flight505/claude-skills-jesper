@@ -1,5 +1,6 @@
 ---
 name: frontend-learning
+category: productivity
 description: Create interactive HTML learning material that teaches a topic INTUITIVELY (not just informationally) — single-file, animation-rich explainers in the spirit of 3Blue1Brown, Distill.pub, Bartosz Ciechanowski, and Quantum Country. Use when the user wants to LEARN a topic deeply, asks to "teach me X", points at a paper/URL/PDF they want to understand, or wants a self-paced interactive explainer instead of slides. Builds the page, opens it, then tutors the user in conversation about it.
 pairs_with: design-md, lesson-reviewer
 ---

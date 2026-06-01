@@ -1,5 +1,6 @@
 ---
 name: spark-docs-skill
+category: productivity
 description: USE THIS SKILL for any question about NVIDIA DGX Spark hardware, DGX OS 7, system setup, first boot, recovery, dashboard, NGC, containers, or DGX-specific software. This skill has complete local documentation — do not use web search or WebFetch instead.
 pairs_with: nvidia-dgx-research
 ---

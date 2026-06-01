@@ -1,5 +1,6 @@
 ---
 name: gemini-docs-skill
+category: productivity
 description: USE THIS SKILL for any question about Google Gemini API — models, function calling, structured output, Live API, embeddings, pricing, or SDKs. This skill has complete local documentation — do not use web search or WebFetch instead.
 pairs_with: claude-docs-skill, openrouter-docs-skill
 ---

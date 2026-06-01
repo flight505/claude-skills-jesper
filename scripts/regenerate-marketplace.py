@@ -56,6 +56,65 @@ FIRST_PARTY_AGENTS_DIR = ROOT / "agents"
 # alongside upstream bundles, with first-party winning on name collision.
 FIRST_PARTY_PLUGINS_DIR = ROOT / "plugins"
 
+# --- Category taxonomy (ratified; see docs/PLAN-forge-unification.md App. A) ---
+# `type` (skill/plugin/agent/persona/command) and `category` (use-case domain)
+# are two orthogonal axes. There are 9 canonical categories. Raw values — from
+# upstream plugin frontmatter or first-party frontmatter — are collapsed to a
+# canonical via CATEGORY_COLLAPSE. Upstream non-plugin items (which carry no
+# category of their own) are assigned by name through UPSTREAM_CATEGORY_MAP_PATH,
+# a committed file kept OUTSIDE upstream/ so it survives sync-upstream.sh.
+CANONICAL_CATEGORIES = {
+    "engineering", "product", "marketing", "leadership", "research",
+    "finance", "operations", "compliance", "productivity",
+}
+CATEGORY_COLLAPSE = {
+    "development": "engineering",
+    "project-management": "operations",
+    "business-growth": "operations",
+    "design": "product",
+    "knowledge": "productivity",
+    "commercial": "finance",
+    "research-ops": "research",
+}
+CATEGORY_FALLBACK = "productivity"
+UPSTREAM_CATEGORY_MAP_PATH = ROOT / "scripts" / "upstream-category-map.json"
+
+
+def canonicalize_category(cat: str) -> str:
+    """Lowercase, trim, and fold a raw category value to its canonical form.
+    Returns "" for an empty input; idempotent on already-canonical values."""
+    cat = (cat or "").strip().lower()
+    return CATEGORY_COLLAPSE.get(cat, cat)
+
+
+def load_category_overrides() -> dict[str, str]:
+    """name -> category for upstream items lacking their own category. Keys
+    beginning with "_" are treated as documentation (e.g. _comment) and skipped."""
+    if not UPSTREAM_CATEGORY_MAP_PATH.exists():
+        return {}
+    raw = json.loads(UPSTREAM_CATEGORY_MAP_PATH.read_text(encoding="utf-8"))
+    return {k: v for k, v in raw.items() if not k.startswith("_")}
+
+
+def apply_categories(marketplace: dict[str, Any], overrides: dict[str, str]) -> list[str]:
+    """Ensure every catalog item carries a canonical category, in place.
+
+    Precedence: the item's own (canonicalized) category, else the name override,
+    else CATEGORY_FALLBACK. Returns the names that fell back, so the caller can
+    warn. This is the single choke point for the type-vs-category invariant.
+    """
+    fell_back: list[str] = []
+    for key in ("plugins", "skills", "agents", "personas", "commands"):
+        for item in marketplace.get(key, []):
+            cat = canonicalize_category(item.get("category", ""))
+            if not cat:
+                cat = canonicalize_category(overrides.get(item["name"], ""))
+            if cat not in CANONICAL_CATEGORIES:
+                fell_back.append(item["name"] if not cat else f'{item["name"]} (raw={cat!r})')
+                cat = CATEGORY_FALLBACK
+            item["category"] = cat
+    return fell_back
+
 # .md filenames we never treat as installable content.
 META_FILENAMES = {"README.md", "TEMPLATE.md", "CHANGELOG.md", "CLAUDE.md", "GEMINI.md", "AGENTS.md"}
 
@@ -589,6 +648,13 @@ def main(argv: list[str]) -> int:
         "personas": personas,
         "commands": commands,
     }
+
+    # Backfill + normalize category across every type (the second axis). Must
+    # run after the dict is assembled and before serialization.
+    fell_back = apply_categories(marketplace, load_category_overrides())
+    if fell_back:
+        print(f"[category] WARN: {len(fell_back)} item(s) defaulted to "
+              f"{CATEGORY_FALLBACK!r}: {', '.join(fell_back)}", file=sys.stderr)
 
     body = json.dumps(marketplace, indent=2, ensure_ascii=False) + "\n"
     if args.dry_run:
