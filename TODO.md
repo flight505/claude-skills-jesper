@@ -1,137 +1,141 @@
-# TODO — architecture backlog
+# TODO — locked architecture decisions
 
-> The previous TODO.md tracked 7 implementation tracks (item-context chat, project-aware
-> suggest, sources taxonomy, etc.) — **all shipped and merged**. Completed work lives in git
-> history (`git log`; forge PRs #2–#11, this repo PRs #2–#8), so it's removed from this file.
-> What remains are **open architectural decisions** about how `forge` and this marketplace
-> relate. These are design questions — think before acting.
+> The original TODO tracked 7 shipped implementation tracks (all merged; in git history).
+> It was then replaced by four **open** architectural questions (A1–A4). As of **2026-06-01**
+> those questions are **decided** — researched (krew/Homebrew/asdf/Helm precedent + the forge
+> codebase) and locked below. What remains is **execution**, not deliberation.
 
-The two repos in play:
-- **forge** (`flight505/forge`) — the Go CLI/TUI installer. Organizes everything by **what it
-  is**: skill · plugin · agent · persona · command.
-- **this repo** (`claude-skills-jesper`) — the content marketplace. `upstream/` (vendored
-  `alirezarezvani/claude-skills`) + a thin first-party layer (`skills/`, `agents/`, `plugins/`),
-  merged into `.claude-plugin/marketplace.json` by `scripts/regenerate-marketplace.py`.
+**Framing fact that settled everything:** `forge` is a **personal tool** — it runs on Jesper's
+machines (MacBook, ml-server, DGX Spark). It is *not* a general/community tool. (If a 2–4 person
+team ever shares it, forge gets modified first — a separate future event.) That single fact flips
+the repo-structure decision from "two repos like krew" to "one repo," because the only reason to
+split a tool from its content is to insulate a *general* tool's release/issue cycle from a
+third-party content-PR firehose — which a personal, vendored, generated catalog doesn't have.
 
----
-
-## A1 — Shared nomenclature between forge and the marketplace
-
-The two repos use **drifting vocabulary** for the same concepts. Pin one glossary, identical in
-the forge README and this CLAUDE.md (and `forge guide`).
-
-Terms needing a single canonical definition:
-- **item / add-on / entry** — pick ONE word for "a thing in the catalog" (code says `Item`; docs
-  drift between add-on / entry / item).
-- **source** vs **catalog** vs **marketplace** — `source` = a registered provider; `catalog` =
-  the merged in-memory view; `marketplace` = the on-disk `marketplace.json`. Stop interchanging.
-- **loadout** (`.forge.json`) vs **manifest** — README says "loadout", code/file/commits say
-  manifest. Pick one.
-- **surface** — keep (forge's word for an install target).
-- **type** (skill/plugin/…) vs **category / domain** (use-case) — two *different axes*; see A4.
-  Never conflate them in prose.
-
-Deliverable: a "Glossary" block, byte-identical in both repos.
+The two halves in play today:
+- **forge** (`flight505/forge`) — the Go CLI/TUI installer. Organizes by **type**: skill · plugin
+  · agent · persona · command.
+- **this repo** (`claude-skills-jesper`) — the content. `upstream/` (vendored
+  `alirezarezvani/claude-skills` via `git subtree`) + a thin first-party layer (`skills/`,
+  `agents/`, `plugins/`), merged into `.claude-plugin/marketplace.json` by
+  `scripts/regenerate-marketplace.py`.
 
 ---
 
-## A2 — `claude-skills-jesper` is a poor, now-hardcoded folder name
+## Glossary (D4 — canonical; mirror byte-identical into forge's README + CLAUDE.md)
 
-"skills" implies a skills bucket, but the folder is the **marketplace** — it holds plugins,
-agents, personas, commands *and* skills. It reads as unrelated to forge.
+One word per concept. Code and docs currently drift; pin these.
 
-**Blast radius (why it's not a simple `mv`)** — the string is hardcoded in:
-- `forge/internal/catalog/registry.go` — the default-source `ID: "claude-skills-jesper"`, two
-  dev-path probes, and `URL: github.com/flight505/claude-skills-jesper`
-- `~/.forge/sources.json` — source `id` + absolute `path`
-- `~/.claude/settings.json`
-- every downstream `.forge.json` → `items[].source: "claude-skills-jesper"` (e.g. sparkpad ×4)
-- `forge/internal/surfaces/cowork_test.go` (test fixtures)
-
-Decision needed — **rename or alias?**
-- *Rename* (e.g. `forge-catalog` / `forge-marketplace`) is cleanest but must migrate the source
-  id + the registry.go defaults + every downstream `source:` value, or `forge sync` breaks.
-- *Alias* — teach forge a source `aliases: []` so the old id keeps resolving while the canonical
-  id changes. Lower blast radius; small forge change.
-
-Recommendation to evaluate: **add source-alias support in forge first**, then rename, so nothing
-breaks mid-migration. The chosen name should reflect the A1 glossary (it's a *catalog/marketplace*,
-not *skills*).
+| concept | canonical term | notes / what to stop saying |
+|---|---|---|
+| the `.forge.json` file | **loadout** | struct is `Loadout`, README title is "Loadouts". "manifest" is overloaded ecosystem-wide → demote to a generic gloss only. Fix `init.go:79` help text ("manifest" → "loadout"). |
+| a thing in the catalog | **item** | never "add-on"; **entry** = the `marketplace.json` *shape* only (`schemas.Entry`, internal). |
+| a registered provider | **source** | the marketplace is forge's *default source*. |
+| merged view of all sources | **catalog** | `internal/catalog/catalog.go` `Catalog` type. ← this is why the rename below is **not** `forge-catalog`. |
+| the on-disk source repo/file | **marketplace** (`marketplace.json`) | fine as the artifact noun; not the in-memory concept. |
+| install target | **surface** | already consistent everywhere; keep. |
+| what a thing **is** | **type** | skill / plugin / agent / persona / command. One axis. |
+| what a thing is **for** | **category** | the machine field (`schemas.Item.Category`) + the existing `--category` flag. "domain" / "use-case field" = informal gloss only — don't let prose drift to a second word. |
 
 ---
 
-## A3 — forge ↔ marketplace are loosely coupled (no cross-doc; maybe shouldn't be 2 repos)
+## W1 — Publish the glossary (was A1)  ·  small
 
-forge has **no CLAUDE.md**, and its README never mentions this marketplace; this repo points at
-forge but forge doesn't point back. forge even hardcodes this repo as its default source
-(registry.go) yet documents nothing about it. A newcomer can't tell they're two halves of one
-system.
-
-1. **Minimum fix:** add a forge CLAUDE.md + a README section naming this marketplace as the
-   reference content source; cross-link both ways. Low effort, high clarity. Do regardless of #2.
-2. **Bigger question:** should they be **one repo**? forge is the tool; this is its default
-   content, and forge already hardcodes the path. Monorepo pros: single clone, no source-
-   registration step, no name drift (subsumes A2), atomic tool+content changes. Cons: Go binary +
-   vendored `upstream/` subtree in one tree; noisier subtree pulls; others can't take forge
-   without the content. Treat as a real RFC — write the trade-offs before deciding; don't merge
-   by default.
+Drop the table above as a `## Glossary` block, byte-identical, into forge's README and CLAUDE.md
+(and surface the key terms in `forge guide`). Also fix `init.go:79` ("manifest" → "loadout") so
+code help matches. Lands naturally inside the monorepo (W4); until then, keep them in sync by hand.
 
 ---
 
-## A4 — Surface use-case **domains**, not just **types**
+## W2 — Source rename behind an alias (was A2)  ·  forge change, then a 1-line rename
 
-The core confusion. There are **two independent axes**; forge surfaces only one.
+**Decided name: `forge-market`** (not `forge-catalog` — that collides with the `Catalog` type =
+the merged-view concept). Matches the `marketplace.json` artifact; survives the monorepo merge
+unchanged (it's just the source id either way).
 
-- **Type** (what it *is*): skill / plugin / agent / persona / command. ← forge groups by this.
-- **Domain** (what it's *for*): the use-case field — Engineering, Marketing, Commercial, etc.
+**Mechanism: per-source `aliases: []`** — the Homebrew `formula_renames.json` pattern, the *only*
+family that keeps **already-committed downstream `.forge.json`** working with **zero edits**
+(npm/cargo consumer-side aliases can't — they'd require editing the very files we're protecting).
 
-**Studied upstream + the generated catalog (2026-06-01) — accurate state:**
-- Upstream's README groups its content into ~16 use-case domains (🔧 Engineering Core/POWERFUL,
-  📣 Marketing, 💼 Commercial, 🏭 Business Operations, 📈 Business & Growth, 💰 Finance,
-  🔬 Research, 🩺 Compliance, 🧠 Knowledge/Productivity, 🎓 Learning, leadership, product, …).
-- **Domain *is* partly machine-readable already:** `upstream/.claude-plugin/marketplace.json`
-  carries a `category` on **63/63** plugins (development 26, leadership 8, research 8,
-  productivity 5, product 4, marketing 3, + singletons). `regenerate-marketplace.py` passes these
-  through, so our generated `marketplace.json` has `category` on **62/65 plugins**.
-- **The gap:** category is plugin-only. In the generated catalog, **0 of** the 27 agents, 38
-  commands, 7 personas, and 10 skills carry a `category` — and the 3 uncategorized plugins +
-  **all first-party items** have none either. `schemas.Item` *has* a `Category` field and
-  `regenerate-marketplace.py` *does* read frontmatter `category:` — it's just unset for non-plugins
-  and first-party.
-- **forge ignores the axis even where it exists:** no `forge list --category`, no domain grouping
-  in TUI/CLI. The 62 categorized plugins can't be browsed by domain today.
-- **First-party compounds it:** first-party items are filed by *type* (`skills/`, `agents/`,
-  `plugins/`), so a personally-authored engineering agent and engineering plugin share no
-  "Engineering" grouping.
+Forge change (small, well-scoped):
+- Add `Aliases []string` to `RegistryEntry` (`internal/catalog/registry.go:13`).
+- Check aliases in `resolveSourcePath` (`internal/installer/installer.go:159`) **and**
+  `resolveMarketplaceRoot` (`installer.go:181`): if `items[].source` matches no source `id`, scan
+  `aliases[]`.
 
-**Goal:** browse/filter the catalog by **domain** as a first-class axis, across all types and both
-upstream + first-party — *without* moving anything out of the type-based folders (the install layer
-depends on them).
+**Migration order — never breaks at any step:**
+1. Ship the alias resolver. Release. *(Resolver must precede the rename.)*
+2. Rename the source id → `forge-market`, add `"aliases": ["claude-skills-jesper"]` in the same
+   change. Update the default-source registry (`registry.go`) + `~/.forge/sources.json`.
+3. Downstream `.forge.json` with `source: "claude-skills-jesper"` keep working via the alias —
+   **no edits required** (sparkpad ×4, etc.). Keep the alias entry forever (cost ≈ nothing).
+4. *(Optional, later)* opt-in `forge migrate` to rewrite old ids — **never** silent rewriting.
 
-Design directions to evaluate (don't pick yet — needs a design pass):
-1. **Backfill `category` for the uncovered set.** First-party: add `category:` to frontmatter
-   (regenerate already reads it). Upstream non-plugin items: derive from a **committed domain map**
-   in *this* repo (not in `upstream/`, which is never hand-edited) keyed off the README's
-   domain→item assignment; `regenerate-marketplace.py` applies it.
-2. **forge gains a domain axis:** `forge list --category <d>` / `forge search` domain filter / a
-   TUI "Domains" grouping — reads the existing `category` field, so categorized plugins work
-   immediately and improve as backfill lands.
-3. **Normalize the vocabulary** — upstream's `category` values (e.g. `development`) vs the README's
-   prose domains (e.g. "Engineering") don't match 1:1. Pick a canonical domain set (ties to A1)
-   and map both into it.
+**`URL:` field is low-risk** — GitHub's repo-rename redirect keeps old `git clone` URLs working
+indefinitely. Still update it explicitly; just don't let the old repo name get re-squatted.
 
-Constraints: don't break the type-based install dirs; the domain map must survive
-`sync-upstream.sh`; keep `category` (machine field) and the canonical domain label consistent.
-
-**Prereq before coding:** transcribe the upstream README's domain→item assignment into a committed
-map file (only the ~16 domain headers are captured so far; per-item assignment for the non-plugin
-types still needs doing).
+Remaining hardcoded sites to flip at step 2: `registry.go` ×6 (the `ID`, 2 dev-path probes, the
+`URL`), `internal/surfaces/cowork_test.go`, `~/.forge/sources.json`, `~/.claude/settings.json`.
 
 ---
 
-## Sequencing
+## W3 — Category as a first-class axis (was A4)  ·  smaller than it looked
 
-A1–A4 interlock. Suggested order: **A1** (glossary; defines type vs domain) → **A4** (domain
-model — the substantive feature, and where the glossary earns its keep) → **A3** (cross-docs /
-one-repo RFC, incorporating the glossary + domain model) → **A2** (rename last, behind alias
-support so nothing breaks).
+**Correction:** `forge list --category` **already exists** (`internal/cli/list.go:18,51,67`) and
+`schemas.Item.Category` is populated from `marketplace.json`. So the axis is half-built. Remaining:
+
+1. **Backfill the data.** Today `category` is on 63/65 plugins, **0** of 27 agents / 38 commands /
+   7 personas / 10 skills, + 2 plugins, + all first-party.
+   - First-party: add `category:` to frontmatter (`regenerate-marketplace.py` already reads it).
+   - Upstream non-plugins: derive from a **committed domain-map in *this* repo** (never edit
+     `upstream/`); `regenerate-marketplace.py` applies it. The map must **survive
+     `sync-upstream.sh`**.
+2. **Extend the axis** to where it's missing: add `--category` to `search`
+   (`internal/cli/search.go` — one `StringVar` + a filter mirroring `--type`) and a category
+   grouping/filter in the TUI (`ui/views/catalog.go` has `typeFilter` but no `categoryFilter`).
+3. **Normalize the vocabulary.** The 15 raw values (`development` 26, `leadership` 8, `research` 8,
+   `productivity` 5, `product` 4, `marketing` 3, + 9 singletons: `compliance`, `project-management`,
+   `business-growth`, `finance`, `design`, `knowledge`, `operations`, `commercial`, `research-ops`)
+   are over-fragmented. Pick a canonical ~8–10 set and map both the raw values and the README's
+   prose domains into it. Don't break the type-based install dirs.
+
+---
+
+## W4 — Merge into one repo, vertical separation (was A3)  ·  the big one — needs a migration plan
+
+**Decided: one repo.** Separation has caused repeated real issues (drift, the "agents forget the
+two halves are connected" confusion, the hardcoded-but-undocumented default URL). Merging removes
+the failure mode *by construction* rather than papering over it with cross-doc links. `git subtree`
+is designed to embed third-party history inside a monorepo, so the `upstream/` vendoring survives.
+
+Vertical separation inside the merged tree (illustrative — settle in the migration plan):
+```
+forge/                  # repo root = the tool's name
+  cmd/ internal/ ui/    # the Go CLI/TUI
+  catalog/              # was claude-skills-jesper
+    upstream/           #   vendored subtree (unchanged)
+    skills/ agents/ plugins/   # first-party
+    scripts/            #   regenerate-marketplace.py, sync-upstream.sh, ...
+    .claude-plugin/marketplace.json
+  CLAUDE.md README.md   # one each — subsume the glossary (W1) + old cross-link goal
+```
+
+**This is a migration, not an edit — write a short plan before executing.** Open questions for the
+plan (the *how*; the *whether* is decided): which repo's history is the base vs. subtree-merged;
+where forge's default-source path points post-merge (in-repo path vs. still a named source);
+CI/release (tool binary vs. catalog regeneration in one tree); does the source id stay `forge-market`
+or become a local/default source. W2's alias guarantees downstream `.forge.json` survive the move
+regardless.
+
+---
+
+## Sequence
+
+1. **W1 glossary** — cheap, unblocks shared vocabulary. *(do now)*
+2. **W2 alias resolver** (forge code) — prerequisite for any safe rename; independent of the rest.
+   The actual id rename can land any time after, non-breaking.
+3. **W3 category** — mostly data + a small `search`/TUI patch.
+4. **W4 monorepo merge** — last and deliberate; subsumes the rename's repo half and the old
+   "couple the repos" work. Needs its own migration plan + check-in before execution.
+
+(W1–W3 are all independent of W4 and can ship in the current two-repo layout; W4 then folds them in.)
