@@ -160,6 +160,29 @@ All changes in this section happen on a branch cut from the post-merge `main`. D
 git checkout -b feat/sg4-monorepo-fixups
 ```
 
+### 3.0 [CRITICAL — do this first] Fence `catalog/` out of the Go module
+
+**Found in rehearsal (2026-06-02):** `catalog/upstream/` ships Go *skeleton assets*
+(e.g. `…/kubernetes-operator/assets/reconcile_skeleton.go`) with placeholder imports
+like `<MODULE>/api/v1alpha1`. Once `catalog/` lives inside forge's Go module, `go build
+./...` / `go test ./...` / `go vet ./...` descend into it and **fail with exit 1**
+(`invalid import path: <MODULE>/...`). G1–G3 are red without this fix.
+
+Fix (proven in rehearsal): add a stub nested module so Go's `./...` skips the whole
+subtree. A directory with its own `go.mod` is a separate module and excluded from the
+parent's `./...`.
+
+```bash
+printf 'module catalog-content\n\ngo 1.23\n' > catalog/go.mod
+go build ./...   # now exits 0
+go test ./...    # now passes
+```
+
+This `catalog/go.mod` is sacrificial — nobody builds `catalog-content`; it exists purely
+to fence the non-compilable skill assets out of forge's build. Commit it as part of the
+fix-ups. (Alternative considered & rejected: renaming to `_catalog`/`.catalog` — Go skips
+those too, but `catalog/` is the wanted name and breaks every doc path.)
+
 ### 3.1 Update `defaultRegistry()` — add the in-repo probe
 
 File: `internal/catalog/registry.go`
@@ -392,6 +415,8 @@ This is the nuclear option — `force-with-lease` is destructive to collaborator
 ---
 
 ## 6. Open risks / what could go wrong
+
+0. **[CONFIRMED in rehearsal] `catalog/upstream` Go skeleton assets break `go build ./...`.** Two `*.go` skill-template files carry placeholder imports (`<MODULE>/...`). Inside forge's module they fail the build/test/lint gates. **Fixed** by §3.0 (stub `catalog/go.mod`); verified `go build ./...` + `go test ./...` pass after. Must be applied immediately after the merge, before any gate run.
 
 1. **`git subtree add --squash` and nested subtrees.** The `upstream/` subtree inside catalog was itself pulled with `--squash`. After the outer `--squash` absorb, `git subtree pull --prefix=catalog/upstream` must re-discover the split point via the commit message annotation. The annotation format is `Squashed 'catalog/upstream/' changes from ...` — but the squash commit in the inner catalog repo says `Squashed 'upstream/' changes from ...`. Git subtree uses this to find the split; the prefix mismatch means **git subtree will not find the old annotation** and may error on the first `sync-upstream.sh` run post-merge. Mitigation: after the merge, run one `git subtree pull --prefix=catalog/upstream catalog-source-upstream main --squash` to lay down a new annotation with the correct prefix. Document this as a one-time bootstrap step in `catalog/scripts/sync-upstream.sh`.
 
