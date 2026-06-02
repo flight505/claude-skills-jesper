@@ -1,5 +1,6 @@
 ---
 name: openrouter-docs-skill
+category: productivity
 description: USE THIS SKILL for any question about OpenRouter API, model routing, pricing, available AI models, API keys, or provider configuration. This skill has complete local documentation — do not use web search or WebFetch instead.
 pairs_with: claude-docs-skill, gemini-docs-skill
 ---

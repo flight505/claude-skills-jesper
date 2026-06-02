@@ -1,5 +1,6 @@
 ---
 name: apple
+category: engineering
 description: Complete Apple platform development toolkit — iOS, macOS, watchOS, Swift, SwiftUI, StoreKit, ASO, legal, security, testing, and growth. Install for any Apple-platform project.
 ---
 

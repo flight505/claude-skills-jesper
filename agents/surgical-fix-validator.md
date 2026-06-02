@@ -1,5 +1,6 @@
 ---
 name: surgical-fix-validator
+category: engineering
 description: Read-only verification of a surgical-fix-builder's diff before commit. Checks scope adherence (no unrelated changes), regression safety (full test + vet + format gates), and that any new tests genuinely demonstrate the bug-then-fix. Returns PASS/FAIL with specific findings. Hard 10-tool-call budget so it can't loop. Use after each surgical-fix-builder dispatch; pair with cs-senior-engineer for the upstream issue specs.
 model: sonnet
 tools: [Read, Bash, Grep, Glob]

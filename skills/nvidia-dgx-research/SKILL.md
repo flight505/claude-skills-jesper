@@ -1,5 +1,6 @@
 ---
 name: nvidia-dgx-research
+category: engineering
 description: USE THIS SKILL for NVIDIA topics not covered by the local spark-docs-skill snapshot — community discussion on the NVIDIA developer forum, NVIDIA developer blog posts, and adjacent NVIDIA product docs (CUDA, NeMo, Jetson, Brev, Dynamo, and others listed in the docs.nvidia.com llms.txt catalog). This is a dispatcher skill that routes queries to WebSearch and WebFetch; it does NOT bundle bulk documentation.
 pairs_with: spark-docs-skill
 ---

@@ -1,5 +1,6 @@
 ---
 name: surgical-fix-builder
+category: engineering
 description: Implements ONE small, well-specified fix at a time from a structured issue spec. Use when a reviewer (cs-senior-engineer, human, lint output) has produced a list of concrete code issues and you want each implemented as an atomic, scope-disciplined change. Refuses to expand scope, refuses to touch unrelated code, runs the relevant tests after each fix and reports outcome. Pair with surgical-fix-validator for a builder/validator loop.
 model: sonnet
 tools: [Read, Write, Edit, Bash, Grep, Glob]
